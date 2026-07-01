@@ -18,6 +18,14 @@ export interface ComposantEntry {
 
 export const COMPOSANTS: ComposantEntry[] = [
   {
+    slug: 'hero-video',
+    name: 'Hero video + marquee logos',
+    status: 'ready',
+    Component: lazy(() => import('./hero-video/Demo')),
+    notes:
+      "Hero card 1400x600 avec video background, texte animé, floating navbar glass, et marquee logos avec gradient hover.",
+  },
+  {
     slug: 'hero',
     name: 'Hero "Marketeam" (typewriter + orbites)',
     status: 'ready',
