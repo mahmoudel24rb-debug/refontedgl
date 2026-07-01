@@ -4,6 +4,8 @@ import { Toaster as Sonner } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import Index from '@/pages/Index'
 import NotFound from '@/pages/NotFound'
+import ComposantIndex from '@/pages/ComposantIndex'
+import ComposantView from '@/pages/ComposantView'
 
 const queryClient = new QueryClient()
 
@@ -15,6 +17,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/composant" element={<ComposantIndex />} />
+            <Route path="/composant/:slug" element={<ComposantView />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
