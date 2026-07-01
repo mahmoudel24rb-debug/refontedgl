@@ -18,6 +18,14 @@ export interface ComposantEntry {
 
 export const COMPOSANTS: ComposantEntry[] = [
   {
+    slug: 'hero',
+    name: 'Hero "Marketeam" (typewriter + orbites)',
+    status: 'ready',
+    Component: lazy(() => import('./hero/Demo')),
+    notes:
+      "Full viewport hero avec typewriter, 4 orbites d'avatars, curseur \"David\", ticker de logos et bordures conic-gradient animées.",
+  },
+  {
     slug: 'exemple',
     name: 'Composant exemple',
     status: 'ready',
