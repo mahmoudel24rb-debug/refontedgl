@@ -270,7 +270,7 @@ export default function Hero() {
           </span>
         )}
 
-        {/* Center */}
+        {/* Center : chiffre-clé DGL */}
         <div
           style={{
             display: 'flex',
@@ -283,10 +283,11 @@ export default function Hero() {
             style={{
               fontSize: '12px',
               fontWeight: 500,
+              letterSpacing: '1.5px',
               color: 'rgba(255,255,255,0.55)',
             }}
           >
-            01 / 04
+            +10 ANS D'EXPERTISE
           </span>
           <span
             style={{
@@ -295,26 +296,16 @@ export default function Hero() {
               background: 'rgba(255,255,255,0.20)',
             }}
           />
-          <button
+          <span
             style={{
               fontSize: '12px',
               fontWeight: 500,
               letterSpacing: '1.5px',
-              color: 'rgba(255,255,255,0.55)',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'color 200ms',
+              color: '#fe5752',
             }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.color = 'rgba(255,255,255,0.90)')
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.color = 'rgba(255,255,255,0.55)')
-            }
           >
-SUIVANT
-          </button>
+            +500 CLIENTS
+          </span>
         </div>
 
         {/* Right scroll text (hidden on narrow) */}

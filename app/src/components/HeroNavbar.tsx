@@ -72,10 +72,14 @@ export default function HeroNavbar() {
           gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr auto 1fr',
           alignItems: 'center',
           padding: '0 clamp(1rem, 3vw, 2rem)',
-          background: 'rgba(10,10,10,0.85)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          // Liquid glass DGL — dark navy tint + strong blur + saturation
+          background:
+            'linear-gradient(180deg, rgba(0,35,41,0.55) 0%, rgba(0,35,41,0.35) 100%)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          boxShadow:
+            'inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 24px -12px rgba(0,0,0,0.4)',
           fontFamily: '"Inter Tight", sans-serif',
         }}
       >

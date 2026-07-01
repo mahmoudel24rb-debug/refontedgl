@@ -6,10 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Base URL for global assets (Bancuip template).
- * TO REPLACE when we swap to DGL Agency assets.
+ * Base URL for local assets (downloaded from Bancuip template).
+ * Files live in `public/assets/` and are served at `/assets/*`.
  */
-export const ASSET_BASE = 'https://qclay.design/lovable/bancuip/'
+export const ASSET_BASE = '/assets/'
 
 export function asset(path: string) {
   return `${ASSET_BASE}${path.replace(/^\//, '')}`
