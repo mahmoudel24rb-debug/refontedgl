@@ -24,18 +24,14 @@ const TEAM = {
   victor: '/composant-hero/team/Image-Equipe-Victor.webp',
 }
 
-// Logos clients hébergés sur dgl-agency.fr
+// Logos clients — déposés en local dans /public/assets/logos/
+// (fetching depuis dgl-agency.fr échouait dans certains contextes réseau)
 const CLIENT_LOGOS = {
-  oceades:
-    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Les-Oceades-e1763389856213.webp',
-  gymfit:
-    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-GYMFIT-e1763389822761.webp',
-  beauregard:
-    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Beauregard.webp',
-  epicure:
-    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Epicure-Social-Club-1.webp',
-  ipms:
-    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-IPMS.webp',
+  oceades: '/assets/logos/oceades.webp',
+  gymfit: '/assets/logos/gymfit.webp',
+  beauregard: '/assets/logos/beauregard.webp',
+  epicure: '/assets/logos/epicure.webp',
+  ipms: '/assets/logos/ipms.webp',
 }
 
 // DGL brand accent — utilisé pour tous les glows pour rester cohérent
@@ -448,37 +444,17 @@ export default function Demo() {
                 </button>
               </div>
 
-              {/* Cursor + badge "L'équipe DGL" */}
-              <div
-                className="mkt-david"
+              <a
+                href="#realisations"
+                className="mkt-nav-link mkt-nav-link-white"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  marginLeft: stacked ? 0 : '4rem',
-                  marginTop: stacked ? 0 : '1rem',
-                  opacity: 0,
-                  animation:
-                    'mktFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 3.6s forwards',
+                  fontSize: 15,
+                  padding: '4px 0',
+                  marginLeft: stacked ? 0 : '1.5rem',
                 }}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#fe5752">
-                  <path d="M5 3l14 8-6 2-2 6-6-16z" />
-                </svg>
-                <span
-                  style={{
-                    background: '#fe5752',
-                    color: '#fff',
-                    fontSize: 16,
-                    fontWeight: 500,
-                    padding: '8px 16px',
-                    borderRadius: 20,
-                    lineHeight: 1,
-                  }}
-                >
-                  L'équipe DGL
-                </span>
-              </div>
+                Voir nos réalisations →
+              </a>
             </div>
           </div>
 

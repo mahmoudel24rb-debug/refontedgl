@@ -31,7 +31,7 @@ export const COMPOSANTS: ComposantEntry[] = [
     status: 'ready',
     Component: lazy(() => import('./hero/Demo')),
     notes:
-      "Adapté du template Marketeam aux couleurs DGL. Photos Kiara/Mahmoud/Victor sur orbite 2, logos clients sur orbites 3/4, compteur 500+ clients au centre.",
+      "Adapté du template Marketeam aux couleurs DGL. Photos Kiara/Mahmoud/Victor sur orbite 2, logos clients sur orbites 3/4, compteur 500+ clients au centre. ✅ Promu comme hero du site principal (components/Hero.tsx). Logos clients en local dans /assets/logos/.",
   },
   {
     slug: 'exemple',
