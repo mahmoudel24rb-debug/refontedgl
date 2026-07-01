@@ -14,27 +14,27 @@ interface Stat {
 const STATS: Stat[] = [
   {
     num: '01',
-    label: 'Daily\nTransactions',
-    from: 50,
-    to: 245,
+    label: 'Clients\nsatisfaits',
+    from: 0,
+    to: 500,
     decimals: 0,
-    suffix: 'M',
+    suffix: '+',
   },
   {
     num: '02',
-    label: 'Daily\nExchange',
+    label: 'ROI moyen\nde nos campagnes',
     from: 0,
-    to: 40.3,
-    decimals: 1,
-    suffix: 'M',
+    to: 65,
+    decimals: 0,
+    suffix: '%',
   },
   {
     num: '03',
-    label: 'Global\nCustomers',
+    label: 'Campagnes\nlancées',
     from: 0,
-    to: 10,
+    to: 300,
     decimals: 0,
-    suffix: 'M',
+    suffix: '+',
   },
 ]
 
@@ -87,7 +87,7 @@ export default function PowerOfFinance() {
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              color: '#083400',
+              color: '#002329',
               fontSize: 'clamp(2.5rem, 5.2vw, 5rem)',
               fontWeight: 400,
               lineHeight: 1.05,
@@ -95,9 +95,9 @@ export default function PowerOfFinance() {
               margin: 0,
             }}
           >
-            Unleash the full
+Prêt à développer
             <br />
-            power of finance
+votre acquisition ?
           </motion.h2>
           <p
             style={{
@@ -110,8 +110,9 @@ export default function PowerOfFinance() {
               maxWidth: '420px',
             }}
           >
-            Everything you need to manage payments, automate financial workflows,
-            reduce risk, and scale fintech operations.
+Avec 10+ ans d'expertise en SEO, publicité Google & Meta Ads et automatisation
+            marketing, DGL Agency vous aide à générer des leads qualifiés et
+            obtenir des résultats mesurables rapidement.
           </p>
         </div>
 
@@ -163,14 +164,14 @@ function PrimaryButton() {
         fontWeight: 500,
         cursor: 'pointer',
         border: '1px solid transparent',
-        background: hover ? '#5DEB5D' : '#6BFF6B',
-        color: '#083400',
-        borderColor: '#6BFF6B',
+        background: hover ? '#e54a45' : '#fe5752',
+        color: '#002329',
+        borderColor: '#fe5752',
         transition:
           'transform 200ms ease, background 200ms ease, color 200ms ease',
       }}
     >
-      Learn more
+Audit gratuit
       <img src={asset('arrow-right.svg')} alt="" width={12} height={12} />
     </button>
   )
@@ -191,14 +192,14 @@ function GhostButton() {
         fontSize: '14px',
         fontWeight: 500,
         cursor: 'pointer',
-        border: '1px solid rgba(8,52,0,0.25)',
-        background: hover ? 'rgba(8,52,0,0.04)' : 'transparent',
-        color: '#083400',
+        border: '1px solid rgba(0,35,41,0.25)',
+        background: hover ? 'rgba(0,35,41,0.04)' : 'transparent',
+        color: '#002329',
         transition:
           'transform 200ms ease, background 200ms ease, color 200ms ease',
       }}
     >
-      Try for free
+Nous contacter
     </button>
   )
 }
@@ -262,7 +263,7 @@ function StatCard({
           'transform 380ms cubic-bezier(0.22,1,0.36,1), box-shadow 380ms ease',
         transform: hover ? 'translateY(-6px)' : 'translateY(0)',
         boxShadow: hover
-          ? '0 24px 48px -20px rgba(8,52,0,0.35)'
+          ? '0 24px 48px -20px rgba(0,35,41,0.35)'
           : '0 0 0 rgba(0,0,0,0)',
         isolation: 'isolate',
       }}
@@ -275,7 +276,7 @@ function StatCard({
           right: '-30%',
           bottom: hover ? '-25%' : '-140%',
           height: '160%',
-          background: '#083400',
+          background: '#002329',
           borderRadius: '50% 50% 0 0 / 40% 40% 0 0',
           transition:
             'bottom 780ms cubic-bezier(0.22,1,0.36,1), border-radius 780ms cubic-bezier(0.22,1,0.36,1)',
@@ -302,7 +303,7 @@ function StatCard({
             fontSize: 'clamp(0.8125rem, 1vw, 0.875rem)',
             fontWeight: 500,
             letterSpacing: '0.1em',
-            color: hover ? 'rgba(255,255,255,0.75)' : 'rgba(8,52,0,0.55)',
+            color: hover ? 'rgba(255,255,255,0.75)' : 'rgba(0,35,41,0.55)',
             transition: 'color 300ms ease',
           }}
         >
@@ -316,7 +317,7 @@ function StatCard({
             fontWeight: 400,
             lineHeight: 1,
             letterSpacing: '-0.02em',
-            color: hover ? '#FFFFFF' : '#083400',
+            color: hover ? '#FFFFFF' : '#002329',
             transition: 'color 300ms ease',
           }}
         >
@@ -330,7 +331,7 @@ function StatCard({
             fontWeight: 500,
             lineHeight: 1.2,
             whiteSpace: 'pre-line',
-            color: hover ? '#FFFFFF' : '#083400',
+            color: hover ? '#FFFFFF' : '#002329',
             transition: 'color 300ms ease',
           }}
         >

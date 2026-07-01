@@ -99,9 +99,9 @@ export default function Hero() {
             margin: 0,
           }}
         >
-          Real-time fintech
+          Agence digitale à Tours
           <br />
-          operations and analytics
+          & experte en acquisition en ligne
         </motion.h1>
 
         <motion.p
@@ -117,9 +117,10 @@ export default function Hero() {
             color: 'rgba(255,255,255,0.60)',
           }}
         >
-          The complete infrastructure for payments, wallets, transaction
-          monitoring, fraud control, compliance workflows, and financial
-          automation in one secure platform.
+          Basée à Tours, DGL Agency est une agence digitale spécialisée en SEO,
+          publicité Google Ads & Meta Ads, et automatisation marketing. Nous
+          aidons les TPE et PME à développer leur visibilité et générer des
+          leads qualifiés.
         </motion.p>
       </div>
 
@@ -161,7 +162,7 @@ export default function Hero() {
               overflow: 'hidden',
             }}
           >
-            Learn more
+            Audit gratuit
             <span
               style={{
                 position: 'relative',
@@ -216,7 +217,7 @@ export default function Hero() {
               (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')
             }
           >
-            Try for free
+            Nos services
           </motion.button>
         </div>
       )}
@@ -265,7 +266,7 @@ export default function Hero() {
               color: 'rgba(255,255,255,0.40)',
             }}
           >
-            ENTERPRISE MANAGEMENT APPLICATIONS
+            SEO · GOOGLE ADS · META ADS · AUTOMATION
           </span>
         )}
 
@@ -312,7 +313,7 @@ export default function Hero() {
               (e.currentTarget.style.color = 'rgba(255,255,255,0.55)')
             }
           >
-            NEXT
+SUIVANT
           </button>
         </div>
 
@@ -329,7 +330,7 @@ export default function Hero() {
               justifySelf: 'end',
             }}
           >
-            SCROLL TO EXPLORE
+DÉCOUVRIR NOS SERVICES
           </motion.span>
         )}
       </motion.div>

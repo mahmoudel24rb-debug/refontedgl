@@ -9,12 +9,11 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { label: 'HOME', active: true },
-  { label: 'ABOUT', dropdown: true },
-  { label: 'PHILOSOPHY' },
-  { label: 'MARKET CALLS' },
-  { label: 'RESEARCH' },
-  { label: 'TEAM' },
+  { label: 'ACCUEIL', active: true },
+  { label: 'SERVICES', dropdown: true },
+  { label: 'RÉALISATIONS' },
+  { label: 'À PROPOS' },
+  { label: 'RESSOURCES' },
 ]
 
 export default function HeroNavbar() {
@@ -83,9 +82,9 @@ export default function HeroNavbar() {
         {/* Left: Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
-            src={asset('logo.svg')}
-            alt="Bancuip"
-            style={{ height: '1.375rem', width: 'auto' }}
+            src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
+            alt="DGL Agency"
+            style={{ height: '1.75rem', width: 'auto' }}
           />
         </div>
 
@@ -177,7 +176,7 @@ export default function HeroNavbar() {
                 (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')
               }
             >
-              Contact us
+              Contact
             </button>
           )}
           <LearnMoreWhiteButton />
@@ -222,8 +221,14 @@ export default function HeroNavbar() {
               gap: '48px',
             }}
           >
-            <DropdownColumn heading="Company" items={['About Us', 'Careers', 'Contact']} />
-            <DropdownColumn heading="Updates" items={['Customer Stories', 'News']} />
+            <DropdownColumn
+              heading="Acquisition"
+              items={['Publicité Digitale', 'Génération de leads', 'Landing Pages']}
+            />
+            <DropdownColumn
+              heading="Croissance"
+              items={['SEO', 'Automatisation', 'Stratégie Digitale']}
+            />
           </div>
 
           <div
@@ -242,13 +247,13 @@ export default function HeroNavbar() {
                 letterSpacing: '0.02em',
               }}
             >
-              More
+              Outils gratuits
             </div>
             <DropdownItem>
-              Store <ArrowUpRight />
+              Simulateur ROI <ArrowUpRight />
             </DropdownItem>
             <DropdownItem>
-              Talent Network <ArrowUpRight />
+              Audit landing page <ArrowUpRight />
             </DropdownItem>
           </div>
         </div>
@@ -333,7 +338,7 @@ function LearnMoreWhiteButton() {
         overflow: 'hidden',
       }}
     >
-      Learn more
+      Audit gratuit
       <span
         style={{
           position: 'relative',

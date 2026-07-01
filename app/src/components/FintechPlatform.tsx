@@ -6,54 +6,54 @@ import { asset } from '@/lib/utils'
 const BLOCK_1_FEATURES = [
   {
     icon: 'icon-1.svg',
-    title: 'Manage payments, invoices, and settlements',
-    desc: 'Track every transaction, payout, and financial flow in one secure dashboard.',
+    title: 'Publicité digitale performante',
+    desc: 'Campagnes Google Ads, Meta Ads et remarketing optimisées, orientées conversion.',
   },
   {
     icon: 'icon-2.svg',
-    title: 'Reduce manual work across finance teams',
-    desc: 'Automate reconciliation, reporting, approvals, and recurring payment processes.',
+    title: 'Génération de leads qualifiés',
+    desc: 'Un flux continu de prospects grâce à des funnels ciblés et des campagnes omnicanales.',
   },
   {
     icon: 'icon-3.svg',
-    title: 'Monitor revenue, risk, and cash flow in real time',
-    desc: 'Get live visibility into financial performance, user activity, and transaction trends.',
+    title: 'ROI mesuré et transparent',
+    desc: 'Reporting temps réel et tableaux de bord personnalisés pour chaque client.',
   },
 ]
 
 const BLOCK_2_FEATURES = [
   {
     icon: 'icon-4.svg',
-    title: 'A complete platform for payments and wallets',
-    desc: 'Build and manage digital finance tools without complex internal infrastructure.',
+    title: 'Référencement naturel SEO durable',
+    desc: 'Contenus puissants, audits techniques réguliers et structure optimisée pour Google.',
   },
   {
     icon: 'icon-5.svg',
-    title: 'Launch banking and payment experiences faster',
-    desc: 'Create user accounts, payment flows, card logic, and transaction systems at scale.',
+    title: 'Automatisation marketing sur-mesure',
+    desc: 'Emails, CRM et parcours clients automatisés pour convertir et fidéliser plus efficacement.',
   },
   {
     icon: 'icon-6.svg',
-    title: 'Analyze, optimize, and control financial performance',
-    desc: 'Use real-time data to improve conversion, reduce risk, and increase operational efficiency.',
+    title: 'Landing pages haute conversion',
+    desc: "Pages d'atterrissage optimisées avec tracking publicitaire avancé sur chaque clic.",
   },
 ]
 
 const STEPS = [
   {
     n: '1',
-    title: 'Payment infrastructure',
-    desc: 'Payment flows, wallets, transactions, payouts',
+    title: 'Audit SEO & Ads gratuit',
+    desc: "Diagnostic complet en 48h avec plan d'action",
   },
   {
     n: '2',
-    title: 'Financial automation logic',
-    desc: 'Invoices, reconciliation, recurring payments',
+    title: 'Stratégie sur mesure',
+    desc: 'Pilotée par vos objectifs business et vos KPIs',
   },
   {
     n: '3',
-    title: 'Risk & compliance setup',
-    desc: 'KYC flows, fraud rules, transaction monitoring',
+    title: 'Optimisation continue',
+    desc: 'Suivi long terme et itérations pour maximiser le ROI',
   },
 ]
 
@@ -153,7 +153,7 @@ export default function FintechPlatform() {
             style={{
               position: 'absolute',
               inset: 0,
-              background: '#86E95C',
+              background: '#fe5752',
               maskImage: `url("${asset('top-2.svg')}")`,
               WebkitMaskImage: `url("${asset('top-2.svg')}")`,
               maskSize: '100% auto',
@@ -162,7 +162,7 @@ export default function FintechPlatform() {
               WebkitMaskRepeat: 'no-repeat',
               maskPosition: 'top center',
               WebkitMaskPosition: 'top center',
-              filter: 'drop-shadow(0 0 8px rgba(8,52,0,0.45))',
+              filter: 'drop-shadow(0 0 8px rgba(0,35,41,0.45))',
             }}
           />
         </div>
@@ -199,10 +199,10 @@ export default function FintechPlatform() {
             style={{
               fontSize: '0.8125rem',
               fontWeight: 400,
-              color: '#083400',
+              color: '#002329',
             }}
           >
-            Our Products
+Nos services
           </span>
         </motion.div>
 
@@ -213,7 +213,7 @@ export default function FintechPlatform() {
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           style={{
             textAlign: 'center',
-            color: '#083400',
+            color: '#002329',
             fontFamily: '"Inter Tight", sans-serif',
             fontSize: 'clamp(2rem, 5vw, 4.0625rem)',
             fontWeight: 400,
@@ -221,9 +221,9 @@ export default function FintechPlatform() {
             margin: 0,
           }}
         >
-          <div>Fintech Platform</div>
+          <div>Agence marketing digital</div>
           <div>
-            for payments{' '}
+            axée{' '}
             <span
               style={{
                 display: 'inline-block',
@@ -259,7 +259,7 @@ export default function FintechPlatform() {
               </motion.div>
             </span>
           </div>
-          <div>and managing finance</div>
+          <div>sur la performance</div>
         </motion.h2>
       </div>
 
@@ -289,7 +289,7 @@ export default function FintechPlatform() {
         >
           <div style={{ flex: 1, minWidth: 0, paddingTop: '0.5rem' }}>
             <TextColumn
-              title="Automate financial operations"
+              title="Acquisition & croissance"
               features={BLOCK_1_FEATURES}
             />
           </div>
@@ -308,7 +308,7 @@ export default function FintechPlatform() {
         >
           <div style={{ flex: 1, minWidth: 0, paddingTop: '0.5rem' }}>
             <TextColumn
-              title="Digital Finance with Secure Infrastructure"
+              title="Visibilité & fidélisation"
               features={BLOCK_2_FEATURES}
             />
           </div>
@@ -330,7 +330,7 @@ function TextColumn({
     <>
       <h3
         style={{
-          color: '#083400',
+          color: '#002329',
           fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)',
           fontWeight: 400,
           lineHeight: '110%',
@@ -413,20 +413,20 @@ function TextColumn({
             display: 'inline-flex',
             alignItems: 'center',
             background: 'transparent',
-            color: '#083400',
+            color: '#002329',
             fontSize: '0.875rem',
             fontWeight: 500,
             height: '2.375rem',
             padding: '0 1rem',
             borderRadius: '0.5rem',
-            border: '1px solid #86EA5D',
+            border: '1px solid #fe5752',
             cursor: 'pointer',
             transition: 'border-color 200ms',
           }}
-          onMouseOver={(e) => (e.currentTarget.style.borderColor = '#6dd145')}
-          onMouseOut={(e) => (e.currentTarget.style.borderColor = '#86EA5D')}
+          onMouseOver={(e) => (e.currentTarget.style.borderColor = '#e54a45')}
+          onMouseOut={(e) => (e.currentTarget.style.borderColor = '#fe5752')}
         >
-          Try for free
+Nos réalisations
         </button>
       </div>
     </>
@@ -443,8 +443,8 @@ function LearnMoreGreen() {
         display: 'inline-flex',
         alignItems: 'center',
         gap: '0.5rem',
-        background: hover ? '#74d84a' : '#86E95C',
-        color: '#083400',
+        background: hover ? '#e54a45' : '#fe5752',
+        color: '#002329',
         fontSize: '0.875rem',
         fontWeight: 500,
         height: '2.375rem',
@@ -455,7 +455,7 @@ function LearnMoreGreen() {
         transition: 'background 200ms ease',
       }}
     >
-      Learn more
+Audit gratuit
       <span
         style={{
           position: 'relative',
@@ -499,7 +499,7 @@ function ArrowSVG({ style }: { style?: React.CSSProperties }) {
     >
       <path
         d="M0.530273 8.75L8.53027 0.75M8.53027 0.75H0.530273M8.53027 0.75V8.75"
-        stroke="#083400"
+        stroke="#002329"
         strokeWidth="1.5"
       />
     </svg>
@@ -605,7 +605,7 @@ function GreenCard1() {
               marginBottom: '0.375rem',
             }}
           >
-            Total on 2026
+ROI moyen 2026
           </div>
           <div
             style={{
@@ -874,7 +874,7 @@ function GreenCard2() {
             textAlign: 'center',
           }}
         >
-          Everything ready for fintech operations.
+Prêt à booster votre acquisition digitale.
         </div>
       </div>
     </div>

@@ -5,21 +5,21 @@ import { asset } from '@/lib/utils'
 const CARDS = [
   {
     bg: 'back-3-1.jpg',
-    word1: 'Multi',
-    word2: 'Currency',
-    desc: 'Insert your bid, form your strategy, or set campaign limits at any currency you wish, without worrying who will keep an eye on all those digits and exchange rates, we will do it - no mistakes!',
+    word1: 'Sur',
+    word2: 'Mesure',
+    desc: "Fini les stratégies génériques. On construit chaque plan aligné avec vos objectifs business, votre secteur et votre cible, pas ceux du voisin.",
   },
   {
     bg: 'back-3-2.jpg',
-    word1: 'Account',
-    word2: 'Manager',
-    desc: 'Get your service assistant to help with optimization, process improvements, implementations, and every inquiry to maximize your performance.',
+    word1: 'Vrais',
+    word2: 'KPIs',
+    desc: "Priorité aux vrais indicateurs : leads qualifiés, conversions, chiffre d'affaires et ROI. Pas de chiffres flatteurs sans impact business.",
   },
   {
     bg: 'back-3-3.jpg',
-    word1: 'White Label',
-    word2: 'Solution',
-    desc: 'Get our service and technical capabilities through a personalized interface under your brand, with no technical setup required on your side.',
+    word1: 'Toujours',
+    word2: 'Optimisé',
+    desc: 'Chaque campagne bénéficie d\'un suivi long terme : optimisation continue, itérations et reporting personnalisé pour chaque client.',
   },
 ]
 
@@ -83,10 +83,10 @@ export default function FinanceFeatures() {
                 style={{
                   fontSize: '0.8125rem',
                   fontWeight: 400,
-                  color: '#083400',
+                  color: '#002329',
                 }}
               >
-                Features
+La différence DGL
               </span>
             </div>
             <p
@@ -100,9 +100,9 @@ export default function FinanceFeatures() {
                 lineHeight: '21.5px',
               }}
             >
-              The complete suite of fintech infrastructure for payments, wallets,
-              fraud monitoring, compliance workflows, and financial automation,
-              built to support secure digital finance operations at scale.
+              Nous allions expertise stratégique, vision ROIste et
+              accompagnement personnalisé. Découvrez ce qui nous distingue des
+              agences généralistes.
             </p>
           </motion.div>
 
@@ -116,14 +116,14 @@ export default function FinanceFeatures() {
               width: '660px',
               maxWidth: '100%',
               justifySelf: narrow ? 'flex-start' : 'end',
-              color: '#083400',
+              color: '#002329',
               fontSize: 'clamp(2rem, 4.3vw, 4.0625rem)',
               fontWeight: 400,
               lineHeight: 1.169,
               margin: 0,
             }}
           >
-            Analytics that feels like it&rsquo;s from the future
+Des résultats concrets, jamais des promesses vides
           </motion.h2>
         </div>
 

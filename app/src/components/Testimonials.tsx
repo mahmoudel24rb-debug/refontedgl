@@ -4,22 +4,35 @@ import { asset } from '@/lib/utils'
 
 const TESTIMONIAL = {
   quote:
-    "We've worked across fintech operations for years, but never had such a complete platform for managing payments in one place.",
-  name: 'James Smith',
-  role: 'Product Manager, Orinya',
+    "Grâce à DGL Agency, nos campagnes Google Ads et Meta Ads ont boosté les adhésions de notre salle. Le suivi est précis, les optimisations constantes, et les résultats clairement mesurables.",
+  name: 'Hakim',
+  role: 'Directeur, GYMFIT',
   avatar: 'client-1.jpg',
-  logo: 'logo-4.svg',
-  logoLabel: 'Orinya',
+  logo: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-GYMFIT-e1763389822761.webp',
+  logoLabel: 'GYMFIT',
 }
 
-const MARQUEE_LOGOS = [
-  { src: 'logo-1.svg', alt: 'Nueral' },
-  { src: 'logo-2.svg', alt: 'GroundAI' },
-  { src: 'logo-3.svg', alt: 'Wids' },
-  { src: 'logo-4.svg', alt: 'Orinya' },
-  { src: 'logo-5.svg', alt: 'Xyreion' },
-  { src: 'logo-6.svg', alt: 'Skodia' },
-  { src: 'logo-7.svg', alt: 'GreenFI' },
+const MARQUEE_LOGOS: { src: string; alt: string }[] = [
+  {
+    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Les-Oceades-e1763389856213.webp',
+    alt: 'Les Océades',
+  },
+  {
+    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-GYMFIT-e1763389822761.webp',
+    alt: 'GYMFIT',
+  },
+  {
+    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Beauregard.webp',
+    alt: 'Beauregard',
+  },
+  {
+    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Epicure-Social-Club-1.webp',
+    alt: 'Epicure Social Club',
+  },
+  {
+    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-IPMS.webp',
+    alt: 'IPMS',
+  },
 ]
 
 export default function Testimonials() {
@@ -76,12 +89,13 @@ export default function Testimonials() {
               background: 'transparent',
               fontSize: '0.8125rem',
               fontWeight: 400,
-              color: '#083400',
-              width: '153px',
+              color: '#002329',
+              width: 'auto',
               boxSizing: 'border-box',
+              whiteSpace: 'nowrap',
             }}
           >
-            <span>What our clients say</span>
+            <span>Ils nous font confiance</span>
           </div>
 
           <p
@@ -97,9 +111,9 @@ export default function Testimonials() {
               opacity: 0.55,
             }}
           >
-            The complete suite of fintech infrastructure for payments, wallets,
-            fraud monitoring, compliance workflows, and financial automation at
-            scale.
+            Des témoignages concrets sur l'efficacité de nos campagnes SEO, Ads
+            et stratégie digitale. Plus de 500 clients satisfaits nous font
+            confiance pour leur acquisition.
           </p>
         </div>
 
@@ -207,9 +221,13 @@ export default function Testimonials() {
 
             {/* Company logo */}
             <img
-              src={asset(TESTIMONIAL.logo)}
+              src={
+                TESTIMONIAL.logo.startsWith('http')
+                  ? TESTIMONIAL.logo
+                  : asset(TESTIMONIAL.logo)
+              }
               alt={TESTIMONIAL.logoLabel}
-              style={{ height: '28px', width: 'auto' }}
+              style={{ height: '56px', width: 'auto', objectFit: 'contain' }}
             />
           </div>
 
@@ -225,7 +243,7 @@ export default function Testimonials() {
           {/* Quote text */}
           <p
             style={{
-              color: '#083400',
+              color: '#002329',
               fontFeatureSettings: '"liga" off, "clig" off',
               fontSize: 'clamp(1.75rem, 3vw, 2.75rem)',
               fontWeight: 400,
@@ -297,9 +315,9 @@ function MarqueeHalf() {
       {MARQUEE_LOGOS.map((l) => (
         <img
           key={l.alt}
-          src={asset(l.src)}
+          src={l.src.startsWith('http') ? l.src : asset(l.src)}
           alt={l.alt}
-          style={{ height: '28px', width: 'auto' }}
+          style={{ height: '48px', width: 'auto', objectFit: 'contain' }}
         />
       ))}
     </div>

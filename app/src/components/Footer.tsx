@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { asset } from '@/lib/utils'
 
 const Twitter = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -30,27 +29,38 @@ const YouTube = () => (
 /*
   Footer — spec incomplete in the source prompt.
   Structure invented from the hints:
-    - dark green bg #172110
+    - dark green bg #002329
     - brand logo with filter brightness(0) invert(1)
     - description, link columns, copyright, socials.
 */
 
 const LINK_COLUMNS = [
   {
-    heading: 'Product',
-    items: ['Payments', 'Wallets', 'Fraud control', 'Compliance', 'Analytics'],
+    heading: 'Services',
+    items: [
+      'Publicité digitale',
+      'SEO',
+      'Génération de leads',
+      'Automatisation',
+      'Landing pages',
+    ],
   },
   {
-    heading: 'Company',
-    items: ['About', 'Careers', 'Customers', 'Contact'],
+    heading: 'Agence',
+    items: ['À propos', 'Nos réalisations', 'Carrières', 'Contact'],
   },
   {
-    heading: 'Resources',
-    items: ['Documentation', 'Blog', 'Changelog', 'Support'],
+    heading: 'Ressources',
+    items: [
+      'Simulateur ROI',
+      'Audit landing page',
+      'PageSpeed tool',
+      'Blog',
+    ],
   },
   {
-    heading: 'Legal',
-    items: ['Terms of service', 'Privacy policy', 'Security', 'Cookies'],
+    heading: 'Légal',
+    items: ['Mentions légales', 'CGV', 'Politique de confidentialité'],
   },
 ]
 
@@ -75,7 +85,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: '#172110',
+        background: '#002329',
         color: '#FFFFFF',
         padding: '80px clamp(1rem, 3vw, 2rem) 32px',
         fontFamily: '"Inter Tight", sans-serif',
@@ -95,12 +105,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <img
-              src={asset('logo.svg')}
-              alt="Bancuip"
+              src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
+              alt="DGL Agency"
               style={{
-                height: '1.75rem',
+                height: '2rem',
                 width: 'auto',
-                filter: 'brightness(0) invert(1)',
                 marginBottom: '20px',
               }}
             />
@@ -114,8 +123,8 @@ export default function Footer() {
                 maxWidth: '340px',
               }}
             >
-              The complete infrastructure for payments, wallets, transaction
-              monitoring, and financial automation in one secure platform.
+Votre partenaire digital pour transformer vos idées en résultats concrets.
+              Agence SEO, Google Ads & Meta Ads basée à Tours.
             </p>
           </div>
 
@@ -133,7 +142,7 @@ export default function Footer() {
               <div key={col.heading}>
                 <div
                   style={{
-                    color: '#86E95C',
+                    color: '#fe5752',
                     fontSize: '0.75rem',
                     fontWeight: 600,
                     letterSpacing: '0.08em',
@@ -200,7 +209,7 @@ export default function Footer() {
               color: 'rgba(255,255,255,0.45)',
             }}
           >
-            © {new Date().getFullYear()} Bancuip. All rights reserved.
+            © {new Date().getFullYear()} DGL Agency. Tous droits réservés.
           </div>
 
           <div
