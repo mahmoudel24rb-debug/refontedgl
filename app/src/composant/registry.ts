@@ -27,11 +27,11 @@ export const COMPOSANTS: ComposantEntry[] = [
   },
   {
     slug: 'hero',
-    name: 'Hero "Marketeam" (typewriter + orbites)',
+    name: 'Hero DGL (typewriter + orbites équipe/clients)',
     status: 'ready',
     Component: lazy(() => import('./hero/Demo')),
     notes:
-      "Full viewport hero avec typewriter, 4 orbites d'avatars, curseur \"David\", ticker de logos et bordures conic-gradient animées.",
+      "Adapté du template Marketeam aux couleurs DGL. Photos Kiara/Mahmoud/Victor sur orbite 2, logos clients sur orbites 3/4, compteur 500+ clients au centre.",
   },
   {
     slug: 'exemple',

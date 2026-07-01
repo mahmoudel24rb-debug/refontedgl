@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
 
 /**
- * Composant Hero "Marketeam" — prototype isolé.
- * Cf. composant/hero/hero prompt.md pour la source du brief.
+ * Composant Hero — version DGL Agency.
+ * Adapté du prompt "Marketeam" original (cf. composant/hero/hero prompt.md)
+ * avec :
+ *   - palette DGL (dark navy + coral)
+ *   - photos équipe (Kiara, Mahmoud, Victor) + logos clients réels
+ *   - copy en français
  *
  * Fonts : Inter + Urbanist chargées via <style>@import.
  * Aucune lib d'animation externe : keyframes CSS + JS pour typewriter/counter.
@@ -10,12 +14,37 @@ import { useEffect, useState } from 'react'
  */
 
 const HEADING_TEXT =
-  'Unlock Top Marketing Talent You Thought Was Out of Reach -- Now Just One Click Away!'
-const HEADING_BLACK_CHARS = 67 // premiers caractères en noir
+  "Débloquez la performance marketing que vous pensiez hors de portée -- Maintenant à un clic"
+const HEADING_ACCENT_CHARS = 66 // les 66 premiers en coral, le reste en blanc
+
+// Photos équipe DGL (déposées dans /public/composant-hero/team/)
+const TEAM = {
+  kiara: '/composant-hero/team/Image-Equipe-Kiara.webp',
+  mahmoud: '/composant-hero/team/Image-Equipe-Mahmoud.webp',
+  victor: '/composant-hero/team/Image-Equipe-Victor.webp',
+}
+
+// Logos clients hébergés sur dgl-agency.fr
+const CLIENT_LOGOS = {
+  oceades:
+    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Les-Oceades-e1763389856213.webp',
+  gymfit:
+    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-GYMFIT-e1763389822761.webp',
+  beauregard:
+    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Beauregard.webp',
+  epicure:
+    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Epicure-Social-Club-1.webp',
+  ipms:
+    'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-IPMS.webp',
+}
+
+// DGL brand accent — utilisé pour tous les glows pour rester cohérent
+const DGL_GLOW = 'rgba(254,87,82,0.55)'
 
 const AVATARS: {
   url: string
-  orbit: 1 | 2 | 3 | 4
+  kind: 'team' | 'logo'
+  orbit: 2 | 3 | 4
   angle: number
   radius: number
   size: number
@@ -23,109 +52,126 @@ const AVATARS: {
   radius_px?: number
   glow: string
   delay: number
+  objectFit?: 'cover' | 'contain'
+  objectPosition?: string
 }[] = [
+  // ORBIT 2 : L'ÉQUIPE (3 photos, orbite 501px)
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/aa51718fb3af3637e6d666b6543fc27a175fada6.png',
-    orbit: 1,
-    angle: 270,
-    radius: 177,
-    size: 58,
-    shape: 'square',
-    radius_px: 20,
-    glow: 'rgba(160,104,255,0.6)',
-    delay: 0.6,
-  },
-  {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/ca755f7f93c1126fb8bdbf99ab364a33aa9ab272.png',
+    url: TEAM.kiara,
+    kind: 'team',
     orbit: 2,
     angle: 60,
     radius: 251,
-    size: 58,
+    size: 78,
     shape: 'round',
-    glow: 'rgba(255,215,80,0.55)',
-    delay: 0.85,
+    glow: DGL_GLOW,
+    delay: 0.6,
+    objectFit: 'cover',
+    objectPosition: 'center 22%',
   },
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/dc01064c7093dcc32674876ee3cf5e41c4a485c6.png',
+    url: TEAM.mahmoud,
+    kind: 'team',
     orbit: 2,
     angle: 180,
     radius: 251,
     size: 78,
     shape: 'round',
-    glow: 'rgba(255,120,180,0.55)',
-    delay: 1.1,
+    glow: DGL_GLOW,
+    delay: 0.85,
+    objectFit: 'cover',
+    objectPosition: 'center 20%',
   },
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/d5470a58b02388336141575048720f19a50de832.png',
+    url: TEAM.victor,
+    kind: 'team',
     orbit: 2,
     angle: 300,
     radius: 251,
-    size: 58,
-    shape: 'square',
-    radius_px: 20,
-    glow: 'rgba(100,160,255,0.55)',
-    delay: 1.35,
+    size: 78,
+    shape: 'round',
+    glow: DGL_GLOW,
+    delay: 1.1,
+    objectFit: 'cover',
+    objectPosition: 'center 20%',
   },
+
+  // ORBIT 3 : logo client (325px radius)
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/018736aa5d0275c4ce56cfebaf2ae3007d81ca1e.png',
+    url: CLIENT_LOGOS.gymfit,
+    kind: 'logo',
     orbit: 3,
     angle: 130,
     radius: 325,
     size: 88,
-    shape: 'round',
-    glow: 'rgba(255,120,180,0.55)',
-    delay: 1.6,
+    shape: 'square',
+    radius_px: 22,
+    glow: DGL_GLOW,
+    delay: 1.35,
+    objectFit: 'contain',
   },
+
+  // ORBIT 4 : 4 logos clients (orbite extérieure 797px)
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/c76d8a0b99676de31c014344bfaf75bad090758d.png',
+    url: CLIENT_LOGOS.oceades,
+    kind: 'logo',
     orbit: 4,
     angle: 30,
     radius: 399,
-    size: 58,
-    shape: 'round',
-    glow: 'rgba(160,104,255,0.55)',
-    delay: 1.75,
+    size: 78,
+    shape: 'square',
+    radius_px: 22,
+    glow: DGL_GLOW,
+    delay: 1.6,
+    objectFit: 'contain',
   },
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/7b1b5f039de7b54cc9913e96c1923c3b15a157fa.png',
+    url: CLIENT_LOGOS.beauregard,
+    kind: 'logo',
     orbit: 4,
     angle: 95,
     radius: 399,
     size: 88,
     shape: 'square',
-    radius_px: 24,
-    glow: 'rgba(255,150,60,0.55)',
-    delay: 1.9,
+    radius_px: 22,
+    glow: DGL_GLOW,
+    delay: 1.85,
+    objectFit: 'contain',
   },
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/9ae171d8895199349755c43fbff00e122221a027.png',
+    url: CLIENT_LOGOS.epicure,
+    kind: 'logo',
     orbit: 4,
     angle: 220,
     radius: 399,
     size: 88,
     shape: 'square',
-    radius_px: 24,
-    glow: 'rgba(255,120,180,0.55)',
+    radius_px: 22,
+    glow: DGL_GLOW,
     delay: 2.05,
+    objectFit: 'contain',
   },
   {
-    url: 'https://polo-pecan-73837341.figma.site/_assets/v11/926c9eb7b4bc1df846fa0e39f0b0dc3fefd80671.png',
+    url: CLIENT_LOGOS.ipms,
+    kind: 'logo',
     orbit: 4,
     angle: 320,
     radius: 399,
-    size: 58,
-    shape: 'round',
-    glow: 'rgba(160,104,255,0.55)',
+    size: 78,
+    shape: 'square',
+    radius_px: 22,
+    glow: DGL_GLOW,
     delay: 2.3,
+    objectFit: 'contain',
   },
 ]
 
 const PARTNER_LOGOS = [
-  'https://polo-pecan-73837341.figma.site/_assets/v11/1e7b0e6fcc016cd28aec5c68990118b8c54c35a5.svg',
-  'https://polo-pecan-73837341.figma.site/_assets/v11/3eac03c183db2ae080d910159211c14843398b61.svg',
-  'https://polo-pecan-73837341.figma.site/_assets/v11/17705a4c0023a0e5a99154dfb10582adbbf4260b.svg',
-  'https://polo-pecan-73837341.figma.site/_assets/v11/0e5f442b09dc5c248e3e60d40a65505fb1887228.svg',
-  'https://polo-pecan-73837341.figma.site/_assets/v11/63f99030ceb459e3c9ab9e429cfa2353491d3816.svg',
+  CLIENT_LOGOS.oceades,
+  CLIENT_LOGOS.gymfit,
+  CLIENT_LOGOS.beauregard,
+  CLIENT_LOGOS.epicure,
+  CLIENT_LOGOS.ipms,
 ]
 
 const ORBITS = [
@@ -243,7 +289,7 @@ export default function Demo() {
           : 64
 
   const { text: typed, done: typingDone } = useTypewriter(HEADING_TEXT, 35, 400)
-  const count = useCountUp(20, 2000, 1200)
+  const count = useCountUp(500, 2000, 1200)
 
   return (
     <>
@@ -254,10 +300,11 @@ export default function Demo() {
         style={{
           minHeight: 'calc(100vh - 48px)',
           background:
-            "url('https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260624_111401_56af5012-2263-45d3-849a-8688084d7c2a.png&w=1280&q=85') center center / cover no-repeat, #0a0a0a",
+            'radial-gradient(ellipse at 15% 25%, rgba(254,87,82,0.28) 0%, transparent 55%), radial-gradient(ellipse at 85% 75%, rgba(254,87,82,0.10) 0%, transparent 50%), #002329',
           fontFamily: '"Inter", sans-serif',
           overflow: 'hidden',
           position: 'relative',
+          color: '#fff',
         }}
       >
         {/* HEADER */}
@@ -273,30 +320,38 @@ export default function Demo() {
             gap: '1rem',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: hideNav ? 0 : '3rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: hideNav ? 0 : '3rem',
+            }}
+          >
             <img
-              src="https://polo-pecan-73837341.figma.site/_assets/v11/17ae538989a509947a8de3892c644664895e69b1.png"
-              alt="Marketeam"
+              src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
+              alt="DGL Agency"
               style={{ height: 32, width: 'auto' }}
             />
             {!hideNav && (
               <nav style={{ display: 'flex', gap: '2rem' }}>
-                {['Your Team', 'Solutions', 'Blog', 'Pricing'].map((link) => (
-                  <a key={link} href="#" className="mkt-nav-link">
-                    {link}
-                  </a>
-                ))}
+                {['Services', 'Réalisations', 'À propos', 'Ressources'].map(
+                  (link) => (
+                    <a key={link} href="#" className="mkt-nav-link">
+                      {link}
+                    </a>
+                  ),
+                )}
               </nav>
             )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             <a href="#" className="mkt-nav-link mkt-nav-link-white">
-              Log In
+              Contact
             </a>
             <div className="mkt-btn-border-wrap">
               <button className="mkt-btn mkt-btn-primary">
-                <span className="mkt-btn-label">Join Now</span>
+                <span className="mkt-btn-label">Audit gratuit</span>
               </button>
             </div>
           </div>
@@ -313,9 +368,7 @@ export default function Demo() {
             gap: stacked ? '3rem' : '2rem',
             maxWidth: '1920px',
             margin: '0 auto',
-            padding: stacked
-              ? '40px 20px 20px'
-              : '40px 64px 20px',
+            padding: stacked ? '40px 20px 20px' : '40px 64px 20px',
           }}
         >
           {/* Hero Left */}
@@ -332,7 +385,7 @@ export default function Demo() {
                 fontFamily: '"Urbanist", sans-serif',
                 fontSize: headingSize,
                 fontWeight: 600,
-                lineHeight: `${headingSize}px`,
+                lineHeight: `${headingSize + 4}px`,
                 letterSpacing: '-1.5px',
                 margin: 0,
               }}
@@ -340,7 +393,9 @@ export default function Demo() {
               {typed.split('').map((ch, i) => (
                 <span
                   key={i}
-                  style={{ color: i < HEADING_BLACK_CHARS ? '#000000' : '#ffffff' }}
+                  style={{
+                    color: i < HEADING_ACCENT_CHARS ? '#fe5752' : '#ffffff',
+                  }}
                 >
                   {ch}
                 </span>
@@ -352,7 +407,7 @@ export default function Demo() {
                     display: 'inline-block',
                     width: 2,
                     height: '0.9em',
-                    background: '#A068FF',
+                    background: '#fe5752',
                     marginLeft: 3,
                     verticalAlign: 'middle',
                   }}
@@ -370,12 +425,13 @@ export default function Demo() {
                 flexWrap: 'wrap',
                 justifyContent: stacked ? 'center' : 'flex-start',
                 opacity: 0,
-                animation: 'mktFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 3.2s forwards',
+                animation:
+                  'mktFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 3.2s forwards',
               }}
             >
               <div className="mkt-btn-border-wrap">
                 <button className="mkt-btn mkt-btn-start">
-                  <span className="mkt-btn-label">Start Project</span>
+                  <span className="mkt-btn-label">Discutons de votre projet</span>
                   <svg
                     width="18"
                     height="18"
@@ -392,7 +448,7 @@ export default function Demo() {
                 </button>
               </div>
 
-              {/* Cursor "David" */}
+              {/* Cursor + badge "L'équipe DGL" */}
               <div
                 className="mkt-david"
                 style={{
@@ -406,12 +462,12 @@ export default function Demo() {
                     'mktFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 3.6s forwards',
                 }}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#A068FF">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#fe5752">
                   <path d="M5 3l14 8-6 2-2 6-6-16z" />
                 </svg>
                 <span
                   style={{
-                    background: '#A068FF',
+                    background: '#fe5752',
                     color: '#fff',
                     fontSize: 16,
                     fontWeight: 500,
@@ -420,7 +476,7 @@ export default function Demo() {
                     lineHeight: 1,
                   }}
                 >
-                  David
+                  L'équipe DGL
                 </span>
               </div>
             </div>
@@ -450,10 +506,7 @@ export default function Demo() {
                 direction={o.direction}
                 isCenter={o.n === 1}
                 counter={count}
-                avatars={AVATARS.filter((a) => a.orbit === o.n).map((a) => ({
-                  ...a,
-                  parentSize: o.size,
-                }))}
+                avatars={AVATARS.filter((a) => a.orbit === o.n)}
               />
             ))}
           </div>
@@ -483,6 +536,7 @@ export default function Demo() {
               width: 'max-content',
               animation: 'mktTicker 20s linear infinite',
               padding: '2rem 0',
+              alignItems: 'center',
             }}
           >
             {Array.from({ length: 4 })
@@ -493,10 +547,11 @@ export default function Demo() {
                   src={src}
                   alt=""
                   style={{
-                    width: 137,
-                    height: 40,
+                    height: 44,
+                    width: 'auto',
+                    maxWidth: 160,
                     objectFit: 'contain',
-                    filter: 'brightness(0.9)',
+                    opacity: 0.9,
                   }}
                 />
               ))}
@@ -541,7 +596,7 @@ function Orbit({
         animation: spinAnim,
       }}
     >
-      {/* Border overlay */}
+      {/* Border overlay (coral DGL) */}
       <div
         style={{
           position: 'absolute',
@@ -549,7 +604,7 @@ function Orbit({
           borderRadius: '50%',
           padding: 1,
           background:
-            'linear-gradient(180deg, rgba(217,161,255,0) 0%, rgba(217,161,255,1) 43%, rgba(217,161,255,0) 100%)',
+            'linear-gradient(180deg, rgba(254,87,82,0) 0%, rgba(254,87,82,1) 43%, rgba(254,87,82,0) 100%)',
           WebkitMask:
             'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
           WebkitMaskComposite: 'xor',
@@ -569,7 +624,7 @@ function Orbit({
             transform: 'translate(-50%, -50%)',
             animation: `mktSpin${direction === 'left' ? 'Right' : 'Left'} ${duration}s linear infinite`,
             textAlign: 'center',
-            color: '#000',
+            color: '#fff',
             width: '80%',
           }}
         >
@@ -580,21 +635,23 @@ function Orbit({
               fontWeight: 500,
               lineHeight: 1,
               letterSpacing: '-2px',
+              color: '#fe5752',
             }}
           >
-            {counter}k+
+            {counter}+
           </div>
           <div
             style={{
               fontFamily: '"Urbanist", sans-serif',
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: 600,
-              marginTop: 8,
-              color: 'rgba(0,0,0,0.65)',
-              letterSpacing: 1,
+              marginTop: 10,
+              color: 'rgba(255,255,255,0.75)',
+              letterSpacing: 1.2,
+              textTransform: 'uppercase',
             }}
           >
-            Specialists
+            Clients satisfaits
           </div>
         </div>
       )}
@@ -630,10 +687,13 @@ function Orbit({
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
-                borderRadius: a.shape === 'square' ? a.radius_px ?? 20 : '50%',
+                objectFit: a.objectFit ?? 'cover',
+                objectPosition: a.objectPosition ?? 'center',
+                borderRadius:
+                  a.shape === 'square' ? (a.radius_px ?? 20) : '50%',
                 boxShadow: `0 0 30px 5px ${a.glow}`,
-                background: '#fff',
+                background: a.kind === 'logo' ? '#fff' : '#002329',
+                padding: a.kind === 'logo' ? 8 : 0,
               }}
             />
           </div>
@@ -706,13 +766,15 @@ const STYLES = `
 
 .mkt-nav-link {
   position: relative;
-  color: #000;
+  color: rgba(255,255,255,0.75);
   font-family: "Inter", sans-serif;
   font-size: 15px;
   font-weight: 400;
   text-decoration: none;
   padding-bottom: 4px;
+  transition: color 200ms;
 }
+.mkt-nav-link:hover { color: #fff; }
 .mkt-nav-link-white { color: #fff; font-weight: 500; }
 
 .mkt-nav-link::after {
@@ -739,7 +801,7 @@ const STYLES = `
   inset: 0;
   padding: 3px;
   border-radius: inherit;
-  background: conic-gradient(from var(--border-angle), #A068FF, #070319, #A068FF, #070319, #A068FF);
+  background: conic-gradient(from var(--border-angle), #fe5752, #002329, #fe5752, #002329, #fe5752);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -759,7 +821,7 @@ const STYLES = `
   font-family: "Inter", sans-serif;
 }
 .mkt-btn-primary {
-  background: #000;
+  background: #002329;
   color: #fff;
   padding: 12px 26px;
   font-size: 15px;
@@ -767,7 +829,7 @@ const STYLES = `
   border-radius: 50px;
 }
 .mkt-btn-start {
-  background: #060218;
+  background: #002329;
   color: #fff;
   padding: 14px 28px;
   font-size: 16px;
@@ -779,7 +841,7 @@ const STYLES = `
   content: '';
   position: absolute;
   inset: 0;
-  background: #A068FF;
+  background: #fe5752;
   transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
   z-index: 1;
 }
