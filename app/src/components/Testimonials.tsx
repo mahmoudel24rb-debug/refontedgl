@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { asset } from '@/lib/utils'
 
+// URLs http(s):// et paths absolus (/x) sont utilisés tels quels ;
+// tout le reste (ex. 'quote.svg', 'client-1.jpg') passe par asset()
+// qui les préfixe de /assets/
+function resolveImg(src: string) {
+  if (src.startsWith('http') || src.startsWith('/')) return src
+  return asset(src)
+}
+
 const TESTIMONIAL = {
   quote:
     "Grâce à DGL Agency, nos campagnes Google Ads et Meta Ads ont boosté les adhésions de notre salle. Le suivi est précis, les optimisations constantes, et les résultats clairement mesurables.",
@@ -206,11 +214,7 @@ export default function Testimonials() {
 
             {/* Company logo */}
             <img
-              src={
-                TESTIMONIAL.logo.startsWith('http')
-                  ? TESTIMONIAL.logo
-                  : asset(TESTIMONIAL.logo)
-              }
+              src={resolveImg(TESTIMONIAL.logo)}
               alt={TESTIMONIAL.logoLabel}
               style={{ height: '56px', width: 'auto', objectFit: 'contain' }}
             />
@@ -300,7 +304,7 @@ function MarqueeHalf() {
       {MARQUEE_LOGOS.map((l) => (
         <img
           key={l.alt}
-          src={l.src.startsWith('http') ? l.src : asset(l.src)}
+          src={resolveImg(l.src)}
           alt={l.alt}
           style={{ height: '48px', width: 'auto', objectFit: 'contain' }}
         />
