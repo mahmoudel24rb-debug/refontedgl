@@ -8,31 +8,16 @@ const TESTIMONIAL = {
   name: 'Hakim',
   role: 'Directeur, GYMFIT',
   avatar: 'client-1.jpg',
-  logo: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-GYMFIT-e1763389822761.webp',
+  logo: '/assets/logos/gymfit.webp',
   logoLabel: 'GYMFIT',
 }
 
 const MARQUEE_LOGOS: { src: string; alt: string }[] = [
-  {
-    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Les-Oceades-e1763389856213.webp',
-    alt: 'Les Océades',
-  },
-  {
-    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-GYMFIT-e1763389822761.webp',
-    alt: 'GYMFIT',
-  },
-  {
-    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Beauregard.webp',
-    alt: 'Beauregard',
-  },
-  {
-    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-Epicure-Social-Club-1.webp',
-    alt: 'Epicure Social Club',
-  },
-  {
-    src: 'https://dgl-agency.fr/wp-content/uploads/2025/11/Logo-IPMS.webp',
-    alt: 'IPMS',
-  },
+  { src: '/assets/logos/oceades.webp', alt: 'Les Océades' },
+  { src: '/assets/logos/gymfit.webp', alt: 'GYMFIT' },
+  { src: '/assets/logos/beauregard.webp', alt: 'Beauregard' },
+  { src: '/assets/logos/epicure.webp', alt: 'Epicure Social Club' },
+  { src: '/assets/logos/ipms.webp', alt: 'IPMS' },
 ]
 
 export default function Testimonials() {

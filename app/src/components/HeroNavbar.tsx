@@ -86,7 +86,7 @@ export default function HeroNavbar() {
         {/* Left: Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
-            src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
+            src="/assets/logos/logo-dgl-agency.webp"
             alt="DGL Agency"
             style={{ height: '1.75rem', width: 'auto' }}
           />

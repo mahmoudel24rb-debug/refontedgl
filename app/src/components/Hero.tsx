@@ -290,7 +290,7 @@ export default function Hero() {
           className="hero3-nav-wrap"
         >
           <img
-            src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
+            src="/assets/logos/logo-dgl-agency.webp"
             alt="DGL Agency"
             style={{ height: 32, width: 'auto' }}
           />
