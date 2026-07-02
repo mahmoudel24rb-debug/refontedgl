@@ -1,799 +1,580 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { motion, type Variants } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 
 /**
- * Hero DGL Agency — version site principal.
- * Basé sur composant/hero/Demo.tsx (typewriter + orbites équipe/clients),
- * ajusté pour occuper 100vh et servir de premier écran du site.
+ * Hero DGL — version "Glowy waves" (basé sur composant/hero3).
+ * Canvas 2D avec 5 couches de vagues qui suivent la souris + contenu
+ * centré entrance-animé. Header (logo + nav + CTA) intégré au-dessus
+ * du canvas.
  *
- * Le header (logo + nav + CTA) est intégré à ce composant.
- * En conséquence, on ne monte plus <HeroNavbar /> dans Index.tsx.
- *
- * Requiert @property (Chrome 85+, Edge 85+, Safari 16.4+, Firefox 128+).
+ * Requiert framer-motion + lucide-react (déjà dans le projet).
  */
 
-const HEADING_TEXT =
-  "Débloquez la performance marketing que vous pensiez hors de portée -- Maintenant à un clic"
-const HEADING_ACCENT_CHARS = 66
-
-const TEAM = {
-  kiara: '/composant-hero/team/Image-Equipe-Kiara.webp',
-  mahmoud: '/composant-hero/team/Image-Equipe-Mahmoud.webp',
-  victor: '/composant-hero/team/Image-Equipe-Victor.webp',
+type Point = { x: number; y: number }
+interface WaveConfig {
+  offset: number
+  amplitude: number
+  frequency: number
+  color: string
+  opacity: number
 }
 
-const CLIENT_LOGOS = {
-  oceades: '/assets/logos/oceades.webp',
-  gymfit: '/assets/logos/gymfit.webp',
-  beauregard: '/assets/logos/beauregard.webp',
-  epicure: '/assets/logos/epicure.webp',
-  ipms: '/assets/logos/ipms.webp',
-}
+const DGL = {
+  bg: '#002329',
+  bgBottom: '#001519',
+  primary: '#fe5752',
+  primaryHover: '#e54a45',
+  white: '#ffffff',
+} as const
 
-const DGL_GLOW = 'rgba(254,87,82,0.55)'
-
-const AVATARS: {
-  url: string
-  kind: 'team' | 'logo'
-  orbit: 2 | 3 | 4
-  angle: number
-  radius: number
-  size: number
-  shape: 'round' | 'square'
-  radius_px?: number
-  glow: string
-  delay: number
-  objectFit?: 'cover' | 'contain'
-  objectPosition?: string
-}[] = [
-  {
-    url: TEAM.kiara,
-    kind: 'team',
-    orbit: 2,
-    angle: 60,
-    radius: 251,
-    size: 78,
-    shape: 'round',
-    glow: DGL_GLOW,
-    delay: 0.6,
-    objectFit: 'cover',
-    objectPosition: 'center 22%',
-  },
-  {
-    url: TEAM.mahmoud,
-    kind: 'team',
-    orbit: 2,
-    angle: 180,
-    radius: 251,
-    size: 78,
-    shape: 'round',
-    glow: DGL_GLOW,
-    delay: 0.85,
-    objectFit: 'cover',
-    objectPosition: 'center 20%',
-  },
-  {
-    url: TEAM.victor,
-    kind: 'team',
-    orbit: 2,
-    angle: 300,
-    radius: 251,
-    size: 78,
-    shape: 'round',
-    glow: DGL_GLOW,
-    delay: 1.1,
-    objectFit: 'cover',
-    objectPosition: 'center 20%',
-  },
-  {
-    url: CLIENT_LOGOS.gymfit,
-    kind: 'logo',
-    orbit: 3,
-    angle: 130,
-    radius: 325,
-    size: 88,
-    shape: 'square',
-    radius_px: 22,
-    glow: DGL_GLOW,
-    delay: 1.35,
-    objectFit: 'contain',
-  },
-  {
-    url: CLIENT_LOGOS.oceades,
-    kind: 'logo',
-    orbit: 4,
-    angle: 30,
-    radius: 399,
-    size: 78,
-    shape: 'square',
-    radius_px: 22,
-    glow: DGL_GLOW,
-    delay: 1.6,
-    objectFit: 'contain',
-  },
-  {
-    url: CLIENT_LOGOS.beauregard,
-    kind: 'logo',
-    orbit: 4,
-    angle: 95,
-    radius: 399,
-    size: 88,
-    shape: 'square',
-    radius_px: 22,
-    glow: DGL_GLOW,
-    delay: 1.85,
-    objectFit: 'contain',
-  },
-  {
-    url: CLIENT_LOGOS.epicure,
-    kind: 'logo',
-    orbit: 4,
-    angle: 220,
-    radius: 399,
-    size: 88,
-    shape: 'square',
-    radius_px: 22,
-    glow: DGL_GLOW,
-    delay: 2.05,
-    objectFit: 'contain',
-  },
-  {
-    url: CLIENT_LOGOS.ipms,
-    kind: 'logo',
-    orbit: 4,
-    angle: 320,
-    radius: 399,
-    size: 78,
-    shape: 'square',
-    radius_px: 22,
-    glow: DGL_GLOW,
-    delay: 2.3,
-    objectFit: 'contain',
-  },
+const WAVE_PALETTE: WaveConfig[] = [
+  { offset: 0, amplitude: 70, frequency: 0.003, color: 'rgba(254,87,82,0.8)', opacity: 0.45 },
+  { offset: Math.PI / 2, amplitude: 90, frequency: 0.0026, color: 'rgba(255,140,133,0.7)', opacity: 0.35 },
+  { offset: Math.PI, amplitude: 60, frequency: 0.0034, color: 'rgba(240,239,233,0.55)', opacity: 0.3 },
+  { offset: Math.PI * 1.5, amplitude: 80, frequency: 0.0022, color: 'rgba(255,255,255,0.35)', opacity: 0.25 },
+  { offset: Math.PI * 2, amplitude: 55, frequency: 0.004, color: 'rgba(254,87,82,0.35)', opacity: 0.2 },
 ]
 
-const PARTNER_LOGOS = [
-  CLIENT_LOGOS.oceades,
-  CLIENT_LOGOS.gymfit,
-  CLIENT_LOGOS.beauregard,
-  CLIENT_LOGOS.epicure,
-  CLIENT_LOGOS.ipms,
-]
+const NAV_LINKS = ['Services', 'Réalisations', 'À propos', 'Ressources']
 
-const ORBITS = [
-  { n: 1, size: 353, duration: 30, direction: 'left' },
-  { n: 2, size: 501, duration: 40, direction: 'right' },
-  { n: 3, size: 649, duration: 50, direction: 'right' },
-  { n: 4, size: 797, duration: 60, direction: 'left' },
+const highlightPills = [
+  'ROAS mesurable',
+  'Setup en 15 jours',
+  'Reporting mensuel',
 ] as const
 
-function useTypewriter(fullText: string, speed = 35, delay = 400) {
-  const [text, setText] = useState('')
-  const [done, setDone] = useState(false)
+const heroStats: { label: string; value: string }[] = [
+  { label: 'Clients satisfaits', value: '500+' },
+  { label: 'Années d\'expertise', value: '10 ans' },
+  { label: 'Campagnes actives', value: '120+' },
+]
 
-  useEffect(() => {
-    let cancelled = false
-    let i = 0
-    let raf: number | null = null
-
-    const start = () => {
-      const tick = () => {
-        if (cancelled) return
-        setText(fullText.slice(0, i))
-        if (i < fullText.length) {
-          i++
-          window.setTimeout(() => (raf = requestAnimationFrame(tick)), speed)
-        } else {
-          setDone(true)
-        }
-      }
-      raf = requestAnimationFrame(tick)
-    }
-
-    const timer = window.setTimeout(start, delay)
-    return () => {
-      cancelled = true
-      window.clearTimeout(timer)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [fullText, speed, delay])
-
-  return { text, done }
+const containerVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, staggerChildren: 0.12 },
+  },
 }
 
-function useCountUp(target: number, duration = 2000, delay = 1200) {
-  const [value, setValue] = useState(0)
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+}
 
-  useEffect(() => {
-    let raf = 0
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
-
-    const timer = window.setTimeout(() => {
-      const start = performance.now()
-      const tick = (now: number) => {
-        const t = Math.min(1, (now - start) / duration)
-        setValue(Math.round(easeOutCubic(t) * target))
-        if (t < 1) raf = requestAnimationFrame(tick)
-      }
-      raf = requestAnimationFrame(tick)
-    }, delay)
-
-    return () => {
-      window.clearTimeout(timer)
-      cancelAnimationFrame(raf)
-    }
-  }, [target, duration, delay])
-
-  return value
+const statsVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.6, ease: 'easeOut', staggerChildren: 0.08 },
+  },
 }
 
 export default function Hero() {
-  const [viewport, setViewport] = useState<
-    'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  >('xl')
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const mouseRef = useRef<Point>({ x: 0, y: 0 })
+  const targetMouseRef = useRef<Point>({ x: 0, y: 0 })
 
   useEffect(() => {
-    const check = () => {
-      const w = window.innerWidth
-      if (w <= 480) setViewport('xs')
-      else if (w <= 768) setViewport('sm')
-      else if (w <= 1024) setViewport('md')
-      else if (w <= 1280) setViewport('lg')
-      else setViewport('xl')
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animationId = 0
+    let time = 0
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    const mouseInfluence = prefersReducedMotion ? 10 : 70
+    const influenceRadius = prefersReducedMotion ? 160 : 320
+    const smoothing = prefersReducedMotion ? 0.04 : 0.1
+
+    const resizeCanvas = () => {
+      const parent = canvas.parentElement
+      canvas.width = parent ? parent.clientWidth : window.innerWidth
+      canvas.height = parent ? parent.clientHeight : window.innerHeight
     }
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+
+    const recenterMouse = () => {
+      const centerPoint = { x: canvas.width / 2, y: canvas.height / 2 }
+      mouseRef.current = centerPoint
+      targetMouseRef.current = centerPoint
+    }
+
+    const handleResize = () => {
+      resizeCanvas()
+      recenterMouse()
+    }
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      targetMouseRef.current = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      }
+    }
+
+    const handleMouseLeave = () => recenterMouse()
+
+    resizeCanvas()
+    recenterMouse()
+
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseleave', handleMouseLeave)
+
+    const drawWave = (wave: WaveConfig) => {
+      ctx.save()
+      ctx.beginPath()
+
+      for (let x = 0; x <= canvas.width; x += 4) {
+        const dx = x - mouseRef.current.x
+        const dy = canvas.height / 2 - mouseRef.current.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        const influence = Math.max(0, 1 - distance / influenceRadius)
+        const mouseEffect =
+          influence *
+          mouseInfluence *
+          Math.sin(time * 0.001 + x * 0.01 + wave.offset)
+
+        const y =
+          canvas.height / 2 +
+          Math.sin(x * wave.frequency + time * 0.002 + wave.offset) *
+            wave.amplitude +
+          Math.sin(x * wave.frequency * 0.4 + time * 0.003) *
+            (wave.amplitude * 0.45) +
+          mouseEffect
+
+        if (x === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+
+      ctx.lineWidth = 2.5
+      ctx.strokeStyle = wave.color
+      ctx.globalAlpha = wave.opacity
+      ctx.shadowBlur = 35
+      ctx.shadowColor = wave.color
+      ctx.stroke()
+
+      ctx.restore()
+    }
+
+    const animate = () => {
+      time += 1
+
+      mouseRef.current.x +=
+        (targetMouseRef.current.x - mouseRef.current.x) * smoothing
+      mouseRef.current.y +=
+        (targetMouseRef.current.y - mouseRef.current.y) * smoothing
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+      gradient.addColorStop(0, DGL.bg)
+      gradient.addColorStop(1, DGL.bgBottom)
+
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      ctx.globalAlpha = 1
+      ctx.shadowBlur = 0
+
+      WAVE_PALETTE.forEach(drawWave)
+
+      animationId = window.requestAnimationFrame(animate)
+    }
+
+    animationId = window.requestAnimationFrame(animate)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseleave', handleMouseLeave)
+      cancelAnimationFrame(animationId)
+    }
   }, [])
 
-  const circleScale =
-    viewport === 'xs'
-      ? 0.4
-      : viewport === 'sm'
-        ? 0.5
-        : viewport === 'md'
-          ? 0.7
-          : viewport === 'lg'
-            ? 0.85
-            : 1
-
-  const stacked = viewport === 'md' || viewport === 'sm' || viewport === 'xs'
-  const hideNav = viewport === 'sm' || viewport === 'xs'
-  const headingSize =
-    viewport === 'xs'
-      ? 28
-      : viewport === 'sm'
-        ? 36
-        : viewport === 'md'
-          ? 48
-          : 64
-
-  const { text: typed, done: typingDone } = useTypewriter(HEADING_TEXT, 35, 400)
-  const count = useCountUp(500, 2000, 1200)
-
   return (
-    <>
-      <style>{STYLES}</style>
-
-      <section
-        className="mkt-app"
-        style={{
-          minHeight: '100vh',
-          background:
-            'radial-gradient(ellipse at 15% 25%, rgba(254,87,82,0.28) 0%, transparent 55%), radial-gradient(ellipse at 85% 75%, rgba(254,87,82,0.10) 0%, transparent 50%), #002329',
-          fontFamily: '"Inter Tight", sans-serif',
-          overflow: 'hidden',
-          position: 'relative',
-          color: '#fff',
-        }}
-      >
-        <header
-          className="mkt-header"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: viewport === 'xs' ? '18px 20px' : '24px 64px',
-            maxWidth: '1920px',
-            margin: '0 auto',
-            gap: '1rem',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: hideNav ? 0 : '3rem',
-            }}
-          >
-            <img
-              src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
-              alt="DGL Agency"
-              style={{ height: 32, width: 'auto' }}
-            />
-            {!hideNav && (
-              <nav style={{ display: 'flex', gap: '2rem' }}>
-                {['Services', 'Réalisations', 'À propos', 'Ressources'].map(
-                  (link) => (
-                    <a key={link} href="#" className="mkt-nav-link">
-                      {link}
-                    </a>
-                  ),
-                )}
-              </nav>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <a href="#" className="mkt-nav-link mkt-nav-link-white">
-              Contact
-            </a>
-            <div className="mkt-btn-border-wrap">
-              <button className="mkt-btn mkt-btn-primary">
-                <span className="mkt-btn-label">Audit gratuit</span>
-              </button>
-            </div>
-          </div>
-        </header>
-
-        <div
-          className="mkt-hero"
-          style={{
-            display: 'flex',
-            flexDirection: stacked ? 'column' : 'row',
-            alignItems: stacked ? 'center' : 'flex-start',
-            justifyContent: 'space-between',
-            gap: stacked ? '3rem' : '2rem',
-            maxWidth: '1920px',
-            margin: '0 auto',
-            padding: stacked ? '40px 20px 20px' : '40px 64px 20px',
-          }}
-        >
-          <div
-            className="mkt-hero-left"
-            style={{
-              flex: stacked ? '1 1 auto' : '0 1 600px',
-              paddingTop: stacked ? 0 : 40,
-              textAlign: stacked ? 'center' : 'left',
-            }}
-          >
-            <h1
-              style={{
-                fontFamily: '"Urbanist", sans-serif',
-                fontSize: headingSize,
-                fontWeight: 600,
-                lineHeight: `${headingSize + 4}px`,
-                letterSpacing: '-1.5px',
-                margin: 0,
-              }}
-            >
-              {typed.split('').map((ch, i) => (
-                <span
-                  key={i}
-                  style={{
-                    color: i < HEADING_ACCENT_CHARS ? '#fe5752' : '#ffffff',
-                  }}
-                >
-                  {ch}
-                </span>
-              ))}
-              {!typingDone && (
-                <span
-                  className="mkt-cursor"
-                  style={{
-                    display: 'inline-block',
-                    width: 2,
-                    height: '0.9em',
-                    background: '#fe5752',
-                    marginLeft: 3,
-                    verticalAlign: 'middle',
-                  }}
-                />
-              )}
-            </h1>
-
-            <div
-              className="mkt-cta-wrap"
-              style={{
-                marginTop: '2.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: stacked ? '1rem' : '1.25rem',
-                flexWrap: 'wrap',
-                justifyContent: stacked ? 'center' : 'flex-start',
-                opacity: 0,
-                animation:
-                  'mktFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 3.2s forwards',
-              }}
-            >
-              <div className="mkt-btn-border-wrap">
-                <button className="mkt-btn mkt-btn-start">
-                  <span className="mkt-btn-label">Discutons de votre projet</span>
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ marginLeft: 6 }}
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </button>
-              </div>
-
-              <a
-                href="#realisations"
-                className="mkt-nav-link mkt-nav-link-white"
-                style={{
-                  fontSize: 15,
-                  padding: '4px 0',
-                  marginLeft: stacked ? 0 : '1.5rem',
-                }}
-              >
-                Voir nos réalisations →
-              </a>
-            </div>
-          </div>
-
-          <div
-            className="mkt-hero-right"
-            style={{
-              width: 720,
-              height: 720,
-              maxWidth: '100vw',
-              position: 'relative',
-              flexShrink: 0,
-              transform: `scale(${circleScale})`,
-              transformOrigin: 'center center',
-              opacity: 0,
-              animation:
-                'mktScaleIn 1.2s cubic-bezier(0.22,1,0.36,1) 0.3s forwards',
-            }}
-          >
-            {ORBITS.map((o) => (
-              <Orbit
-                key={o.n}
-                size={o.size}
-                duration={o.duration}
-                direction={o.direction}
-                isCenter={o.n === 1}
-                counter={count}
-                avatars={AVATARS.filter((a) => a.orbit === o.n)}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div
-          className="mkt-ticker-wrap"
-          style={{
-            marginTop: '2rem',
-            position: 'relative',
-            overflow: 'hidden',
-            WebkitMaskImage:
-              'linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)',
-            maskImage:
-              'linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)',
-            opacity: 0,
-            animation:
-              'mktFadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.6s forwards',
-          }}
-        >
-          <div
-            className="mkt-ticker"
-            style={{
-              display: 'flex',
-              gap: 64,
-              width: 'max-content',
-              animation: 'mktTicker 20s linear infinite',
-              padding: '2rem 0',
-              alignItems: 'center',
-            }}
-          >
-            {Array.from({ length: 4 })
-              .flatMap(() => PARTNER_LOGOS)
-              .map((src, i) => (
-                <img
-                  key={i}
-                  src={src}
-                  alt=""
-                  style={{
-                    height: 44,
-                    width: 'auto',
-                    maxWidth: 160,
-                    objectFit: 'contain',
-                    opacity: 0.9,
-                  }}
-                />
-              ))}
-          </div>
-        </div>
-      </section>
-    </>
-  )
-}
-
-function Orbit({
-  size,
-  duration,
-  direction,
-  isCenter,
-  counter,
-  avatars,
-}: {
-  size: number
-  duration: number
-  direction: 'left' | 'right'
-  isCenter: boolean
-  counter: number
-  avatars: (typeof AVATARS)[number][]
-}) {
-  const spinAnim = `mktSpin${direction === 'left' ? 'Left' : 'Right'} ${duration}s linear infinite`
-  return (
-    <div
-      className="mkt-orbit"
+    <section
       style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        width: size,
-        height: size,
-        marginLeft: -size / 2,
-        marginTop: -size / 2,
-        borderRadius: '50%',
-        animation: spinAnim,
+        position: 'relative',
+        isolation: 'isolate',
+        display: 'flex',
+        minHeight: '100vh',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        background: DGL.bg,
+        color: DGL.white,
+        fontFamily: '"Inter Tight", sans-serif',
       }}
+      aria-label="Hero DGL Agency"
     >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          borderRadius: '50%',
-          padding: 1,
-          background:
-            'linear-gradient(180deg, rgba(254,87,82,0) 0%, rgba(254,87,82,1) 43%, rgba(254,87,82,0) 100%)',
-          WebkitMask:
-            'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-          WebkitMaskComposite: 'xor',
-          mask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-          maskComposite: 'exclude',
-          pointerEvents: 'none',
-        }}
+      <canvas
+        ref={canvasRef}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        aria-hidden="true"
       />
 
-      {isCenter && (
+      {/* Halos gradients pour la profondeur */}
+      <div
+        style={{ position: 'absolute', inset: 0, zIndex: -1, pointerEvents: 'none' }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: 0,
+            height: 520,
+            width: 520,
+            transform: 'translateX(-50%)',
+            borderRadius: '50%',
+            background: 'rgba(254,87,82,0.10)',
+            filter: 'blur(140px)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            height: 360,
+            width: 360,
+            borderRadius: '50%',
+            background: 'rgba(240,239,233,0.05)',
+            filter: 'blur(120px)',
+          }}
+        />
         <div
           style={{
             position: 'absolute',
             top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            animation: `mktSpin${direction === 'left' ? 'Right' : 'Left'} ${duration}s linear infinite`,
-            textAlign: 'center',
-            color: '#fff',
-            width: '80%',
+            left: '25%',
+            height: 400,
+            width: 400,
+            borderRadius: '50%',
+            background: 'rgba(254,87,82,0.06)',
+            filter: 'blur(150px)',
           }}
-        >
-          <div
-            style={{
-              fontFamily: '"Urbanist", sans-serif',
-              fontSize: 64,
-              fontWeight: 500,
-              lineHeight: 1,
-              letterSpacing: '-2px',
-              color: '#fe5752',
-            }}
-          >
-            {counter}+
-          </div>
-          <div
-            style={{
-              fontFamily: '"Urbanist", sans-serif',
-              fontSize: 15,
-              fontWeight: 600,
-              marginTop: 10,
-              color: 'rgba(255,255,255,0.75)',
-              letterSpacing: 1.2,
-              textTransform: 'uppercase',
-            }}
-          >
-            Clients satisfaits
-          </div>
-        </div>
-      )}
+        />
+      </div>
 
-      {avatars.map((a, i) => (
+      {/* HEADER — absolute au-dessus du canvas */}
+      <header
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 20,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '24px 64px',
+          maxWidth: 1920,
+          margin: '0 auto',
+        }}
+        className="hero3-header"
+      >
         <div
-          key={i}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: a.size,
-            height: a.size,
-            marginLeft: -a.size / 2,
-            marginTop: -a.size / 2,
-            transform: `rotate(${a.angle}deg) translate(${a.radius}px) rotate(-${a.angle}deg)`,
-            opacity: 0,
-            animation: `mktAvatarIn 0.9s cubic-bezier(0.22,1,0.36,1) ${a.delay}s forwards`,
-          }}
+          style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}
+          className="hero3-nav-wrap"
         >
-          <div
+          <img
+            src="https://dgl-agency.fr/wp-content/uploads/2025/11/logo-dgl-agency.webp"
+            alt="DGL Agency"
+            style={{ height: 32, width: 'auto' }}
+          />
+          <nav style={{ display: 'flex', gap: '2rem' }} className="hero3-nav">
+            {NAV_LINKS.map((link) => (
+              <a key={link} href="#" className="hero3-nav-link">
+                {link}
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <a href="#" className="hero3-nav-link hero3-nav-link-white">
+            Contact
+          </a>
+          <button className="hero3-header-cta">Audit gratuit</button>
+        </div>
+      </header>
+
+      {/* CONTENU CENTRÉ */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          margin: '0 auto',
+          display: 'flex',
+          width: '100%',
+          maxWidth: 1152,
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '96px 24px',
+          textAlign: 'center',
+        }}
+      >
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{ width: '100%' }}
+        >
+          <motion.h1
+            variants={itemVariants}
             style={{
-              width: '100%',
-              height: '100%',
-              animation: `mktSpin${direction === 'left' ? 'Right' : 'Left'} ${duration}s linear infinite`,
+              margin: 0,
+              marginBottom: 24,
+              fontSize: 'clamp(36px, 6vw, 80px)',
+              lineHeight: 1.05,
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              color: DGL.white,
             }}
           >
-            <img
-              src={a.url}
-              alt=""
+            Débloquez la performance{' '}
+            <span
               style={{
-                width: '100%',
-                height: '100%',
-                objectFit: a.objectFit ?? 'cover',
-                objectPosition: a.objectPosition ?? 'center',
-                borderRadius:
-                  a.shape === 'square' ? (a.radius_px ?? 20) : '50%',
-                boxShadow: `0 0 30px 5px ${a.glow}`,
-                background: a.kind === 'logo' ? '#fff' : '#002329',
-                padding: a.kind === 'logo' ? 8 : 0,
+                background: `linear-gradient(90deg, ${DGL.primary} 0%, rgba(254,87,82,0.6) 55%, rgba(240,239,233,0.8) 100%)`,
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
               }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
+            >
+              marketing que vous méritez
+            </span>
+          </motion.h1>
+
+          <motion.p
+            variants={itemVariants}
+            style={{
+              margin: '0 auto 40px',
+              maxWidth: 760,
+              fontSize: 'clamp(16px, 1.6vw, 22px)',
+              lineHeight: 1.55,
+              color: 'rgba(255,255,255,0.72)',
+            }}
+          >
+            SEO, Google Ads, Meta Ads, automatisation. On construit des systèmes
+            d'acquisition mesurables au ROAS, avec un reporting mensuel clair et
+            zéro promesse en l'air.
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            style={{
+              marginBottom: 40,
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 16,
+            }}
+          >
+            <PrimaryButton>
+              Audit gratuit
+              <ArrowRight
+                size={16}
+                aria-hidden
+                className="hero3-arrow"
+                style={{ transition: 'transform 200ms' }}
+              />
+            </PrimaryButton>
+            <GhostButton>Voir nos réalisations</GhostButton>
+          </motion.div>
+
+          <motion.ul
+            variants={itemVariants}
+            style={{
+              margin: '0 0 48px',
+              padding: 0,
+              listStyle: 'none',
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 12,
+              fontSize: 12,
+              textTransform: 'uppercase',
+              letterSpacing: '0.2em',
+              color: 'rgba(255,255,255,0.75)',
+            }}
+          >
+            {highlightPills.map((pill) => (
+              <li
+                key={pill}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: 999,
+                  border: '1px solid rgba(254,87,82,0.25)',
+                  background: 'rgba(0,35,41,0.6)',
+                  backdropFilter: 'blur(6px)',
+                }}
+              >
+                {pill}
+              </li>
+            ))}
+          </motion.ul>
+
+          <motion.div
+            variants={statsVariants}
+            style={{
+              display: 'grid',
+              gap: 16,
+              padding: 24,
+              borderRadius: 16,
+              border: '1px solid rgba(254,87,82,0.2)',
+              background: 'rgba(0,35,41,0.6)',
+              backdropFilter: 'blur(8px)',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            }}
+          >
+            {heroStats.map((stat) => (
+              <motion.div
+                key={stat.label}
+                variants={itemVariants}
+                style={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+              >
+                <div
+                  style={{
+                    fontSize: 11,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.3em',
+                    color: 'rgba(255,255,255,0.55)',
+                  }}
+                >
+                  {stat.label}
+                </div>
+                <div
+                  style={{
+                    fontSize: 32,
+                    fontWeight: 600,
+                    color: DGL.white,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {stat.value}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <style>{`
+        .hero3-arrow-btn:hover .hero3-arrow { transform: translateX(4px); }
+
+        .hero3-nav-link {
+          position: relative;
+          color: rgba(255,255,255,0.75);
+          font-size: 15px;
+          font-weight: 400;
+          text-decoration: none;
+          padding-bottom: 4px;
+          transition: color 200ms;
+        }
+        .hero3-nav-link:hover { color: #fff; }
+        .hero3-nav-link-white { color: #fff; font-weight: 500; }
+
+        .hero3-header-cta {
+          background: ${DGL.primary};
+          color: ${DGL.white};
+          border: none;
+          padding: 10px 22px;
+          border-radius: 999px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          font-family: inherit;
+          transition: background 200ms;
+        }
+        .hero3-header-cta:hover { background: ${DGL.primaryHover}; }
+
+        @media (max-width: 900px) {
+          .hero3-header { padding: 18px 20px !important; }
+          .hero3-nav { display: none !important; }
+        }
+      `}</style>
+    </section>
   )
 }
 
-const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700&display=swap');
-
-@property --border-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
+function PrimaryButton({ children }: { children: React.ReactNode }) {
+  return (
+    <button
+      className="hero3-arrow-btn"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        borderRadius: 999,
+        border: 'none',
+        background: DGL.primary,
+        color: DGL.white,
+        padding: '14px 32px',
+        fontSize: 15,
+        fontWeight: 600,
+        textTransform: 'uppercase',
+        letterSpacing: '0.2em',
+        cursor: 'pointer',
+        transition: 'background 200ms',
+        fontFamily: 'inherit',
+        boxShadow: '0 8px 32px rgba(254,87,82,0.35)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = DGL.primaryHover
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = DGL.primary
+      }}
+    >
+      {children}
+    </button>
+  )
 }
 
-@keyframes mktBorderRotate {
-  from { --border-angle: 0deg; }
-  to   { --border-angle: 360deg; }
+function GhostButton({ children }: { children: React.ReactNode }) {
+  return (
+    <button
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        borderRadius: 999,
+        border: '1px solid rgba(254,87,82,0.4)',
+        background: 'rgba(0,35,41,0.4)',
+        color: 'rgba(255,255,255,0.85)',
+        padding: '14px 32px',
+        fontSize: 15,
+        fontWeight: 500,
+        textTransform: 'uppercase',
+        letterSpacing: '0.2em',
+        cursor: 'pointer',
+        backdropFilter: 'blur(8px)',
+        transition: 'all 200ms',
+        fontFamily: 'inherit',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(254,87,82,0.7)'
+        e.currentTarget.style.background = 'rgba(0,35,41,0.7)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(254,87,82,0.4)'
+        e.currentTarget.style.background = 'rgba(0,35,41,0.4)'
+      }}
+    >
+      {children}
+    </button>
+  )
 }
-
-@keyframes mktSpinLeft {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
-}
-@keyframes mktSpinRight {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes mktTicker {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-@keyframes mktFadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes mktFadeDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes mktScaleIn {
-  from { opacity: 0; transform: scale(0.85); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes mktAvatarIn {
-  from {
-    opacity: 0;
-    filter: blur(8px);
-    scale: 0.3;
-  }
-  to {
-    opacity: 1;
-    filter: blur(0);
-    scale: 1;
-  }
-}
-
-.mkt-app { animation: mktFadeDown 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
-
-.mkt-nav-link {
-  position: relative;
-  color: rgba(255,255,255,0.75);
-  font-family: "Inter Tight", sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  text-decoration: none;
-  padding-bottom: 4px;
-  transition: color 200ms;
-}
-.mkt-nav-link:hover { color: #fff; }
-.mkt-nav-link-white { color: #fff; font-weight: 500; }
-
-.mkt-nav-link::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-.mkt-nav-link:hover::after { transform: scaleX(1); }
-
-.mkt-btn-border-wrap {
-  position: relative;
-  display: inline-block;
-  border-radius: 50px;
-  padding: 3px;
-}
-.mkt-btn-border-wrap::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 3px;
-  border-radius: inherit;
-  background: conic-gradient(from var(--border-angle), #fe5752, #002329, #fe5752, #002329, #fe5752);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  animation: mktBorderRotate 3s linear infinite;
-  pointer-events: none;
-}
-
-.mkt-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: none;
-  cursor: pointer;
-  overflow: hidden;
-  font-family: "Inter Tight", sans-serif;
-}
-.mkt-btn-primary {
-  background: #002329;
-  color: #fff;
-  padding: 12px 26px;
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 50px;
-}
-.mkt-btn-start {
-  background: #002329;
-  color: #fff;
-  padding: 14px 28px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 50px;
-}
-.mkt-btn-label { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 6px; }
-.mkt-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #fe5752;
-  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
-  z-index: 1;
-}
-.mkt-btn-primary::after { transform: translateX(-100%); }
-.mkt-btn-primary:hover::after { transform: translateX(0); }
-.mkt-btn-start::after { transform: translateX(100%); }
-.mkt-btn-start:hover::after { transform: translateX(0); }
-
-.mkt-cursor { animation: mktBlink 1s steps(2) infinite; }
-@keyframes mktBlink { 0%,49% { opacity:1; } 50%,100% { opacity:0; } }
-`

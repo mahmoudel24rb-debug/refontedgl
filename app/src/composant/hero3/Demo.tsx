@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion, type Variants } from 'framer-motion'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 /**
  * Hero3 — "Glowy Waves" canvas hero.
@@ -293,28 +293,6 @@ export default function Demo() {
           animate="visible"
           style={{ width: '100%' }}
         >
-          <motion.div
-            variants={itemVariants}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              marginBottom: 24,
-              padding: '8px 16px',
-              borderRadius: 999,
-              border: '1px solid rgba(254,87,82,0.3)',
-              background: 'rgba(0,35,41,0.6)',
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.25em',
-              color: 'rgba(255,255,255,0.85)',
-            }}
-          >
-            <Sparkles size={16} color={DGL.primary} aria-hidden />
-            Performance marketing DGL
-          </motion.div>
-
           <motion.h1
             variants={itemVariants}
             style={{
