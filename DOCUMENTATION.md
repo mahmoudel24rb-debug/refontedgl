@@ -406,7 +406,7 @@ Le prototype `refontev2` amène `three.js` (~365 KB gzip). Comme c'est en `React
 ## 11. Sécurité — attention
 
 - **Application password WordPress** de `mahmoud@dgl-agency.fr` : stocké dans le config Claude Desktop MCP en local (pas dans le repo, cf. `%LOCALAPPDATA%\Packages\Claude_*\...\claude_desktop_config.json`). Ne PAS commiter.
-- **Clé Anthropic API** trouvée en clair dans les PHP WordPress historiques (elle est dans le JS front du site actuel) — **à rotationner en priorité**, elle est de facto compromise. La valeur exacte n'est pas reproduite ici pour ne pas la propager dans le repo. Cf. code source du site WordPress si besoin, ou console Anthropic pour la nouvelle.
+- **Clé Anthropic API** en clair (via `define('DGL_CLAUDE_API_KEY', 'sk-ant-...')`) dans 2 fichiers PHP du Landing Roaster (`landing-roaster-api.php` + `roaster-cro/roaster-cro.php`). Server-side donc pas exposée au navigateur, mais fragile : si le FS serveur fuit (backup public, misconfig, listing directory…) la clé sort. À déplacer dans `wp-config.php` (constante non versionnée) ou mieux dans les options WordPress. Sur la refonte React : jamais côté client, tout doit passer par Vercel Edge Function / API route.
 - Le `.gitignore` exclut `.env*` et les deux prompt sources complets (`prompt complet.md`, `mhmod prompt.txt`) qui contenaient du contexte sensible.
 
 ---
