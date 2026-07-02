@@ -403,15 +403,7 @@ Le prototype `refontev2` amène `three.js` (~365 KB gzip). Comme c'est en `React
 
 ---
 
-## 11. Sécurité — attention
-
-- **Application password WordPress** de `mahmoud@dgl-agency.fr` : stocké dans le config Claude Desktop MCP en local (pas dans le repo, cf. `%LOCALAPPDATA%\Packages\Claude_*\...\claude_desktop_config.json`). Ne PAS commiter.
-- **Clé Anthropic API** en clair (via `define('DGL_CLAUDE_API_KEY', 'sk-ant-...')`) dans 2 fichiers PHP du Landing Roaster (`landing-roaster-api.php` + `roaster-cro/roaster-cro.php`). Server-side donc pas exposée au navigateur, mais fragile : si le FS serveur fuit (backup public, misconfig, listing directory…) la clé sort. À déplacer dans `wp-config.php` (constante non versionnée) ou mieux dans les options WordPress. Sur la refonte React : jamais côté client, tout doit passer par Vercel Edge Function / API route.
-- Le `.gitignore` exclut `.env*` et les deux prompt sources complets (`prompt complet.md`, `mhmod prompt.txt`) qui contenaient du contexte sensible.
-
----
-
-## 12. Ce qui reste à faire
+## 11. Ce qui reste à faire
 
 ### Site principal
 - [ ] Refondre `FinanceFeatures.tsx` et `PowerOfFinance.tsx` pour qu'elles collent au ton DGL (actuellement trop "template Bancuip")
@@ -426,12 +418,10 @@ Le prototype `refontev2` amène `three.js` (~365 KB gzip). Comme c'est en `React
 - [ ] Supprimer `exemple/`
 
 ### Backend / API
-- [ ] Formulaires (audit gratuit, contact) → envoi vers HubSpot/CRM (voir intégration WordPress actuelle)
-- [ ] Rate limiting côté serveur (pour éviter les abus des lead magnets)
-- [ ] Rotation de la clé Claude API + move vers server-side
+- [ ] Formulaires (audit gratuit, contact) → envoi vers le CRM
+- [ ] Route serveur (Vercel Edge Function) pour les appels API avec clés — jamais en client
 
 ### SEO
-- [ ] Appliquer le `PLAN-CORRECTION-SEO-DGL-AGENCY.md` sur le site actuel en attendant le go-live
 - [ ] Meta tags dynamiques par route
 - [ ] Sitemap XML généré à build
 
@@ -447,7 +437,7 @@ Le prototype `refontev2` amène `three.js` (~365 KB gzip). Comme c'est en `React
 
 ---
 
-## 13. Commandes utiles
+## 12. Commandes utiles
 
 ```bash
 # Depuis app/
@@ -468,7 +458,7 @@ git push origin main    # Déclenche le deploy Vercel
 
 ---
 
-## 14. Contact / historique conversation
+## 13. Sources / crédits
 
 Toute la construction du projet a été faite en conversation avec Claude (Anthropic) dans Claude Code sur Windows. Les briefs sources proviennent de :
 - **motionsites.ai** (prompts Marketeam, Axion Studio)
