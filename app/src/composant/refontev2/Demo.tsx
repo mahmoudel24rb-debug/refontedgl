@@ -1,6 +1,25 @@
-import { useEffect, useState } from 'react'
+import { Component, useEffect, useState, type ReactNode } from 'react'
 import { ArrowRight, Clock, Menu, X } from 'lucide-react'
-import { ChromaFlow, FilmGrain, FlutedGlass, Swirl } from 'shaders/react'
+import { ChromaFlow, FilmGrain, FlutedGlass, Shader, Swirl } from 'shaders/react'
+
+// Si le shader stack throw (WebGL indispo, contexte GPU perdu, etc.),
+// on garde le reste du hero visible avec juste le fond cream.
+class ShaderBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(err: unknown) {
+    console.warn('[refontev2] shader stack failed, falling back:', err)
+  }
+  render() {
+    if (this.state.failed) return null
+    return this.props.children
+  }
+}
 
 /**
  * Composant refontev2 — page landing complète DGL (3 sections).
@@ -79,29 +98,33 @@ function Hero() {
     >
       {/* Shader stack fullscreen */}
       <div className="v2-shader-stack">
-        <Swirl colorA={DGL.white} colorB="#F0EFE9" detail={1.7} />
-        <ChromaFlow
-          baseColor={DGL.white}
-          downColor={DGL.coral}
-          leftColor={DGL.coral}
-          rightColor={DGL.coral}
-          upColor={DGL.coral}
-          momentum={13}
-          radius={3.5}
-        />
-        <FlutedGlass
-          aberration={0.61}
-          angle={31}
-          frequency={8}
-          highlight={0.12}
-          highlightSoftness={0}
-          lightAngle={-90}
-          refraction={4}
-          shape="rounded"
-          softness={1}
-          speed={0.15}
-        />
-        <FilmGrain strength={0.05} />
+        <ShaderBoundary>
+          <Shader style={{ width: '100%', height: '100%' }}>
+            <Swirl colorA={DGL.white} colorB="#F0EFE9" detail={1.7} />
+            <ChromaFlow
+              baseColor={DGL.white}
+              downColor={DGL.coral}
+              leftColor={DGL.coral}
+              rightColor={DGL.coral}
+              upColor={DGL.coral}
+              momentum={13}
+              radius={3.5}
+            />
+            <FlutedGlass
+              aberration={0.61}
+              angle={31}
+              frequency={8}
+              highlight={0.12}
+              highlightSoftness={0}
+              lightAngle={-90}
+              refraction={4}
+              shape="rounded"
+              softness={1}
+              speed={0.15}
+            />
+            <FilmGrain strength={0.05} />
+          </Shader>
+        </ShaderBoundary>
       </div>
 
       {/* Navbar */}
@@ -396,18 +419,19 @@ function TextRoll({ children }: { children: React.ReactNode }) {
    STYLES
 ============================== */
 const STYLES = `
-/* Shader stack */
+/* Shader stack — <Shader> root is the direct child, it renders a canvas */
 .v2-shader-stack {
   position: absolute;
   inset: 0;
   z-index: 10;
   pointer-events: none;
-}
-.v2-shader-stack > * {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
+}
+.v2-shader-stack canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 /* Navbar */
