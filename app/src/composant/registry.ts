@@ -18,6 +18,14 @@ export interface ComposantEntry {
 
 export const COMPOSANTS: ComposantEntry[] = [
   {
+    slug: 'refontev2',
+    name: 'Refonte v2 — page landing (3 sections)',
+    status: 'ready',
+    Component: lazy(() => import('./refontev2/Demo')),
+    notes:
+      "Adaptation DGL du brief 'Axion Studio'. Hero avec stack shader (Swirl+ChromaFlow+FlutedGlass+FilmGrain), Section À propos (grid 26/1fr/48% en desktop), Section réalisations (2 case studies vidéo Océades/GYMFIT). Copy français, horloge Paris, couleurs coral+navy+cream.",
+  },
+  {
     slug: 'hero3',
     name: 'Hero3 — Glowy waves canvas (réactif souris)',
     status: 'ready',
