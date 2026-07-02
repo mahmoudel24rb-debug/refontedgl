@@ -18,6 +18,14 @@ export interface ComposantEntry {
 
 export const COMPOSANTS: ComposantEntry[] = [
   {
+    slug: 'hero3',
+    name: 'Hero3 — Glowy waves canvas (réactif souris)',
+    status: 'ready',
+    Component: lazy(() => import('./hero3/Demo')),
+    notes:
+      "Canvas 2D avec 5 couches de vagues sinusoïdales qui suivent la souris. Copy DGL, palette coral+navy. Pas de dépendance shadcn (Button inline). Bouclé sur requestAnimationFrame + prefers-reduced-motion honoré.",
+  },
+  {
     slug: 'hero-video',
     name: 'Hero video + marquee logos',
     status: 'ready',
