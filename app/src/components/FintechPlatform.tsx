@@ -1,39 +1,55 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
+import {
+  Check,
+  Target,
+  Users,
+  TrendingUp,
+  Search,
+  Zap,
+  LayoutTemplate,
+} from 'lucide-react'
 import { asset } from '@/lib/utils'
 
-const BLOCK_1_FEATURES = [
+type LucideIcon = ComponentType<{ size?: number; color?: string; strokeWidth?: number }>
+
+interface Feature {
+  Icon: LucideIcon
+  title: string
+  desc: string
+}
+
+const BLOCK_1_FEATURES: Feature[] = [
   {
-    icon: 'icon-1.svg',
+    Icon: Target,
     title: 'Publicité digitale performante',
     desc: 'Campagnes Google Ads, Meta Ads et remarketing optimisées, orientées conversion.',
   },
   {
-    icon: 'icon-2.svg',
+    Icon: Users,
     title: 'Génération de leads qualifiés',
     desc: 'Un flux continu de prospects grâce à des funnels ciblés et des campagnes omnicanales.',
   },
   {
-    icon: 'icon-3.svg',
+    Icon: TrendingUp,
     title: 'ROI mesuré et transparent',
     desc: 'Reporting temps réel et tableaux de bord personnalisés pour chaque client.',
   },
 ]
 
-const BLOCK_2_FEATURES = [
+const BLOCK_2_FEATURES: Feature[] = [
   {
-    icon: 'icon-4.svg',
+    Icon: Search,
     title: 'Référencement naturel SEO durable',
     desc: 'Contenus puissants, audits techniques réguliers et structure optimisée pour Google.',
   },
   {
-    icon: 'icon-5.svg',
+    Icon: Zap,
     title: 'Automatisation marketing sur-mesure',
     desc: 'Emails, CRM et parcours clients automatisés pour convertir et fidéliser plus efficacement.',
   },
   {
-    icon: 'icon-6.svg',
+    Icon: LayoutTemplate,
     title: 'Landing pages haute conversion',
     desc: "Pages d'atterrissage optimisées avec tracking publicitaire avancé sur chaque clic.",
   },
@@ -324,7 +340,7 @@ function TextColumn({
   features,
 }: {
   title: string
-  features: typeof BLOCK_1_FEATURES
+  features: Feature[]
 }) {
   return (
     <>
@@ -359,16 +375,21 @@ function TextColumn({
               alignItems: 'flex-start',
             }}
           >
-            <img
-              src={asset(f.icon)}
-              alt=""
+            <div
               style={{
-                width: '1.5rem',
-                height: '1.5rem',
-                objectFit: 'contain',
+                width: '2.25rem',
+                height: '2.25rem',
+                borderRadius: '9px',
+                background: 'rgba(254,87,82,0.12)',
+                border: '1px solid rgba(254,87,82,0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 flexShrink: 0,
               }}
-            />
+            >
+              <f.Icon size={18} color="#fe5752" strokeWidth={2} />
+            </div>
             <div>
               <div
                 style={{
@@ -518,7 +539,7 @@ function GreenCard1() {
         aspectRatio: '496 / 598',
         flexShrink: 0,
         borderRadius: '6px',
-        background: 'linear-gradient(0deg, #DFEFDC 0%, #D1E8CB 100%)',
+        background: 'linear-gradient(0deg, #FDE9E8 0%, #FCD9D6 100%)',
         boxShadow: 'inset 0 4px 54px 7px rgba(0,0,0,0.05)',
         position: 'relative',
         overflow: 'hidden',
@@ -536,7 +557,7 @@ function GreenCard1() {
           width: '77%',
           height: '74%',
           borderRadius: '14px',
-          background: 'linear-gradient(90deg, #F9F4EF 0%, #F9F8F7 100%)',
+          background: 'linear-gradient(90deg, #FFFFFF 0%, #FAFAF8 100%)',
           boxShadow: '0 34px 54px 2px rgba(0,0,0,0.05)',
           display: 'flex',
           flexDirection: 'column',
@@ -616,7 +637,7 @@ ROI moyen 2026
               marginBottom: '0.5rem',
             }}
           >
-            $2.222,65
+            2 222,65 €
           </div>
           <div
             style={{
@@ -627,8 +648,8 @@ ROI moyen 2026
               fontWeight: 500,
             }}
           >
-            <span style={{ color: '#6AC36E' }}>▲</span>
-            <span style={{ color: '#6AC36E' }}>+$2.222,65 (100%)</span>
+            <span style={{ color: '#fe5752' }}>▲</span>
+            <span style={{ color: '#fe5752' }}>+2 222,65 € (100%)</span>
             <span style={{ color: '#909DA2' }}>- 2026</span>
           </div>
 
@@ -658,7 +679,7 @@ ROI moyen 2026
                 style={{
                   flex: 1,
                   borderRadius: '3px 3px 0 0',
-                  background: b.active ? '#4A7C59' : 'rgba(0,0,0,0.10)',
+                  background: b.active ? '#fe5752' : 'rgba(0,0,0,0.10)',
                 }}
               />
             ))}
@@ -740,7 +761,7 @@ function GreenCard2() {
         aspectRatio: '496 / 598',
         flexShrink: 0,
         borderRadius: '6px',
-        background: 'linear-gradient(0deg, #DFEFDC 0%, #D1E8CB 100%)',
+        background: 'linear-gradient(0deg, #FDE9E8 0%, #FCD9D6 100%)',
         boxShadow: 'inset 0 4px 54px 7px rgba(0,0,0,0.05)',
         position: 'relative',
         overflow: 'hidden',
@@ -791,7 +812,7 @@ function GreenCard2() {
               width: '100%',
               height: '82px',
               borderRadius: '14px',
-              background: 'linear-gradient(90deg, #EFF9F0 0%, #F7F9F7 100%)',
+              background: 'linear-gradient(90deg, #FFFFFF 0%, #FAFAF8 100%)',
               boxShadow: '0 34px 54px 2px rgba(0,0,0,0.05)',
               display: 'flex',
               alignItems: 'center',
@@ -804,13 +825,13 @@ function GreenCard2() {
                 width: '1.323rem',
                 height: '1.323rem',
                 borderRadius: '50%',
-                background: '#D1E9CE',
+                background: 'rgba(254,87,82,0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '11px',
-                fontWeight: 500,
-                color: '#168930',
+                fontWeight: 600,
+                color: '#fe5752',
                 flexShrink: 0,
               }}
             >
@@ -819,7 +840,7 @@ function GreenCard2() {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div
                 style={{
-                  color: '#205519',
+                  color: '#002329',
                   fontSize: '0.875rem',
                   fontWeight: 600,
                   letterSpacing: '0.14px',
@@ -844,7 +865,7 @@ function GreenCard2() {
                 width: '1.625rem',
                 height: '1.625rem',
                 borderRadius: '50%',
-                background: '#4CAF50',
+                background: '#fe5752',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
