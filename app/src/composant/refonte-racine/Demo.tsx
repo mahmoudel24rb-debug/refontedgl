@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero'
+import StickyNav from '@/components/refonte/StickyNav'
 import Agence from '@/components/refonte/Agence'
 import Services from '@/components/refonte/Services'
 import Preuves from '@/components/refonte/Preuves'
@@ -29,7 +30,9 @@ export default function Demo() {
     >
       <style>{BASE_CSS}</style>
       {/* la topbar du composant view fait 48px → on la déduit pour
-          que le hero tienne exactement dans le viewport */}
+          que le hero tienne exactement dans le viewport, et la sticky
+          nav démarre sous cette topbar */}
+      <StickyNav topOffset={60} />
       <Hero minHeight="calc(100vh - 48px)" />
       <Agence />
       <Services />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { BadgeRow, DGL, Reveal } from './ui'
 
@@ -35,6 +35,26 @@ const TESTIMONIALS: { name: string; role: string; quote: string }[] = [
   },
 ]
 
+/* Lecture uniquement quand la vidéo est à l'écran : économise CPU,
+   batterie et data mobile (les 2 mp4 CloudFront pèsent plusieurs Mo). */
+function useVideoInView() {
+  const ref = useRef<HTMLVideoElement | null>(null)
+  useEffect(() => {
+    const video = ref.current
+    if (!video) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {})
+        else video.pause()
+      },
+      { threshold: 0.15 },
+    )
+    io.observe(video)
+    return () => io.disconnect()
+  }, [])
+  return ref
+}
+
 function CaseCard({
   videoSrc,
   metric,
@@ -50,10 +70,18 @@ function CaseCard({
   hoverLabel: string
   wide?: boolean
 }) {
+  const videoRef = useVideoInView()
   return (
     <div className={`v2r-card${wide ? ' v2r-card-wide' : ''}`}>
       <div className="v2r-media">
-        <video src={videoSrc} autoPlay muted loop playsInline />
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
         <span className="v2r-metric">{metric}</span>
         <div className="v2r-hover-btn">
           <span className="v2r-hover-label">{hoverLabel}</span>
@@ -159,6 +187,10 @@ const PREUVES_CSS = `
 .v2r-section {
   background: ${DGL.white};
   padding: 80px 0 96px;
+  position: relative;
+  z-index: 5;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
 }
 @media (min-width: 1024px) { .v2r-section { padding: 120px 0 140px; } }
 
@@ -308,6 +340,10 @@ const PREUVES_CSS = `
 .v2t-section {
   background: ${DGL.cream};
   padding: 80px 0 96px;
+  position: relative;
+  z-index: 6;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
 }
 @media (min-width: 1024px) { .v2t-section { padding: 120px 0 140px; } }
 

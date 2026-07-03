@@ -67,6 +67,9 @@ export default function Hero() {
     <section
       style={{
         position: 'relative',
+        // stacking context : le contenu z-20 du hero ne doit pas passer
+        // au-dessus du recouvrement arrondi de la section suivante
+        isolation: 'isolate',
         minHeight: 'calc(100vh - 48px)',
         background: DGL.cream,
         overflow: 'hidden',

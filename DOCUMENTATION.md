@@ -180,6 +180,19 @@ Seul changement livré sur le site racine : les liens/CTA du hero glowy waves
 pointent vers des ancres (`#services`, `#realisations`, `#agence`, `#contact`)
 — inertes tant que les nouvelles sections ne sont pas montées.
 
+**Améliorations 2026-07-03 (2e passe)** :
+- `components/refonte/StickyNav.tsx` : navbar sticky pill (glass navy) qui
+  apparaît au scroll-up une fois le hero dépassé — montée dans refonte-racine
+  avec `topOffset={60}` (48px de topbar composant + 12px de marge)
+- Transitions arrondies entre sections : chaque section recouvre la précédente
+  (`border-radius 28px 28px 0 0` + `margin-top: -28px` + z-index croissant).
+  ⚠️ les heros doivent avoir `isolation: isolate` pour rester dessous.
+- Vidéos réalisations : play/pause à l'IntersectionObserver + `preload="metadata"`
+- `vite.config.ts` : code-splitting rolldown (`codeSplitting.groups`) — chunk
+  principal 541 KB → 188 KB (+ react 190, motion 130, router 41, cacheables)
+- `index.html` : lang fr, title/meta/OG du vrai site, JSON-LD LocalBusiness,
+  graisses Inter Tight réduites à 300-700 (la 800 n'était pas utilisée)
+
 ### Détail des composants
 
 #### `Hero.tsx` — Glowy waves

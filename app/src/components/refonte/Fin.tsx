@@ -123,6 +123,10 @@ const FIN_CSS = `
 .v2f-section {
   background: ${DGL.navy};
   color: ${DGL.white};
+  position: relative;
+  z-index: 7;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
 }
 
 /* CTA */

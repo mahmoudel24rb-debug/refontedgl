@@ -204,6 +204,11 @@ const AGENCE_CSS = `
   background: ${DGL.white};
   padding: 0 0 72px;
   overflow: hidden;
+  /* recouvrement arrondi sur le hero */
+  position: relative;
+  z-index: 2;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
 }
 @media (min-width: 1024px) { .v2a-section { padding-bottom: 120px; } }
 

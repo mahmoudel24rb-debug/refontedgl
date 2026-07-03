@@ -146,6 +146,10 @@ const SERVICES_CSS = `
 .v2s-section {
   background: ${DGL.navy};
   padding: 80px 0 96px;
+  position: relative;
+  z-index: 3;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
 }
 @media (min-width: 1024px) { .v2s-section { padding: 120px 0 140px; } }
 
@@ -267,6 +271,10 @@ const SERVICES_CSS = `
 .v2m-section {
   background: ${DGL.cream};
   padding: 80px 0 96px;
+  position: relative;
+  z-index: 4;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
 }
 @media (min-width: 1024px) { .v2m-section { padding: 120px 0 140px; } }
 
