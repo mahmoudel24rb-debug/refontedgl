@@ -28,7 +28,9 @@ export default function Demo() {
       }}
     >
       <style>{BASE_CSS}</style>
-      <Hero />
+      {/* la topbar du composant view fait 48px → on la déduit pour
+          que le hero tienne exactement dans le viewport */}
+      <Hero minHeight="calc(100vh - 48px)" />
       <Agence />
       <Services />
       <Preuves />

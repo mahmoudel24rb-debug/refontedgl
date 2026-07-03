@@ -82,7 +82,7 @@ const statsVariants: Variants = {
   },
 }
 
-export default function Hero() {
+export default function Hero({ minHeight = '100vh' }: { minHeight?: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const mouseRef = useRef<Point>({ x: 0, y: 0 })
   const targetMouseRef = useRef<Point>({ x: 0, y: 0 })
@@ -213,7 +213,7 @@ export default function Hero() {
         position: 'relative',
         isolation: 'isolate',
         display: 'flex',
-        minHeight: '100vh',
+        minHeight,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -333,7 +333,7 @@ export default function Hero() {
           maxWidth: 1152,
           flexDirection: 'column',
           alignItems: 'center',
-          padding: '96px 24px',
+          padding: '80px 24px 64px',
           textAlign: 'center',
         }}
       >
