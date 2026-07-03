@@ -36,7 +36,12 @@ const WAVE_PALETTE: WaveConfig[] = [
   { offset: Math.PI * 2, amplitude: 55, frequency: 0.004, color: 'rgba(254,87,82,0.35)', opacity: 0.2 },
 ]
 
-const NAV_LINKS = ['Services', 'Réalisations', 'À propos', 'Ressources']
+const NAV_LINKS: { label: string; href: string }[] = [
+  { label: 'Services', href: '#services' },
+  { label: 'Réalisations', href: '#realisations' },
+  { label: 'À propos', href: '#agence' },
+  { label: 'Ressources', href: '#contact' },
+]
 
 const highlightPills = [
   'ROAS mesurable',
@@ -296,18 +301,24 @@ export default function Hero() {
           />
           <nav style={{ display: 'flex', gap: '2rem' }} className="hero3-nav">
             {NAV_LINKS.map((link) => (
-              <a key={link} href="#" className="hero3-nav-link">
-                {link}
+              <a key={link.label} href={link.href} className="hero3-nav-link">
+                {link.label}
               </a>
             ))}
           </nav>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <a href="#" className="hero3-nav-link hero3-nav-link-white">
+          <a href="#contact" className="hero3-nav-link hero3-nav-link-white">
             Contact
           </a>
-          <button className="hero3-header-cta">Audit gratuit</button>
+          <a
+            className="hero3-header-cta"
+            href="#contact"
+            style={{ textDecoration: 'none', display: 'inline-block' }}
+          >
+            Audit gratuit
+          </a>
         </div>
       </header>
 
@@ -383,7 +394,7 @@ export default function Hero() {
               gap: 16,
             }}
           >
-            <PrimaryButton>
+            <PrimaryButton href="#contact">
               Audit gratuit
               <ArrowRight
                 size={16}
@@ -392,7 +403,7 @@ export default function Hero() {
                 style={{ transition: 'transform 200ms' }}
               />
             </PrimaryButton>
-            <GhostButton>Voir nos réalisations</GhostButton>
+            <GhostButton href="#realisations">Voir nos réalisations</GhostButton>
           </motion.div>
 
           <motion.ul
@@ -510,10 +521,17 @@ export default function Hero() {
   )
 }
 
-function PrimaryButton({ children }: { children: React.ReactNode }) {
+function PrimaryButton({
+  href,
+  children,
+}: {
+  href: string
+  children: React.ReactNode
+}) {
   return (
-    <button
+    <a
       className="hero3-arrow-btn"
+      href={href}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -530,6 +548,7 @@ function PrimaryButton({ children }: { children: React.ReactNode }) {
         cursor: 'pointer',
         transition: 'background 200ms',
         fontFamily: 'inherit',
+        textDecoration: 'none',
         boxShadow: '0 8px 32px rgba(254,87,82,0.35)',
       }}
       onMouseEnter={(e) => {
@@ -540,13 +559,20 @@ function PrimaryButton({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </button>
+    </a>
   )
 }
 
-function GhostButton({ children }: { children: React.ReactNode }) {
+function GhostButton({
+  href,
+  children,
+}: {
+  href: string
+  children: React.ReactNode
+}) {
   return (
-    <button
+    <a
+      href={href}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -564,6 +590,7 @@ function GhostButton({ children }: { children: React.ReactNode }) {
         backdropFilter: 'blur(8px)',
         transition: 'all 200ms',
         fontFamily: 'inherit',
+        textDecoration: 'none',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = 'rgba(254,87,82,0.7)'
@@ -575,6 +602,6 @@ function GhostButton({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </button>
+    </a>
   )
 }

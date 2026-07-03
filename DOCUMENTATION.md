@@ -3,7 +3,7 @@
 Documentation complète du chantier de refonte du site https://dgl-agency.fr.
 Cible : remplacer WordPress + Oxygen Builder 4.0 par une SPA React + Vite déployée sur Vercel.
 
-**Dernière mise à jour** : 2026-07-02 (commit `a08aef4`)
+**Dernière mise à jour** : 2026-07-03 (nouvelles sections premium dans components/refonte/ + prototypes refonte-racine et refontev2 v2 — site racine inchangé en attendant validation)
 
 ---
 
@@ -153,7 +153,8 @@ Chaque prototype est **lazy-loaded** via `React.lazy()` — ils n'alourdissent p
 
 ## 5. Site principal (`/`) — architecture
 
-**`pages/Index.tsx`** monte les sections dans cet ordre :
+**`pages/Index.tsx`** monte les sections dans cet ordre (inchangé — la refonte
+attend validation via `/composant/refonte-racine`) :
 
 ```tsx
 <main style={{ background: '#002329', minHeight: '100vh' }}>
@@ -165,6 +166,19 @@ Chaque prototype est **lazy-loaded** via `React.lazy()` — ils n'alourdissent p
   <Footer />
 </main>
 ```
+
+**Refonte en attente de validation (2026-07-03)** : un jeu de sections premium
+vit dans **`components/refonte/`** (`ui.tsx` : tokens DGL, TextRoll, Reveal,
+BadgeRow, BASE_CSS + `Agence/Services/Preuves/Fin`) avec le contenu réel de
+dgl-agency.fr. Deux prototypes les montent :
+- `/composant/refonte-racine` : hero glowy waves actuel + ces sections — **la
+  future version du site racine** (une fois validée, copier la composition du
+  Demo dans `pages/Index.tsx`)
+- `/composant/refontev2` : hero shader Paper Design + les mêmes sections
+
+Seul changement livré sur le site racine : les liens/CTA du hero glowy waves
+pointent vers des ancres (`#services`, `#realisations`, `#agence`, `#contact`)
+— inertes tant que les nouvelles sections ne sont pas montées.
 
 ### Détail des composants
 
@@ -291,14 +305,20 @@ Composant vide pour valider que le workflow fonctionne. À supprimer.
 - **Techniques** : `requestAnimationFrame`, `shadowBlur 35`, distance/influence pour déformer la vague sous le curseur, `prefers-reduced-motion` réduit l'intensité par 7
 - **Statut** : Ready — **actuellement le Hero du site principal** (copié dans `components/Hero.tsx`)
 
-#### `refontev2` — Page landing complète (3 sections)
-- **Source** : brief motionsites.ai "Axion Studio" (agency landing)
-- **Ce qu'il fait** :
-  - Section 1 (Hero, 100vh) : stack shader Paper Design (Swirl + ChromaFlow + FlutedGlass + FilmGrain) + navbar pill blanche avec horloge Paris live + H1 français + CTA + badge "Partenaire Certifié Premium"
-  - Section 2 (À propos, blanc) : badge "1 · L'agence DGL" + H2 + grid desktop 26/1fr/48%
-  - Section 3 (Réalisations, cream) : 2 case studies vidéo (Océades, GYMFIT) avec bouton hover qui s'expand
-- **Techniques** : package `shaders` (three.js), `<Shader>` root obligatoire (bug initial : nœuds sans root → contexte null → page noire, fixé avec ErrorBoundary + wrapping)
-- **Statut** : Ready — non intégré, en cours de review
+#### `refontev2` — Site agence complet (7 sections)
+- **Source** : brief motionsites.ai "Axion Studio" (hero) + contenu réel de dgl-agency.fr (le reste)
+- **v1** : 3 sections (hero shader + à propos + 2 case studies). Jugée "trop simple" hors hero.
+- **v2 (2026-07-02)** : hero conservé tel quel, tout le reste refait. Code splitté en fichiers : `ui.tsx` (tokens, TextRoll, Reveal IO, BadgeRow, CSS partagé), `Hero.tsx`, `Agence.tsx`, `Services.tsx`, `Preuves.tsx`, `Fin.tsx`.
+  1. **Hero** (cream) : stack shader Paper Design + navbar pill horloge Paris + CTA (liens câblés vers les ancres)
+  2. **L'agence** (blanc) : marquee 5 logos clients (monochromes navy via CSS filter — les webp sont blancs), **manifesto révélé mot-à-mot au scroll** (élément signature), 4 stats en count-up (10 ans / 500+ / +65 % ROI / 120+), équipe (photos locales Mahmoud/Kiara/Victor)
+  3. **Services** (navy) : les 6 services de /nos-services/ en lignes pleine largeur, **balayage coral au hover** + accordion au tap mobile, chips d'expertises
+  4. **Méthode** (cream) : 4 étapes numérotées (audit 48 h → stratégie → déploiement 15 j → optimisation)
+  5. **Réalisations** (blanc) : chiffres réels — Océades +75 % conversions (vidéo), GYMFIT 0,78 €/lead (vidéo), bande Beauregard +29 % leads
+  6. **Témoignages** (cream) : Hakim/Samuel/Marion (les 3 du site WordPress) en méga-citation avec switcher par onglets
+  7. **CTA + Footer** (navy) : audit gratuit 48 h, colonnes de liens réels (services, agence, outils gratuits), **wordmark géant "DGL AGENCY" coral coupé en pied de page**
+- **Techniques** : package `shaders` (three.js), `<Shader>` root obligatoire + ErrorBoundary ; IntersectionObserver one-shot pour les reveals ; scroll listener rAF pour le manifesto ; `prefers-reduced-motion` honoré partout. ⚠️ En Chromium headless le shader échoue (SwiftShader strict sur les identifiants `__`) — fond cream de fallback, OK en vrai navigateur.
+- **Rôles équipe (Mahmoud/Kiara/Victor) inventés de façon plausible — à faire valider.**
+- **Statut** : Ready — en review
 
 ---
 

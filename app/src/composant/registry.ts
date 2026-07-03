@@ -18,12 +18,20 @@ export interface ComposantEntry {
 
 export const COMPOSANTS: ComposantEntry[] = [
   {
+    slug: 'refonte-racine',
+    name: 'Refonte racine — hero glowy waves + sections v2',
+    status: 'ready',
+    Component: lazy(() => import('./refonte-racine/Demo')),
+    notes:
+      "La future version du site principal : hero glowy waves actuel (canvas 2D) + les sections refonte partagées (components/refonte/) avec le contenu réel de dgl-agency.fr — manifesto scroll-reveal, stats count-up, équipe, 6 services balayage coral, méthode 4 étapes, réalisations chiffrées (Océades +75 %, GYMFIT 0,78 €/lead, Beauregard +29 %), témoignages, CTA audit + footer wordmark géant. Une fois validé → copier la composition dans pages/Index.tsx.",
+  },
+  {
     slug: 'refontev2',
-    name: 'Refonte v2 — page landing (3 sections)',
+    name: 'Refonte v2 — site agence complet (7 sections)',
     status: 'ready',
     Component: lazy(() => import('./refontev2/Demo')),
     notes:
-      "Adaptation DGL du brief 'Axion Studio'. Hero avec stack shader (Swirl+ChromaFlow+FlutedGlass+FilmGrain), Section À propos (grid 26/1fr/48% en desktop), Section réalisations (2 case studies vidéo Océades/GYMFIT). Copy français, horloge Paris, couleurs coral+navy+cream.",
+      "v2 : hero shader (Swirl+ChromaFlow+FlutedGlass+FilmGrain) + les sections refonte partagées (components/refonte/) avec le contenu réel de dgl-agency.fr — manifesto scroll-reveal, 6 services balayage coral, réalisations chiffrées, témoignages, footer wordmark géant. ✅ Sections promues sur le site principal (avec le hero glowy waves à la place du shader).",
   },
   {
     slug: 'hero3',
