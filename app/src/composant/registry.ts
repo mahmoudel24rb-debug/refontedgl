@@ -20,10 +20,18 @@ export const COMPOSANTS: ComposantEntry[] = [
   {
     slug: 'refonte-racine',
     name: 'Refonte racine — hero glowy waves + sections v2',
-    status: 'ready',
+    status: 'validated',
     Component: lazy(() => import('./refonte-racine/Demo')),
     notes:
-      "La future version du site principal : hero glowy waves actuel (canvas 2D) + les sections refonte partagées (components/refonte/) avec le contenu réel de dgl-agency.fr — manifesto scroll-reveal, stats count-up, équipe, 6 services balayage coral, méthode 4 étapes, réalisations chiffrées (Océades +75 %, GYMFIT 0,78 €/lead, Beauregard +29 %), témoignages, CTA audit + footer wordmark géant. Une fois validé → copier la composition dans pages/Index.tsx.",
+      "✅ Promu comme site principal le 2026-07-03. Hero glowy waves + sections refonte partagées (components/refonte/) : manifesto scroll-reveal, bandeau typo géant, 6 services balayage coral, méthode, réalisations chiffrées, témoignages autorotate, outils gratuits (halo curseur), FAQ (JSON-LD), CTA magnétique + footer wordmark géant.",
+  },
+  {
+    slug: 'site-v1',
+    name: 'Site v1 — archive (template Bancuip)',
+    status: 'validated',
+    Component: lazy(() => import('./site-v1/Demo')),
+    notes:
+      "Archive de l'ancienne page d'accueil (avant la refonte du 2026-07-03) : hero glowy waves + FintechPlatform + FinanceFeatures + Testimonials + PowerOfFinance + Footer, hérités du template Bancuip et adaptés DGL. Conservée pour référence.",
   },
   {
     slug: 'refontev2',

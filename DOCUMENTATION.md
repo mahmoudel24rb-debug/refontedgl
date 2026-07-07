@@ -3,7 +3,7 @@
 Documentation complète du chantier de refonte du site https://dgl-agency.fr.
 Cible : remplacer WordPress + Oxygen Builder 4.0 par une SPA React + Vite déployée sur Vercel.
 
-**Dernière mise à jour** : 2026-07-03 (nouvelles sections premium dans components/refonte/ + prototypes refonte-racine et refontev2 v2 — site racine inchangé en attendant validation)
+**Dernière mise à jour** : 2026-07-03 (🚀 refonte promue en site racine — hero glowy waves + 9 sections premium ; ancienne version archivée sur /composant/site-v1)
 
 ---
 
@@ -153,32 +153,31 @@ Chaque prototype est **lazy-loaded** via `React.lazy()` — ils n'alourdissent p
 
 ## 5. Site principal (`/`) — architecture
 
-**`pages/Index.tsx`** monte les sections dans cet ordre (inchangé — la refonte
-attend validation via `/composant/refonte-racine`) :
+**`pages/Index.tsx`** — **refonte promue le 2026-07-03** (validée via
+`/composant/refonte-racine`) :
 
 ```tsx
-<main style={{ background: '#002329', minHeight: '100vh' }}>
-  <Hero />
-  <FintechPlatform />
-  <FinanceFeatures />
-  <Testimonials />
-  <PowerOfFinance />
-  <Footer />
+<main className="v2-page" style={{ background: '#002329', minHeight: '100vh' }}>
+  <style>{BASE_CSS}</style>
+  <StickyNav />      {/* pill glass au scroll-up */}
+  <Hero />           {/* glowy waves (hero3), navy — conservé */}
+  <Agence />         {/* blanc — marquee logos + manifesto + stats + équipe */}
+  <MarqueeTexte />   {/* bandeau typo géant défilant */}
+  <Services />       {/* navy — 6 services balayage coral + méthode (cream) */}
+  <Preuves />        {/* blanc — réalisations chiffrées + témoignages (cream) */}
+  <Outils />         {/* blanc — 4 lead magnets, halo curseur */}
+  <Faq />            {/* cream — accordion + JSON-LD FAQPage */}
+  <Fin />            {/* navy — CTA audit magnétique + footer wordmark géant */}
 </main>
 ```
 
-**Refonte en attente de validation (2026-07-03)** : un jeu de sections premium
-vit dans **`components/refonte/`** (`ui.tsx` : tokens DGL, TextRoll, Reveal,
-BadgeRow, BASE_CSS + `Agence/Services/Preuves/Fin`) avec le contenu réel de
-dgl-agency.fr. Deux prototypes les montent :
-- `/composant/refonte-racine` : hero glowy waves actuel + ces sections — **la
-  future version du site racine** (une fois validée, copier la composition du
-  Demo dans `pages/Index.tsx`)
-- `/composant/refontev2` : hero shader Paper Design + les mêmes sections
+Toutes les sections vivent dans **`components/refonte/`** et sont partagées
+avec les prototypes `/composant/refonte-racine` (même composition, hero à
+`calc(100vh - 48px)`) et `/composant/refontev2` (hero shader Paper Design).
 
-Seul changement livré sur le site racine : les liens/CTA du hero glowy waves
-pointent vers des ancres (`#services`, `#realisations`, `#agence`, `#contact`)
-— inertes tant que les nouvelles sections ne sont pas montées.
+**Archive** : l'ancienne composition (template Bancuip — FintechPlatform,
+FinanceFeatures, Testimonials, PowerOfFinance, Footer) reste consultable sur
+`/composant/site-v1` ; les fichiers sont toujours dans `components/`.
 
 **Améliorations 2026-07-03 (2e passe)** :
 - `components/refonte/StickyNav.tsx` : navbar sticky pill (glass navy) qui
