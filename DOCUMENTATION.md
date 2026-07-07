@@ -3,7 +3,7 @@
 Documentation complète du chantier de refonte du site https://dgl-agency.fr.
 Cible : remplacer WordPress + Oxygen Builder 4.0 par une SPA React + Vite déployée sur Vercel.
 
-**Dernière mise à jour** : 2026-07-03 (🚀 refonte promue en site racine — hero glowy waves + 9 sections premium ; ancienne version archivée sur /composant/site-v1)
+**Dernière mise à jour** : 2026-07-03 (site racine = composition d'origine avec composants modernisés ; snapshot pré-modernisation sur /composant/site-v1 ; refonte alternative sur /composant/refonte-racine)
 
 ---
 
@@ -153,31 +153,34 @@ Chaque prototype est **lazy-loaded** via `React.lazy()` — ils n'alourdissent p
 
 ## 5. Site principal (`/`) — architecture
 
-**`pages/Index.tsx`** — **refonte promue le 2026-07-03** (validée via
-`/composant/refonte-racine`) :
+**`pages/Index.tsx`** — composition d'origine conservée, **composants
+modernisés en profondeur le 2026-07-03** (choix de Mahmoud : garder son site,
+pas le remplacer par la refonte) :
 
 ```tsx
-<main className="v2-page" style={{ background: '#002329', minHeight: '100vh' }}>
-  <style>{BASE_CSS}</style>
-  <StickyNav />      {/* pill glass au scroll-up */}
-  <Hero />           {/* glowy waves (hero3), navy — conservé */}
-  <Agence />         {/* blanc — marquee logos + manifesto + stats + équipe */}
-  <MarqueeTexte />   {/* bandeau typo géant défilant */}
-  <Services />       {/* navy — 6 services balayage coral + méthode (cream) */}
-  <Preuves />        {/* blanc — réalisations chiffrées + témoignages (cream) */}
-  <Outils />         {/* blanc — 4 lead magnets, halo curseur */}
-  <Faq />            {/* cream — accordion + JSON-LD FAQPage */}
-  <Fin />            {/* navy — CTA audit magnétique + footer wordmark géant */}
+<main style={{ background: '#002329', minHeight: '100vh' }}>
+  <Hero />            {/* glowy waves — inchangé */}
+  <FintechPlatform /> {/* cream — badges pill, cartes 20px hover-lift, halos
+                         coral à la place des rochers Bancuip (supprimés) */}
+  <FinanceFeatures /> {/* blanc — chips d'index 01/02/03, zoom image au hover,
+                         typo 500/-0.03em */}
+  <Testimonials />    {/* #F6F6F6 — les 3 témoignages réels (Hakim/Samuel/
+                         Marion), flèches + dots + rotation auto 7 s,
+                         logos marquee en monochrome navy */}
+  <PowerOfFinance />  {/* blanc — liquid cards conservées, boutons pill,
+                         chiffres tabular-nums */}
+  <Footer />          {/* navy — wordmark géant DGL AGENCY coral coupé */}
 </main>
 ```
 
-Toutes les sections vivent dans **`components/refonte/`** et sont partagées
-avec les prototypes `/composant/refonte-racine` (même composition, hero à
-`calc(100vh - 48px)`) et `/composant/refontev2` (hero shader Paper Design).
+Toutes les sections ont le recouvrement arrondi 28px (effet cartes empilées,
+z-index 2→6, le hero est `isolation: isolate`).
 
-**Archive** : l'ancienne composition (template Bancuip — FintechPlatform,
-FinanceFeatures, Testimonials, PowerOfFinance, Footer) reste consultable sur
-`/composant/site-v1` ; les fichiers sont toujours dans `components/`.
+**Versions consultables** :
+- `/composant/site-v1` : snapshot FIGÉ (copies locales gelées) de la page
+  d'avant la modernisation
+- `/composant/refonte-racine` + `/composant/refontev2` : la refonte
+  alternative (sections `components/refonte/`), non retenue pour la racine
 
 **Améliorations 2026-07-03 (2e passe)** :
 - `components/refonte/StickyNav.tsx` : navbar sticky pill (glass navy) qui

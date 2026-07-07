@@ -20,18 +20,18 @@ export const COMPOSANTS: ComposantEntry[] = [
   {
     slug: 'refonte-racine',
     name: 'Refonte racine — hero glowy waves + sections v2',
-    status: 'validated',
+    status: 'ready',
     Component: lazy(() => import('./refonte-racine/Demo')),
     notes:
-      "✅ Promu comme site principal le 2026-07-03. Hero glowy waves + sections refonte partagées (components/refonte/) : manifesto scroll-reveal, bandeau typo géant, 6 services balayage coral, méthode, réalisations chiffrées, témoignages autorotate, outils gratuits (halo curseur), FAQ (JSON-LD), CTA magnétique + footer wordmark géant.",
+      "Proposition alternative de page d'accueil (brièvement promue puis retirée le 2026-07-03 — Mahmoud préfère garder la composition d'origine). Hero glowy waves + sections refonte partagées (components/refonte/) : manifesto scroll-reveal, bandeau typo géant, 6 services balayage coral, méthode, réalisations chiffrées, témoignages autorotate, outils gratuits (halo curseur), FAQ (JSON-LD), CTA magnétique + footer wordmark géant.",
   },
   {
     slug: 'site-v1',
-    name: 'Site v1 — archive (template Bancuip)',
+    name: 'Site v1 — snapshot figé (avant modernisation)',
     status: 'validated',
     Component: lazy(() => import('./site-v1/Demo')),
     notes:
-      "Archive de l'ancienne page d'accueil (avant la refonte du 2026-07-03) : hero glowy waves + FintechPlatform + FinanceFeatures + Testimonials + PowerOfFinance + Footer, hérités du template Bancuip et adaptés DGL. Conservée pour référence.",
+      "Snapshot FIGÉ de la page d'accueil telle qu'elle était avant la modernisation des composants (2026-07-03) : copies locales gelées de FintechPlatform, FinanceFeatures, Testimonials, PowerOfFinance et Footer. Le site racine utilise les versions modernisées de components/.",
   },
   {
     slug: 'refontev2',

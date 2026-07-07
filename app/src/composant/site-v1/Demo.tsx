@@ -1,15 +1,16 @@
 import Hero from '@/components/Hero'
-import FintechPlatform from '@/components/FintechPlatform'
-import FinanceFeatures from '@/components/FinanceFeatures'
-import Testimonials from '@/components/Testimonials'
-import PowerOfFinance from '@/components/PowerOfFinance'
-import Footer from '@/components/Footer'
+import FintechPlatform from './FintechPlatform'
+import FinanceFeatures from './FinanceFeatures'
+import Testimonials from './Testimonials'
+import PowerOfFinance from './PowerOfFinance'
+import Footer from './Footer'
 
 /**
- * Composant site-v1 — ARCHIVE de l'ancienne page d'accueil.
- * C'était la composition de pages/Index.tsx avant la promotion de la
- * refonte (2026-07-03) : hero glowy waves + sections héritées du
- * template Bancuip adaptées à DGL. Conservée ici pour ne rien perdre.
+ * Composant site-v1 — SNAPSHOT FIGÉ de la page d'accueil d'origine
+ * (avant la modernisation des composants du 2026-07-03).
+ * Les 5 sections sont des copies locales gelées : les versions vivantes
+ * de components/ évoluent, celles-ci ne bougent plus.
+ * Seul le Hero reste partagé (inchangé visuellement).
  */
 export default function Demo() {
   return (

@@ -37,12 +37,8 @@ export default function FinanceFeatures() {
     <section
       style={{
         background: '#FFFFFF',
-        padding: '96px 18px 72px',
+        padding: '115px 18px 18px',
         fontFamily: '"Inter Tight", sans-serif',
-        position: 'relative',
-        borderRadius: '28px 28px 0 0',
-        marginTop: -28,
-        zIndex: 3,
       }}
     >
       <div style={{ width: '100%', margin: '0 auto' }}>
@@ -77,28 +73,20 @@ export default function FinanceFeatures() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: '10px',
-                border: '1px solid rgba(0,35,41,0.18)',
-                borderRadius: '999px',
-                padding: '7px 16px',
+                border: '1px solid rgba(0,0,0,0.20)',
+                borderRadius: '9px',
+                padding: '7px 14px',
                 background: 'transparent',
               }}
             >
               <span
                 style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: '50%',
-                  background: '#fe5752',
-                }}
-              />
-              <span
-                style={{
                   fontSize: '0.8125rem',
-                  fontWeight: 500,
+                  fontWeight: 400,
                   color: '#002329',
                 }}
               >
-                La différence DGL
+La différence DGL
               </span>
             </div>
             <p
@@ -130,9 +118,8 @@ export default function FinanceFeatures() {
               justifySelf: narrow ? 'flex-start' : 'end',
               color: '#002329',
               fontSize: 'clamp(2rem, 4.3vw, 4.0625rem)',
-              fontWeight: 500,
-              letterSpacing: '-0.03em',
-              lineHeight: 1.12,
+              fontWeight: 400,
+              lineHeight: 1.169,
               margin: 0,
             }}
           >
@@ -153,7 +140,7 @@ Des résultats concrets, jamais des promesses vides
           }}
         >
           {CARDS.map((c, i) => (
-            <FeatureCard key={i} data={c} narrow={narrow} index={i} />
+            <FeatureCard key={i} data={c} narrow={narrow} />
           ))}
         </motion.div>
       </div>
@@ -164,14 +151,11 @@ Des résultats concrets, jamais des promesses vides
 function FeatureCard({
   data,
   narrow,
-  index,
 }: {
   data: (typeof CARDS)[number]
   narrow: boolean
-  index: number
 }) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const [hover, setHover] = useState(false)
   const { scrollYProgress } = useScroll({
     target: cardRef,
     offset: ['start end', 'start start'],
@@ -182,19 +166,17 @@ function FeatureCard({
   return (
     <div
       ref={cardRef}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
       style={{
         position: 'relative',
         width: '100%',
-        borderRadius: '20px',
+        borderRadius: '14px',
         overflow: 'hidden',
         aspectRatio: narrow ? '4 / 5' : '1820 / 720',
         background: '#0a0a0a',
         isolation: 'isolate',
       }}
     >
-      {/* Background image — zoom lent au hover */}
+      {/* Background image */}
       <img
         src={asset(data.bg)}
         alt=""
@@ -205,9 +187,6 @@ function FeatureCard({
           height: '100%',
           objectFit: 'cover',
           zIndex: 0,
-          transform: hover ? 'scale(1.05)' : 'scale(1)',
-          transition: 'transform 1200ms cubic-bezier(0.22,0.61,0.36,1)',
-          willChange: 'transform',
         }}
       />
 
@@ -218,29 +197,9 @@ function FeatureCard({
           inset: 0,
           zIndex: 1,
           background:
-            'linear-gradient(180deg, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.35) 100%)',
+            'linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.25) 100%)',
         }}
       />
-
-      {/* Index chip */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '24px',
-          left: '28px',
-          zIndex: 3,
-          fontSize: '0.8125rem',
-          fontWeight: 600,
-          letterSpacing: '0.08em',
-          color: '#fff',
-          background: 'rgba(0,35,41,0.45)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '999px',
-          padding: '6px 14px',
-        }}
-      >
-        {String(index + 1).padStart(2, '0')}
-      </div>
 
       {/* Words */}
       <div
@@ -264,9 +223,9 @@ function FeatureCard({
             x: word1X,
             color: '#FFFFFF',
             fontSize: 'clamp(2.5rem, 7vw, 7rem)',
-            fontWeight: 500,
+            fontWeight: 400,
             lineHeight: 1,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-1px',
             display: 'inline-block',
             willChange: 'transform',
           }}
@@ -278,9 +237,9 @@ function FeatureCard({
             x: word2X,
             color: '#FFFFFF',
             fontSize: 'clamp(2.5rem, 7vw, 7rem)',
-            fontWeight: 500,
+            fontWeight: 400,
             lineHeight: 1,
-            letterSpacing: '-0.03em',
+            letterSpacing: '-1px',
             display: 'inline-block',
             willChange: 'transform',
           }}

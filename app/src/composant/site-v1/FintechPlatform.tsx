@@ -118,13 +118,8 @@ export default function FintechPlatform() {
         background: '#F0EFE9',
         position: 'relative',
         overflow: 'hidden',
-        padding: 'clamp(3rem, 6vw, 5rem) 0 clamp(4rem, 7vw, 6.5rem)',
+        padding: 'clamp(3rem, 6vw, 5rem) 0',
         fontFamily: '"Inter Tight", sans-serif',
-        // recouvrement arrondi sur le hero (effet cartes empilées)
-        borderRadius: '28px 28px 0 0',
-        marginTop: -28,
-        zIndex: 2,
-        isolation: 'isolate',
       }}
     >
       {/* Top decorative SVG with cursor-follow highlight */}
@@ -209,29 +204,21 @@ export default function FintechPlatform() {
             justifyContent: 'center',
             alignItems: 'center',
             gap: '10px',
-            border: '1px solid rgba(0,35,41,0.18)',
-            borderRadius: '999px',
-            padding: '7px 16px',
+            border: '1px solid rgba(0,0,0,0.20)',
+            borderRadius: '9px',
+            padding: '7px 14px',
             marginBottom: '1.25rem',
             background: 'transparent',
           }}
         >
           <span
             style={{
-              width: 6,
-              height: 6,
-              borderRadius: '50%',
-              background: '#fe5752',
-            }}
-          />
-          <span
-            style={{
               fontSize: '0.8125rem',
-              fontWeight: 500,
+              fontWeight: 400,
               color: '#002329',
             }}
           >
-            Nos services
+Nos services
           </span>
         </motion.div>
 
@@ -245,8 +232,7 @@ export default function FintechPlatform() {
             color: '#002329',
             fontFamily: '"Inter Tight", sans-serif',
             fontSize: 'clamp(2rem, 5vw, 4.0625rem)',
-            fontWeight: 500,
-            letterSpacing: '-0.03em',
+            fontWeight: 400,
             lineHeight: '107.5%',
             margin: 0,
           }}
@@ -546,15 +532,13 @@ function ArrowSVG({ style }: { style?: React.CSSProperties }) {
 ============================== */
 function GreenCard1() {
   return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    <div
       style={{
         width: '100%',
         maxWidth: '31rem',
         aspectRatio: '496 / 598',
         flexShrink: 0,
-        borderRadius: '20px',
+        borderRadius: '6px',
         background: 'linear-gradient(0deg, #FDE9E8 0%, #FCD9D6 100%)',
         boxShadow: 'inset 0 4px 54px 7px rgba(0,0,0,0.05)',
         position: 'relative',
@@ -730,24 +714,38 @@ ROI moyen 2026
         </div>
       </div>
 
-      {/* Halo coral doux en bas de carte (remplace les rochers Bancuip) */}
-      <div
+      {/* Bottom images */}
+      <img
+        src={asset('block-1-1.png')}
+        alt=""
         style={{
           position: 'absolute',
+          bottom: 0,
           left: '50%',
-          bottom: '-30%',
-          width: '90%',
-          aspectRatio: '1 / 1',
-          transform: 'translateX(-50%)',
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(254,87,82,0.28) 0%, rgba(254,87,82,0) 70%)',
-          filter: 'blur(30px)',
-          pointerEvents: 'none',
+          transform: 'translateX(-100%)',
+          width: '51%',
+          height: 'auto',
+          objectFit: 'fill',
           zIndex: 1,
+          pointerEvents: 'none',
         }}
       />
-    </motion.div>
+      <img
+        src={asset('block-1-2.png')}
+        alt=""
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-2%)',
+          width: '49%',
+          height: 'auto',
+          objectFit: 'fill',
+          zIndex: 3,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
   )
 }
 
@@ -756,15 +754,13 @@ ROI moyen 2026
 ============================== */
 function GreenCard2() {
   return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    <div
       style={{
         width: '100%',
         maxWidth: '31rem',
         aspectRatio: '496 / 598',
         flexShrink: 0,
-        borderRadius: '20px',
+        borderRadius: '6px',
         background: 'linear-gradient(0deg, #FDE9E8 0%, #FCD9D6 100%)',
         boxShadow: 'inset 0 4px 54px 7px rgba(0,0,0,0.05)',
         position: 'relative',
@@ -772,23 +768,28 @@ function GreenCard2() {
         margin: '0 auto',
       }}
     >
-      {/* Halo coral doux en bas de carte (remplace le strip Bancuip) */}
+      {/* Bottom image strip */}
       <div
         style={{
           position: 'absolute',
-          left: '50%',
-          bottom: '-30%',
-          width: '90%',
-          aspectRatio: '1 / 1',
-          transform: 'translateX(-50%)',
-          borderRadius: '50%',
-          background:
-            'radial-gradient(circle, rgba(254,87,82,0.28) 0%, rgba(254,87,82,0) 70%)',
-          filter: 'blur(30px)',
-          pointerEvents: 'none',
+          bottom: 0,
+          left: 0,
+          right: 0,
           zIndex: 1,
         }}
-      />
+      >
+        <img
+          src={asset('block-2-1.png')}
+          alt=""
+          style={{
+            width: '100%',
+            height: 'auto',
+            maxHeight: '19.6%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+        />
+      </div>
 
       {/* Steps card */}
       <div
@@ -897,6 +898,6 @@ function GreenCard2() {
 Prêt à booster votre acquisition digitale.
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

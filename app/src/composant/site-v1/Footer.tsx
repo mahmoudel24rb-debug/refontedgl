@@ -87,13 +87,8 @@ export default function Footer() {
       style={{
         background: '#002329',
         color: '#FFFFFF',
-        padding: '80px clamp(1rem, 3vw, 2rem) 0',
+        padding: '80px clamp(1rem, 3vw, 2rem) 32px',
         fontFamily: '"Inter Tight", sans-serif',
-        position: 'relative',
-        borderRadius: '28px 28px 0 0',
-        marginTop: -28,
-        zIndex: 6,
-        overflow: 'hidden',
       }}
     >
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
@@ -257,26 +252,6 @@ Votre partenaire digital pour transformer vos idées en résultats concrets.
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Wordmark géant, volontairement coupé par le bas de page */}
-      <div
-        aria-hidden
-        style={{
-          fontSize: 'clamp(3.6rem, 13.5vw, 13.5rem)',
-          fontWeight: 600,
-          letterSpacing: '-0.05em',
-          lineHeight: 0.76,
-          textAlign: 'center',
-          whiteSpace: 'nowrap',
-          color: '#fe5752',
-          transform: 'translateY(18%)',
-          userSelect: 'none',
-          pointerEvents: 'none',
-          marginTop: '48px',
-        }}
-      >
-        DGL AGENCY
       </div>
     </footer>
   )

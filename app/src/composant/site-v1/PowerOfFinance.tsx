@@ -54,12 +54,8 @@ export default function PowerOfFinance() {
     <section
       style={{
         background: '#FFFFFF',
-        padding: '85px 18px 72px',
+        padding: '85px 18px 60px',
         fontFamily: '"Inter Tight", sans-serif',
-        position: 'relative',
-        borderRadius: '28px 28px 0 0',
-        marginTop: -28,
-        zIndex: 5,
       }}
     >
       {/* Header */}
@@ -93,9 +89,9 @@ export default function PowerOfFinance() {
             style={{
               color: '#002329',
               fontSize: 'clamp(2.5rem, 5.2vw, 5rem)',
-              fontWeight: 500,
+              fontWeight: 400,
               lineHeight: 1.05,
-              letterSpacing: '-0.03em',
+              letterSpacing: '-0.01em',
               margin: 0,
             }}
           >
@@ -162,28 +158,21 @@ function PrimaryButton() {
         display: 'inline-flex',
         alignItems: 'center',
         gap: '8px',
-        padding: '12px 22px',
-        borderRadius: '999px',
+        padding: '10px 18px',
+        borderRadius: '9px',
         fontSize: '14px',
-        fontWeight: 600,
+        fontWeight: 500,
         cursor: 'pointer',
         border: '1px solid transparent',
         background: hover ? '#e54a45' : '#fe5752',
-        color: '#ffffff',
+        color: '#002329',
         borderColor: '#fe5752',
-        transform: hover ? 'translateY(-2px)' : 'translateY(0)',
         transition:
-          'transform 250ms cubic-bezier(0.22,1,0.36,1), background 200ms ease',
+          'transform 200ms ease, background 200ms ease, color 200ms ease',
       }}
     >
 Audit gratuit
-      <img
-        src={asset('arrow-right.svg')}
-        alt=""
-        width={12}
-        height={12}
-        style={{ filter: 'brightness(0) invert(1)' }}
-      />
+      <img src={asset('arrow-right.svg')} alt="" width={12} height={12} />
     </button>
   )
 }
@@ -198,16 +187,16 @@ function GhostButton() {
         display: 'inline-flex',
         alignItems: 'center',
         gap: '8px',
-        padding: '12px 22px',
-        borderRadius: '999px',
+        padding: '10px 18px',
+        borderRadius: '9px',
         fontSize: '14px',
         fontWeight: 500,
         cursor: 'pointer',
-        border: `1px solid ${hover ? '#002329' : 'rgba(0,35,41,0.25)'}`,
+        border: '1px solid rgba(0,35,41,0.25)',
         background: hover ? 'rgba(0,35,41,0.04)' : 'transparent',
         color: '#002329',
         transition:
-          'border-color 200ms ease, background 200ms ease',
+          'transform 200ms ease, background 200ms ease, color 200ms ease',
       }}
     >
 Nous contacter
@@ -325,10 +314,9 @@ function StatCard({
         <div
           style={{
             fontSize: 'clamp(3rem, 8vw, 6rem)',
-            fontWeight: 500,
+            fontWeight: 400,
             lineHeight: 1,
-            letterSpacing: '-0.04em',
-            fontVariantNumeric: 'tabular-nums',
+            letterSpacing: '-0.02em',
             color: hover ? '#FFFFFF' : '#002329',
             transition: 'color 300ms ease',
           }}
