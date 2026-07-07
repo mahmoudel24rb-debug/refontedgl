@@ -1,7 +1,10 @@
 import Hero from './Hero'
 import Agence from '@/components/refonte/Agence'
+import MarqueeTexte from '@/components/refonte/MarqueeTexte'
 import Services from '@/components/refonte/Services'
 import Preuves from '@/components/refonte/Preuves'
+import Outils from '@/components/refonte/Outils'
+import Faq from '@/components/refonte/Faq'
 import Fin from '@/components/refonte/Fin'
 import { BASE_CSS, DGL } from '@/components/refonte/ui'
 
@@ -34,8 +37,11 @@ export default function Demo() {
       <style>{BASE_CSS}</style>
       <Hero />
       <Agence />
+      <MarqueeTexte />
       <Services />
       <Preuves />
+      <Outils />
+      <Faq />
       <Fin />
     </div>
   )

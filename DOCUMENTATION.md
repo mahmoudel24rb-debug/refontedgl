@@ -193,6 +193,19 @@ pointent vers des ancres (`#services`, `#realisations`, `#agence`, `#contact`)
 - `index.html` : lang fr, title/meta/OG du vrai site, JSON-LD LocalBusiness,
   graisses Inter Tight réduites à 300-700 (la 800 n'était pas utilisée)
 
+**Améliorations 2026-07-03 (3e passe — sections premium)** :
+- `MarqueeTexte.tsx` : bandeau typographique géant défilant entre agence et
+  services (expertises en text-stroke navy + astérisques coral, hover remplit)
+- `Outils.tsx` (section 6, blanc) : les 4 lead magnets réels du site en cartes
+  premium — halo coral qui suit le curseur (--mx/--my), liens vers dgl-agency.fr
+- `Faq.tsx` (section 7, cream) : 6 questions/réponses en accordion (grid-rows,
+  plus qui pivote) + JSON-LD FAQPage pour les rich results
+- Micro-interactions : `Magnetic` (ui.tsx) sur le CTA final, tilt 3D discret
+  (max 4°) sur les cartes réalisations, rotation auto des témoignages toutes
+  les 6 s (stoppée au premier clic, désactivée en reduced-motion)
+- z-index des recouvrements arrondis : agence 2 → marquee 2 → services 3 →
+  méthode 4 → réalisations 5 → témoignages 6 → outils 7 → FAQ 8 → fin 9
+
 ### Détail des composants
 
 #### `Hero.tsx` — Glowy waves

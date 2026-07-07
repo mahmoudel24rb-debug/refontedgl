@@ -1,8 +1,11 @@
 import Hero from '@/components/Hero'
 import StickyNav from '@/components/refonte/StickyNav'
 import Agence from '@/components/refonte/Agence'
+import MarqueeTexte from '@/components/refonte/MarqueeTexte'
 import Services from '@/components/refonte/Services'
 import Preuves from '@/components/refonte/Preuves'
+import Outils from '@/components/refonte/Outils'
+import Faq from '@/components/refonte/Faq'
 import Fin from '@/components/refonte/Fin'
 import { BASE_CSS } from '@/components/refonte/ui'
 
@@ -35,8 +38,11 @@ export default function Demo() {
       <StickyNav topOffset={60} />
       <Hero minHeight="calc(100vh - 48px)" />
       <Agence />
+      <MarqueeTexte />
       <Services />
       <Preuves />
+      <Outils />
+      <Faq />
       <Fin />
     </main>
   )

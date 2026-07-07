@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react'
-import { DGL, Reveal, TextRoll } from './ui'
+import { DGL, Magnetic, Reveal, TextRoll } from './ui'
 
 /**
  * Section 7 — CTA FINAL + FOOTER (fond navy).
@@ -56,12 +56,14 @@ export default function Fin() {
             sans engagement.
           </p>
           <div className="v2f-cta-row">
-            <a className="v2-cta-primary group" href="#contact">
-              <TextRoll>Réserver mon audit gratuit</TextRoll>
-              <span className="v2-cta-primary-arrow">
-                <ArrowRight size={14} color={DGL.coral} />
-              </span>
-            </a>
+            <Magnetic>
+              <a className="v2-cta-primary group" href="#contact">
+                <TextRoll>Réserver mon audit gratuit</TextRoll>
+                <span className="v2-cta-primary-arrow">
+                  <ArrowRight size={14} color={DGL.coral} />
+                </span>
+              </a>
+            </Magnetic>
             <a className="v2f-ghost-link" href="#contact">
               Tester le simulateur de ROI
               <ArrowRight size={14} />
@@ -124,7 +126,7 @@ const FIN_CSS = `
   background: ${DGL.navy};
   color: ${DGL.white};
   position: relative;
-  z-index: 7;
+  z-index: 9;
   border-radius: 28px 28px 0 0;
   margin-top: -28px;
 }

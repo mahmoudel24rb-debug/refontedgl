@@ -71,9 +71,25 @@ function CaseCard({
   wide?: boolean
 }) {
   const videoRef = useVideoInView()
+
+  /* Tilt 3D discret au survol (max ~4°), remis à plat à la sortie */
+  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const el = e.currentTarget
+    const rect = el.getBoundingClientRect()
+    const px = (e.clientX - rect.left) / rect.width
+    const py = (e.clientY - rect.top) / rect.height
+    const rx = (0.5 - py) * 4
+    const ry = (px - 0.5) * 4
+    el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`
+  }
+  const resetTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.transform = ''
+  }
+
   return (
     <div className={`v2r-card${wide ? ' v2r-card-wide' : ''}`}>
-      <div className="v2r-media">
+      <div className="v2r-media" onMouseMove={handleTilt} onMouseLeave={resetTilt}>
         <video
           ref={videoRef}
           src={videoSrc}
@@ -98,7 +114,20 @@ function CaseCard({
 
 export default function Preuves() {
   const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
   const t = TESTIMONIALS[active]
+
+  /* Rotation auto toutes les 6 s — s'arrête définitivement au premier
+     clic de l'utilisateur, jamais lancée en reduced-motion. */
+  useEffect(() => {
+    if (paused) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(
+      () => setActive((a) => (a + 1) % TESTIMONIALS.length),
+      6000,
+    )
+    return () => window.clearInterval(id)
+  }, [paused])
 
   return (
     <>
@@ -163,7 +192,10 @@ export default function Preuves() {
                 role="tab"
                 aria-selected={active === i}
                 className={`v2t-tab${active === i ? ' is-active' : ''}`}
-                onClick={() => setActive(i)}
+                onClick={() => {
+                  setPaused(true)
+                  setActive(i)
+                }}
               >
                 {item.name}
               </button>
@@ -220,6 +252,8 @@ const PREUVES_CSS = `
   cursor: pointer;
   aspect-ratio: 4 / 3;
   flex: 1;
+  transition: transform 250ms ease-out;
+  will-change: transform;
 }
 .v2r-card-wide .v2r-media { aspect-ratio: 16 / 10; }
 .v2r-media video {

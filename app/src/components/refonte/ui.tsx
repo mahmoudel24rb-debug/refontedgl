@@ -70,6 +70,48 @@ export function Reveal({
   )
 }
 
+/* Effet magnétique : l'élément suit légèrement le curseur qui le survole
+   puis revient en place. Désactivé si prefers-reduced-motion. */
+export function Magnetic({
+  children,
+  strength = 0.22,
+}: {
+  children: ReactNode
+  strength?: number
+}) {
+  const ref = useRef<HTMLDivElement | null>(null)
+
+  const handleMove = (e: React.MouseEvent) => {
+    const el = ref.current
+    if (!el) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left - rect.width / 2) * strength
+    const y = (e.clientY - rect.top - rect.height / 2) * strength
+    el.style.transform = `translate(${x}px, ${y}px)`
+  }
+
+  const handleLeave = () => {
+    const el = ref.current
+    if (el) el.style.transform = 'translate(0px, 0px)'
+  }
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{
+        display: 'inline-flex',
+        transition: 'transform 350ms cubic-bezier(0.22,0.61,0.36,1)',
+        willChange: 'transform',
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
 /* Numérotation de sections : encode l'ordre de lecture de la page,
    même langage visuel que le brief Axion (cercle + pill). */
 export function BadgeRow({
