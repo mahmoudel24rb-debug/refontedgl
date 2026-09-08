@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { motion, type Variants } from 'framer-motion'
 import {
   Calculator,
   FileText,
@@ -13,27 +15,67 @@ import { TOOLS_GRID_CTA, TOOLS_PAGE, type ToolCard } from '../content'
 
 /**
  * Catalogue des outils gratuits : deux grandes cartes image avec une carte
- * blanche flottante, puis une grille de quatre cartes compactes.
+ * blanche flottante qui se deplie au survol (module HoverCard du template),
+ * puis une grille de quatre cartes compactes.
  */
 
 const FEATURED_ICONS: LucideIcon[] = [Calculator, Gauge]
 const GRID_ICONS: LucideIcon[] = [Sparkles, FileText, Gauge, Workflow]
 
+/* Depliement de la liste des atouts (valeurs du template). */
+const FEATURES: Variants = {
+  rest: { height: 0, opacity: 0 },
+  hover: {
+    height: 'auto',
+    opacity: 1,
+    transition: {
+      height: { duration: 0.15 },
+      opacity: { duration: 0.1, delay: 0.1 },
+    },
+  },
+}
+
+const FEATURE: Variants = {
+  rest: { opacity: 0, y: 10 },
+  hover: { opacity: 1, y: 0 },
+}
+
+/** Sur un ecran tactile il n'y a pas de survol : la carte reste depliee. */
+function useCoarsePointer() {
+  const [coarse, setCoarse] = useState(false)
+
+  useEffect(() => {
+    const query = window.matchMedia('(hover: none)')
+    const update = () => setCoarse(query.matches)
+    update()
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
+
+  return coarse
+}
+
 function FeaturedCard({ tool, icon }: { tool: ToolCard; icon: LucideIcon }) {
   const Icon = icon
+  const coarse = useCoarsePointer()
+  const state = coarse ? 'hover' : 'rest'
+
   return (
-    <a
+    <motion.a
       href={tool.href}
       target="_blank"
       rel="noopener"
-      className="group relative block min-h-[420px] overflow-hidden rounded-3xl"
+      initial={state}
+      animate={state}
+      whileHover="hover"
+      className="relative flex h-full min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl p-6"
     >
       {tool.image ? (
         <img
           src={tool.image}
           alt={tool.name}
           loading="lazy"
-          className="absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="absolute inset-0 size-full object-cover"
         />
       ) : null}
       <span
@@ -41,30 +83,48 @@ function FeaturedCard({ tool, icon }: { tool: ToolCard; icon: LucideIcon }) {
         className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/35 to-transparent"
       />
       {tool.badge ? (
-        <span className="bg-ink absolute top-6 left-6 rounded-full px-3 py-1 text-sm leading-5 text-white">
+        <span className="bg-ink absolute top-6 left-6 z-10 rounded-full px-3 py-1 text-sm leading-5 text-white">
           {tool.badge}
         </span>
       ) : null}
-      <div className="absolute inset-x-6 bottom-6 rounded-2xl bg-white p-5 shadow-xl">
-        <div className="flex items-center gap-3">
-          <span className="bg-primary flex size-8 shrink-0 items-center justify-center rounded-lg text-white">
-            <Icon size={18} aria-hidden="true" />
-          </span>
-          <h3 className="text-ink text-base font-semibold">{tool.name}</h3>
+
+      <motion.div
+        layout
+        className="relative z-10 flex w-full flex-col rounded-2xl bg-white px-6 py-5 shadow-xl"
+      >
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-center gap-3">
+            <span className="bg-primary flex size-8 shrink-0 items-center justify-center rounded-lg text-white">
+              <Icon size={18} aria-hidden="true" />
+            </span>
+            <h3 className="text-ink text-lg font-semibold">{tool.name}</h3>
+          </div>
+          <p className="text-muted text-sm leading-6">{tool.desc}</p>
         </div>
-        <p className="text-muted mt-2 text-sm leading-6">{tool.desc}</p>
+
         {tool.features ? (
-          <ul className="mt-4 grid grid-cols-1 gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
-            {tool.features.map((feature) => (
-              <li key={feature} className="text-ink/80 flex items-start gap-2">
-                <CheckCircleIcon size={16} className="mt-0.5 shrink-0" />
-                {feature}
-              </li>
-            ))}
-          </ul>
+          <motion.div
+            variants={FEATURES}
+            initial={false}
+            className="overflow-hidden"
+          >
+            <ul className="mt-5 flex flex-col gap-3 pb-1 text-sm">
+              {tool.features.map((feature, index) => (
+                <motion.li
+                  key={feature}
+                  variants={FEATURE}
+                  transition={{ duration: 0.2, delay: 0.05 * index }}
+                  className="text-ink/80 flex items-start gap-2"
+                >
+                  <CheckCircleIcon size={16} className="mt-0.5 shrink-0" />
+                  {feature}
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
         ) : null}
-      </div>
-    </a>
+      </motion.div>
+    </motion.a>
   )
 }
 

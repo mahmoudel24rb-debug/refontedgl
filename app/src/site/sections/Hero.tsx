@@ -1,27 +1,126 @@
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  type Variants,
+} from 'framer-motion'
 import Container from '../ui/Container'
 import DotButton from '../ui/DotButton'
 import { CTA, HERO } from '../content'
 
 /* -------------------------------------------------------------------------- */
+/* Variants du calque de fond (template : stagger .25 s, delai initial .2 s)   */
+/* -------------------------------------------------------------------------- */
+
+const LAYERS: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.25, delayChildren: 0.2 } },
+}
+
+/** Planete et etoiles : opacite pleine. */
+const FADE_IN: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.8, ease: 'easeInOut' } },
+}
+
+/** Grille : le template la pose a 20 % (les traits sont peints plus clairs). */
+const FADE_GRID: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 0.2, transition: { duration: 0.8, ease: 'easeInOut' } },
+}
+
+/** Lueur : 40 % dans le template (les taches sont peintes 2,5x plus fortes). */
+const FADE_GLOW: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 0.4, transition: { duration: 0.8, ease: 'easeInOut' } },
+}
+
+/* -------------------------------------------------------------------------- */
 /* Couches de fond                                                            */
 /* -------------------------------------------------------------------------- */
 
-/** Grille fine, masquee vers le bas comme dans le template. */
+const CELL = 64
+const FILLED_CELLS = 6
+
+/**
+ * Grille fine masquee vers le bas. Comme dans le template, six cellules
+ * tirees au sort au montage sont remplies d'un degrade coral.
+ */
 function Grid() {
+  const ref = useRef<HTMLDivElement>(null)
+  const size = useRef('')
+  const [cells, setCells] = useState<{ x: number; y: number }[]>([])
+
+  useEffect(() => {
+    const pick = () => {
+      const node = ref.current
+      if (!node) return
+      const cols = Math.ceil(node.clientWidth / CELL)
+      const rows = Math.ceil(node.clientHeight / CELL)
+      /* On ne retire au sort que si le nombre de cellules a change. */
+      const key = `${cols}x${rows}`
+      if (key === size.current) return
+      size.current = key
+      const total = cols * rows
+      const picked = new Set<number>()
+      while (picked.size < Math.min(FILLED_CELLS, total)) {
+        picked.add(Math.floor(Math.random() * total))
+      }
+      setCells(
+        [...picked].map((index) => ({
+          x: (index % cols) * CELL,
+          y: Math.floor(index / cols) * CELL,
+        })),
+      )
+    }
+    pick()
+    window.addEventListener('resize', pick)
+    return () => window.removeEventListener('resize', pick)
+  }, [])
+
   return (
-    <div
+    <motion.div
+      ref={ref}
+      variants={FADE_GRID}
       className="pointer-events-none absolute inset-x-0 top-0 h-1/2 w-full"
       style={{
         backgroundImage:
-          'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
-        backgroundSize: '64px 64px',
+          'linear-gradient(to right, rgba(255,255,255,0.25) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.25) 1px, transparent 1px)',
+        backgroundSize: `${CELL}px ${CELL}px`,
         maskImage:
           'linear-gradient(to bottom, transparent 0%, black 50%, transparent 100%)',
         WebkitMaskImage:
           'linear-gradient(to bottom, transparent 0%, black 50%, transparent 100%)',
       }}
-    />
+    >
+      <svg className="absolute inset-0 h-full w-full" aria-hidden="true">
+        <defs>
+          <linearGradient id="dgl-hero-cell" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop
+              offset="0%"
+              stopColor="var(--color-primary)"
+              stopOpacity="0.5"
+            />
+            <stop
+              offset="100%"
+              stopColor="var(--color-primary)"
+              stopOpacity="0"
+            />
+          </linearGradient>
+        </defs>
+        {cells.map((cell) => (
+          <rect
+            key={`${cell.x}-${cell.y}`}
+            x={cell.x}
+            y={cell.y}
+            width={CELL}
+            height={CELL}
+            fill="url(#dgl-hero-cell)"
+          />
+        ))}
+      </svg>
+    </motion.div>
   )
 }
 
@@ -38,13 +137,16 @@ function mulberry32(seed: number) {
   }
 }
 
+/** Pseudo-aleatoire du template, fonction de l'index de l'etoile. */
+function starRandom(index: number) {
+  const value = 10000 * Math.sin(99.7 * index)
+  return value - Math.floor(value)
+}
+
 interface Star {
   x: number
   y: number
   r: number
-  o: number
-  twinkle: boolean
-  delay: number
 }
 
 const STARS: Star[] = (() => {
@@ -55,54 +157,67 @@ const STARS: Star[] = (() => {
       x: random() * 100,
       y: random() * 72,
       r: 0.6 + random() * 0.8,
-      o: 0.15 + random() * 0.3,
-      twinkle: false,
-      delay: random() * 4,
     })
-  }
-  for (let i = 0; i < 8; i += 1) {
-    list[Math.floor(random() * list.length)].twinkle = true
   }
   return list
 })()
 
-function Stars({ animate }: { animate: boolean }) {
+function Stars({ active }: { active: boolean }) {
+  const ref = useRef<SVGSVGElement>(null)
+  /* Les etoiles ne scintillent que tant que le hero est a l'ecran. */
+  const inView = useInView(ref, { amount: 0 })
+  const twinkle = active && inView
+
   return (
-    <svg
+    <motion.svg
+      ref={ref}
+      variants={FADE_IN}
       className="pointer-events-none absolute inset-0 h-full w-full"
       aria-hidden="true"
     >
       {STARS.map((star, index) => (
-        <circle
+        <motion.circle
           key={index}
           cx={`${star.x}%`}
           cy={`${star.y}%`}
           r={star.r}
           fill="#ffffff"
-          opacity={star.o}
-          style={
-            star.twinkle && animate
+          initial={{ opacity: 0.2 }}
+          animate={twinkle ? { opacity: [0.2, 1, 0.2] } : { opacity: 0.2 }}
+          transition={
+            twinkle
               ? {
-                  animation: `dgl-twinkle 4s ease-in-out ${star.delay}s infinite`,
+                  duration: 2 + 3 * starRandom(index),
+                  delay: 1.2 + 2.5 * starRandom(index + 100),
+                  repeat: Infinity,
+                  repeatType: 'loop',
+                  ease: 'easeInOut',
                 }
-              : undefined
+              : { duration: 0 }
           }
         />
       ))}
-    </svg>
+    </motion.svg>
   )
 }
 
 /** Demi-planete : seul l'arc superieur de l'ellipse depasse. */
-function Planet() {
+function Planet({ active }: { active: boolean }) {
   return (
-    <div className="pointer-events-none absolute top-[82%] left-1/2 w-[1950px] max-w-none -translate-x-1/2 md:top-[62%]">
-      <svg
+    <motion.div
+      variants={FADE_IN}
+      className="pointer-events-none absolute top-[82%] left-1/2 w-[1950px] max-w-none -translate-x-1/2 md:top-[62%]"
+    >
+      <motion.svg
         width="1950"
         height="1200"
         viewBox="0 0 1950 1200"
         fill="none"
         aria-hidden="true"
+        initial={{ opacity: active ? 0 : 1 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.3 }}
       >
         <defs>
           <linearGradient id="dgl-hero-arc" x1="0" y1="0" x2="1" y2="0">
@@ -163,41 +278,49 @@ function Planet() {
           stroke="url(#dgl-hero-arc)"
           strokeWidth="2"
         />
-      </svg>
-    </div>
+      </motion.svg>
+    </motion.div>
   )
 }
 
 /**
  * Lueur coral au centre bas. Elle est peinte AVANT la planete : la calotte
  * sombre masque la partie basse, il ne reste que le halo au-dessus de l'arc.
+ * Les taches sont peintes 2,5x plus fortes et montent chacune a 40 % (le
+ * calque du template) : leur composition entre elles reste identique au rendu
+ * statique precedent.
  */
-function Glow({ animate }: { animate: boolean }) {
-  const pulse = animate
+const PASS_THROUGH: Variants = { hidden: {}, show: {} }
+
+function Glow({ active }: { active: boolean }) {
+  const pulse = active
     ? { animation: 'dgl-glow-pulse 8s ease-in-out infinite alternate' }
     : undefined
   return (
-    <div
+    <motion.div
+      variants={PASS_THROUGH}
       className="pointer-events-none absolute inset-0"
       style={{ mixBlendMode: 'plus-lighter' }}
     >
-      <div
+      <motion.div
+        variants={FADE_GLOW}
         className="absolute bottom-[4%] left-1/2 h-[42%] w-[76%] -translate-x-1/2 rounded-[50%] md:bottom-[24%] md:w-[62%]"
         style={{
-          background: 'rgba(254,87,82,0.25)',
+          background: 'rgba(254,87,82,0.625)',
           filter: 'blur(80px)',
           ...pulse,
         }}
       />
-      <div
+      <motion.div
+        variants={FADE_GLOW}
         className="absolute bottom-[10%] left-1/2 h-[24%] w-[40%] -translate-x-1/2 rounded-[50%] md:bottom-[30%] md:w-[30%]"
         style={{
-          background: 'rgba(255,154,148,0.15)',
+          background: 'rgba(255,154,148,0.375)',
           filter: 'blur(80px)',
           ...pulse,
         }}
       />
-    </div>
+    </motion.div>
   )
 }
 
@@ -205,44 +328,29 @@ function Glow({ animate }: { animate: boolean }) {
 /* Hero                                                                       */
 /* -------------------------------------------------------------------------- */
 
-const CONTAINER_VARIANTS: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-}
-
-const ITEM_VARIANTS: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 0.61, 0.36, 1] },
-  },
-}
-
 export default function Hero() {
   const reduced = useReducedMotion()
-  const animate = !reduced
+  const active = !reduced
 
   return (
     <section className="flex max-w-screen flex-col items-center justify-center overflow-x-hidden">
       <div className="h-[60vh] w-full p-2 md:h-screen">
         <div className="bg-ink relative m-0 h-full w-full overflow-hidden rounded-3xl text-white">
-          <div className="pointer-events-none absolute inset-0 h-full w-full">
+          <motion.div
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            variants={LAYERS}
+            initial={active ? 'hidden' : false}
+            animate="show"
+          >
             <Grid />
-            <Stars animate={animate} />
-            <Glow animate={animate} />
-            <Planet />
-          </div>
+            <Stars active={active} />
+            <Glow active={active} />
+            <Planet active={active} />
+          </motion.div>
 
           <Container className="relative z-10 flex h-full flex-col justify-between">
-            <motion.div
-              className="pt-32 md:pt-42 lg:pt-56"
-              variants={CONTAINER_VARIANTS}
-              initial={animate ? 'hidden' : false}
-              animate="show"
-            >
-              <motion.a
-                variants={ITEM_VARIANTS}
+            <div className="pt-32 md:pt-42 lg:pt-56">
+              <a
                 href={HERO.pill.href}
                 target="_blank"
                 rel="noopener"
@@ -256,25 +364,22 @@ export default function Hero() {
                     {HERO.pill.text}
                   </span>
                 </span>
-              </motion.a>
+              </a>
 
               <div className="mt-6 flex flex-col items-start gap-6 md:mt-10 lg:flex-row lg:gap-10">
-                <motion.h1
-                  variants={ITEM_VARIANTS}
-                  className="-tracking-xl max-w-[720px] text-3xl leading-[1] font-semibold text-balance text-white sm:text-4xl md:text-5xl lg:text-7xl"
-                >
+                <h1 className="-tracking-xl max-w-[720px] text-3xl leading-[1] font-semibold text-balance text-white sm:text-4xl md:text-5xl lg:text-7xl">
                   {HERO.title}
-                </motion.h1>
-                <motion.div variants={ITEM_VARIANTS} className="lg:max-w-md">
+                </h1>
+                <div className="lg:max-w-md">
                   <h2 className="text-sm font-medium text-balance text-white/70 sm:text-base lg:text-lg">
                     {HERO.subtitle}
                   </h2>
                   <div className="mt-6">
                     <DotButton label={CTA.label} href={CTA.href} />
                   </div>
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
 
             <div className="relative h-18 sm:h-48 md:h-72">
               <p

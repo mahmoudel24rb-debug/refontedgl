@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import Container from '../ui/Container'
 import CarouselDots from '../ui/CarouselDots'
@@ -12,39 +12,18 @@ import {
 } from '../content'
 
 /**
- * Carrousel de temoignages sur cartes navy quadrillees : deux avis par
- * diapositive, pastilles de navigation, rotation automatique arretee des
- * que le visiteur intervient.
+ * Carrousel de temoignages sur cartes navy quadrillees : piste translatee de
+ * `index * (largeur de la premiere carte + 24)` comme le module Feedbacks du
+ * template, une pastille par avis, rotation automatique arretee des que le
+ * visiteur intervient.
  */
 
-const PER_SLIDE = 2
+const GAP = 24
 const ROTATION_MS = 7000
-
-const CSS = `
-.dgl-td-slide{animation:dgl-td-in 500ms cubic-bezier(0.22,0.61,0.36,1) both}
-@keyframes dgl-td-in{
-  from{opacity:0;transform:translate3d(0,14px,0)}
-  to{opacity:1;transform:translate3d(0,0,0)}
-}
-@media (prefers-reduced-motion: reduce){
-  .dgl-td-slide{animation:none}
-}
-`
-
-/** [0,1] puis [2,0] avec trois avis : les diapositives bouclent sur la liste. */
-function buildSlides(total: number): number[][] {
-  const count = Math.max(1, Math.ceil(total / PER_SLIDE))
-  return Array.from({ length: count }, (_, slide) =>
-    Array.from(
-      { length: PER_SLIDE },
-      (_unused, offset) => (slide * PER_SLIDE + offset) % total,
-    ),
-  )
-}
 
 function Card({ item }: { item: Testimonial }) {
   return (
-    <figure className="bg-ink relative flex min-h-[360px] flex-col justify-between overflow-hidden rounded-3xl p-8 text-white">
+    <figure className="bg-ink relative flex min-h-[360px] w-[85vw] shrink-0 flex-col justify-between overflow-hidden rounded-3xl p-8 text-white lg:w-[680px]">
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -62,11 +41,12 @@ function Card({ item }: { item: Testimonial }) {
         src={item.logo}
         alt={item.company}
         loading="lazy"
+        draggable={false}
         className="relative h-8 w-auto max-w-[180px] self-start object-contain"
       />
       <div className="relative mt-10">
         <blockquote className="text-xl leading-8 font-medium text-balance text-white">
-          {`« ${item.quote} »`}
+          {`« ${item.quote} »`}
         </blockquote>
         <figcaption className="mt-6 text-sm">
           <span className="font-semibold text-white">{item.name}</span>{' '}
@@ -79,51 +59,66 @@ function Card({ item }: { item: Testimonial }) {
 
 export default function TestimonialsDark() {
   const reduced = useReducedMotion()
-  const slides = buildSlides(TESTIMONIALS.length)
+  const trackRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
+  const [step, setStep] = useState(0)
   const [locked, setLocked] = useState(false)
 
+  useLayoutEffect(() => {
+    const track = trackRef.current
+    const card = track?.firstElementChild
+    if (!card) return
+    const measure = () => setStep(card.getBoundingClientRect().width + GAP)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(card)
+    window.addEventListener('resize', measure)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
+
   useEffect(() => {
-    if (reduced || locked || slides.length < 2) return
+    if (reduced || locked || TESTIMONIALS.length < 2) return
     const id = window.setInterval(() => {
-      setActive((index) => (index + 1) % slides.length)
+      setActive((index) => (index + 1) % TESTIMONIALS.length)
     }, ROTATION_MS)
     return () => window.clearInterval(id)
-  }, [reduced, locked, slides.length])
+  }, [reduced, locked])
 
-  const current = slides[active] ?? slides[0]
+  const select = useCallback((index: number) => {
+    setLocked(true)
+    setActive(index)
+  }, [])
 
   return (
     <section className="w-full overflow-hidden py-16 md:py-24">
-      <style>{CSS}</style>
       <Container>
         <SectionHeader
           title={TESTIMONIALS_DARK_HEADING}
           right={<DotButton label={CTA.label} href={CTA.href} />}
         />
 
-        <div
-          key={active}
-          className="dgl-td-slide mt-12 grid gap-6 md:grid-cols-2"
-        >
-          {current.map((index, position) => (
-            <Card
-              key={`${index}-${position}`}
-              item={TESTIMONIALS[index] as Testimonial}
-            />
-          ))}
+        <div className="mt-12">
+          <div
+            ref={trackRef}
+            className="flex items-stretch gap-6 transition-transform duration-500 ease-out will-change-transform"
+            style={{ transform: `translate3d(${-active * step}px, 0, 0)` }}
+          >
+            {TESTIMONIALS.map((item) => (
+              <Card key={item.name} item={item} />
+            ))}
+          </div>
         </div>
 
-        {slides.length > 1 ? (
+        {TESTIMONIALS.length > 1 ? (
           <div className="mt-10 flex justify-center">
             <CarouselDots
-              count={slides.length}
+              count={TESTIMONIALS.length}
               active={active}
               label="Navigation des temoignages"
-              onSelect={(index) => {
-                setLocked(true)
-                setActive(index)
-              }}
+              onSelect={select}
             />
           </div>
         ) : null}

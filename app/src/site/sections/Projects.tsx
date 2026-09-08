@@ -1,3 +1,4 @@
+import { motion, type Variants } from 'framer-motion'
 import Container from '../ui/Container'
 import PageWatermark from '../ui/PageWatermark'
 import { ArrowRightIcon } from '../ui/Icons'
@@ -24,38 +25,78 @@ const SPANS: Record<ProjectSpan, string> = {
 /** Hauteur du filigrane : le haut de la grille le recouvre de 14 %. */
 const WATERMARK_OFFSET = 'calc(clamp(96px, 16vw, 220px) * 0.86)'
 
+/* Voile floute et blocs de texte : variants du template (module Projects). */
+const OVERLAY: Variants = {
+  rest: { opacity: 0 },
+  hover: { opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+}
+
+const TOP_BLOCK: Variants = {
+  rest: { opacity: 0, y: 8 },
+  hover: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut', delay: 0.05 },
+  },
+}
+
+const BOTTOM_BLOCK: Variants = {
+  rest: { opacity: 0, y: 8 },
+  hover: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut', delay: 0.13 },
+  },
+}
+
 function Tile({ project }: { project: Project }) {
   return (
     <div className={SPANS[project.span]}>
-      <a
+      <motion.a
         href={project.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative block h-[280px] overflow-hidden rounded-3xl sm:h-[340px] lg:h-[460px]"
+        initial="rest"
+        animate="rest"
+        whileHover="hover"
+        className="group relative block h-[280px] overflow-hidden rounded-3xl text-left sm:h-[340px] lg:h-[460px]"
       >
         <img
           src={project.image}
           alt={`${project.client}, ${project.title}`}
           loading="lazy"
-          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+          className="h-full w-full rounded-3xl object-cover object-center"
         />
-        <div className="bg-ink/85 pointer-events-none absolute inset-0 flex flex-col justify-end p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-8">
-          <p className="-tracking-xs font-mono text-xs uppercase text-white/60">
-            {project.client}
-          </p>
-          <h3 className="mt-2 text-xl font-semibold text-white">
-            {project.title}
-          </h3>
-          <p className="mt-2 text-base leading-6 font-medium text-white/80">
-            {project.desc}
-          </p>
-          <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-white">
-            {PROJECTS_SECTION.cta}
-            <ArrowRightIcon size={16} />
-          </span>
-          <p className="mt-3 text-sm text-white/60">{project.tags.join(', ')}</p>
-        </div>
-      </a>
+        <motion.div
+          variants={OVERLAY}
+          className="bg-ink/50 absolute inset-0 flex flex-col justify-between rounded-3xl p-6 backdrop-blur-md md:p-8"
+        >
+          <motion.div variants={TOP_BLOCK} className="space-y-2">
+            <p className="-tracking-xs font-mono text-xs uppercase text-white/60">
+              {project.client}
+            </p>
+            <div className="-tracking-sm text-2xl leading-8 font-medium text-white">
+              {project.title}
+            </div>
+            <p className="text-base leading-6 font-medium text-white/80">
+              {project.desc}
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={BOTTOM_BLOCK}
+            className="flex w-full items-end justify-between gap-4"
+          >
+            <span className="tracking-xs inline-flex items-center gap-1 text-sm leading-4 font-medium text-white">
+              {PROJECTS_SECTION.cta}
+              <ArrowRightIcon size={16} />
+            </span>
+            <span className="-tracking-xs text-right text-sm leading-4 font-medium text-white/80">
+              {project.tags.join(', ')}
+            </span>
+          </motion.div>
+        </motion.div>
+      </motion.a>
 
       <div className="mt-4 md:hidden" aria-hidden="true">
         <p className="-tracking-xs text-muted font-mono text-xs uppercase">

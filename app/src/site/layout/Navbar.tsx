@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import Container from '../ui/Container'
 import DotButton from '../ui/DotButton'
 import { CTA, NAV } from '../content'
 import { LOGO_DGL, LOGO_FILTER_INK, LOGO_FILTER_WHITE } from '../tokens'
+
+/** Ouverture du panneau mobile en cercle depuis le bouton hamburger. */
+const CLIP_CLOSED = 'circle(0% at calc(100% - 2.5rem) 2.5rem)'
+const CLIP_OPEN = 'circle(150% at calc(100% - 2.5rem) 2.5rem)'
 
 /**
  * Navigation absolue du template : logo a gauche, liens centres, CTA a
@@ -97,53 +102,59 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
         </Container>
       </nav>
 
-      {open ? (
-        <div
-          id="dgl-mobile-menu"
-          className="bg-ink fixed inset-0 z-[60] flex flex-col md:hidden"
-        >
-          <div className="flex h-16 items-center justify-between px-6 pt-4">
-            <Link to="/" aria-label="DGL Agency, accueil" onClick={() => setOpen(false)}>
-              <img
-                src={LOGO_DGL}
-                alt="DGL Agency"
-                width={112}
-                height={28}
-                className="h-7 w-auto object-contain"
-                style={{ filter: LOGO_FILTER_WHITE }}
-              />
-            </Link>
-            <button
-              type="button"
-              aria-label="Fermer le menu"
-              onClick={() => setOpen(false)}
-              className="cursor-pointer p-2 text-white/80 hover:text-white"
-            >
-              <X size={22} />
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-6 px-7 pt-10">
-            {NAV.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className="text-lg font-medium text-white/80 transition-colors hover:text-white"
-              >
-                {item.label}
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            id="dgl-mobile-menu"
+            initial={{ clipPath: CLIP_CLOSED }}
+            animate={{ clipPath: CLIP_OPEN }}
+            exit={{ clipPath: CLIP_CLOSED }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+            className="bg-ink fixed inset-0 z-[60] flex flex-col md:hidden"
+          >
+            <div className="flex h-16 items-center justify-between px-6 pt-4">
+              <Link to="/" aria-label="DGL Agency, accueil" onClick={() => setOpen(false)}>
+                <img
+                  src={LOGO_DGL}
+                  alt="DGL Agency"
+                  width={112}
+                  height={28}
+                  className="h-7 w-auto object-contain"
+                  style={{ filter: LOGO_FILTER_WHITE }}
+                />
               </Link>
-            ))}
-            <div className="pt-4">
-              <DotButton
-                label={CTA.label}
-                href={CTA.href}
+              <button
+                type="button"
+                aria-label="Fermer le menu"
                 onClick={() => setOpen(false)}
-              />
+                className="cursor-pointer p-2 text-white/80 hover:text-white"
+              >
+                <X size={22} />
+              </button>
             </div>
-          </div>
-        </div>
-      ) : null}
+
+            <div className="flex flex-col gap-6 px-7 pt-10">
+              {NAV.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium text-white/80 transition-colors hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <div className="pt-4">
+                <DotButton
+                  label={CTA.label}
+                  href={CTA.href}
+                  onClick={() => setOpen(false)}
+                />
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </>
   )
 }

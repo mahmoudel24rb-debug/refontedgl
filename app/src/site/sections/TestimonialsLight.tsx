@@ -21,18 +21,19 @@ import {
 import { LOGO_FILTER_INK } from '../tokens'
 
 /**
- * Carrousel clair de temoignages : piste horizontale translatee par index,
- * une carte deborde a droite comme dans le template. Glissement tactile,
- * rotation automatique de 6 s coupee des la premiere interaction.
+ * Carrousel clair de temoignages : piste horizontale translatee de
+ * `index * (largeur de la premiere carte + 24)`, comme le module Testimonials
+ * du template. Glissement tactile et rotation automatique de 6 s coupee des la
+ * premiere interaction.
  */
 
-const GAP = 16
+const GAP = 24
 const AUTOPLAY_MS = 6000
 const DRAG_THRESHOLD = 48
 
 function Card({ item }: { item: Testimonial }) {
   return (
-    <article className="flex w-full shrink-0 grow-0 basis-auto flex-col rounded-3xl bg-white p-6 sm:w-[calc(50%-8px)] md:p-8 lg:w-[calc(42%-11px)]">
+    <article className="flex min-h-full w-[85vw] shrink-0 flex-col rounded-3xl bg-white p-6 md:w-[588px] md:p-8">
       <div className="flex items-start justify-between gap-4">
         <img
           src={item.logo}
@@ -75,30 +76,29 @@ function Card({ item }: { item: Testimonial }) {
 
 export default function TestimonialsLight() {
   const reduced = useReducedMotion()
-  const viewportRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const pointerStart = useRef<number | null>(null)
 
   const [index, setIndex] = useState(0)
   const [step, setStep] = useState(0)
-  const [maxShift, setMaxShift] = useState(0)
   const [drag, setDrag] = useState(0)
+  const [dragging, setDragging] = useState(false)
   const [paused, setPaused] = useState(false)
 
-  const measure = useCallback(() => {
-    const viewport = viewportRef.current
-    const track = trackRef.current
-    if (!viewport || !track) return
-    const card = track.firstElementChild as HTMLElement | null
-    setStep(card ? card.offsetWidth + GAP : 0)
-    setMaxShift(Math.max(0, track.scrollWidth - viewport.clientWidth))
-  }, [])
-
   useLayoutEffect(() => {
+    const track = trackRef.current
+    const card = track?.firstElementChild
+    if (!card) return
+    const measure = () => setStep(card.getBoundingClientRect().width + GAP)
     measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(card)
     window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
-  }, [measure])
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
 
   useEffect(() => {
     if (reduced || paused) return
@@ -116,6 +116,7 @@ export default function TestimonialsLight() {
   function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (event.pointerType === 'mouse' && event.button !== 0) return
     pointerStart.current = event.clientX
+    setDragging(true)
     setPaused(true)
   }
 
@@ -128,12 +129,11 @@ export default function TestimonialsLight() {
     if (pointerStart.current === null) return
     const delta = drag
     pointerStart.current = null
+    setDragging(false)
     setDrag(0)
     if (delta <= -DRAG_THRESHOLD) select(index + 1)
     else if (delta >= DRAG_THRESHOLD) select(index - 1)
   }
-
-  const shift = Math.min(index * step, maxShift)
 
   return (
     <section className="w-full overflow-hidden py-16 md:py-24">
@@ -145,7 +145,6 @@ export default function TestimonialsLight() {
         />
 
         <div
-          ref={viewportRef}
           className="relative mt-10 touch-pan-y select-none md:mt-14"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -155,13 +154,11 @@ export default function TestimonialsLight() {
         >
           <div
             ref={trackRef}
-            className="flex items-stretch gap-4"
+            className={`flex items-stretch gap-6 transition-transform ease-out will-change-transform ${
+              dragging ? 'duration-0' : 'duration-500'
+            }`}
             style={{
-              transform: `translate3d(${-shift + drag}px, 0, 0)`,
-              transition:
-                pointerStart.current !== null
-                  ? 'none'
-                  : 'transform 600ms cubic-bezier(0.22, 0.61, 0.36, 1)',
+              transform: `translate3d(${-index * step + drag}px, 0, 0)`,
             }}
           >
             {TESTIMONIALS.map((item) => (

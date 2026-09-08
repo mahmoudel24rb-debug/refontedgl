@@ -39,7 +39,7 @@ function Grid() {
 
 function ReviewChip({ item }: { item: Testimonial }) {
   return (
-    <figure className="mr-3 flex min-w-[280px] max-w-[320px] flex-col rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+    <figure className="mx-2 flex min-w-[280px] max-w-[320px] shrink-0 flex-col rounded-xl border border-white/10 bg-white/5 px-4 py-3">
       <div className="flex items-center gap-3">
         <img
           src={item.avatar}
@@ -129,7 +129,7 @@ export default function Founder() {
             </div>
 
             <div className="mt-12 lg:mt-auto lg:pt-12">
-              <Marquee duration={25} pauseOnHover>
+              <Marquee speed={50} pauseOnHover>
                 {TESTIMONIALS.map((item) => (
                   <ReviewChip key={item.name} item={item} />
                 ))}

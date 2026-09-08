@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+import { useInView, useReducedMotion } from 'framer-motion'
 import {
   ChartColumn,
   Globe,
@@ -9,7 +11,9 @@ import {
 } from 'lucide-react'
 import Container from '../ui/Container'
 import DotButton from '../ui/DotButton'
+import GridPatternDepth from '../ui/GridPatternDepth'
 import Marquee from '../ui/Marquee'
+import RollingNumber from '../ui/RollingNumber'
 import SectionHeader from '../ui/SectionHeader'
 import { CTA, GROWTH, GROWTH_TOOLS_LABEL } from '../content'
 
@@ -29,6 +33,14 @@ const SIDE_FADE =
 /* Indices des tuiles de la grille equipe qui recoivent une photo (5 x 4). */
 const PHOTO_CELLS = [7, 11, 13]
 const TEAM_CELLS = 20
+
+/* Compteur roulant : prefixe, nombre, suffixe. */
+const STAT_VALUE = /^(\D*)(\d+)(.*)$/
+const COUNTER_STEP = 3
+const COUNTER_TICK_MS = 10
+
+/* Vitesse des defilements du bento, en px/s (valeur du template). */
+const MARQUEE_SPEED = 50
 
 const TOOL_ICONS: Record<string, LucideIcon> = {
   'Google Ads': Megaphone,
@@ -97,8 +109,31 @@ function TeamCard() {
 
 function StatsCard() {
   const [first, second] = GROWTH.stats
+  const reduced = useReducedMotion()
+  const cardRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(cardRef, { once: true, amount: 0.35 })
+  const [count, setCount] = useState(1)
+
+  const parsed = STAT_VALUE.exec(first ? first.value : '')
+  const target = parsed ? Number(parsed[2]) : 0
+
+  useEffect(() => {
+    if (!inView || reduced || target <= 0) return
+    let current = 1
+    setCount(current)
+    const id = window.setInterval(() => {
+      current = Math.min(current + COUNTER_STEP, target)
+      setCount(current)
+      if (current >= target) window.clearInterval(id)
+    }, COUNTER_TICK_MS)
+    return () => window.clearInterval(id)
+  }, [inView, reduced, target])
+
   return (
-    <div className="relative flex min-h-[320px] flex-col overflow-hidden rounded-2xl bg-white p-6 lg:min-h-[380px]">
+    <div
+      ref={cardRef}
+      className="relative flex min-h-[320px] flex-col overflow-hidden rounded-2xl bg-white p-6 lg:min-h-[380px]"
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -113,10 +148,18 @@ function StatsCard() {
         }}
       />
       <div className="relative">
-        <p className="text-ink text-7xl font-medium tracking-tight md:text-8xl">
-          {first.value}
-        </p>
-        <p className="text-muted mt-1 text-base">{first.label}</p>
+        {parsed ? (
+          <p className="text-ink flex items-center text-7xl font-medium tracking-tight md:text-8xl">
+            {parsed[1]}
+            <RollingNumber value={reduced ? target : count} />
+            {parsed[3]}
+          </p>
+        ) : (
+          <p className="text-ink text-7xl font-medium tracking-tight md:text-8xl">
+            {first ? first.value : ''}
+          </p>
+        )}
+        <p className="text-muted mt-1 text-base">{first ? first.label : ''}</p>
         {second ? (
           <p className="mt-6 text-2xl font-medium tracking-tight">
             <span className="text-ink">{second.value}</span>{' '}
@@ -143,7 +186,7 @@ function PlatformsCard() {
       className="overflow-hidden rounded-2xl bg-white py-5"
       style={{ maskImage: SIDE_FADE, WebkitMaskImage: SIDE_FADE }}
     >
-      <Marquee duration={34}>
+      <Marquee speed={MARQUEE_SPEED} reverse pauseOnHover>
         {GROWTH.platforms.map((platform) => (
           <span
             key={platform}
@@ -160,11 +203,17 @@ function PlatformsCard() {
 
 function QuoteCard() {
   return (
-    <div className="to-primary/15 flex flex-1 flex-col justify-center rounded-2xl bg-gradient-to-br from-white via-white p-6">
-      <p className="text-ink/80 text-lg leading-7 text-pretty">
+    <div className="to-primary/15 relative flex flex-1 flex-col justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-white via-white p-6">
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 right-0 bottom-0 aspect-[497/346] translate-x-[18%]"
+      >
+        <GridPatternDepth className="h-full w-full" />
+      </span>
+      <p className="text-ink/80 relative text-lg leading-7 text-pretty">
         {GROWTH.quote.text}
       </p>
-      <p className="mt-6 text-base">
+      <p className="relative mt-6 text-base">
         <span className="text-ink font-medium">{GROWTH.quote.name}</span>
         <span className="text-muted">, {GROWTH.quote.role}</span>
       </p>
@@ -179,29 +228,34 @@ function QuoteCard() {
 function ToolsCard() {
   return (
     <div className="rounded-2xl bg-white p-6 lg:col-span-2">
-      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <p className="text-ink text-lg font-medium">{GROWTH_TOOLS_LABEL}</p>
-        <ul className="flex flex-wrap items-center gap-3">
-          {GROWTH.tools.map((tool, index) => {
-            const Icon = TOOL_ICONS[tool.name] ?? Globe
-            return (
-              <li key={tool.name}>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
+        <p className="text-ink shrink-0 text-lg font-medium">
+          {GROWTH_TOOLS_LABEL}
+        </p>
+        <div className="min-w-0 flex-1">
+          <Marquee speed={MARQUEE_SPEED} autoFill pauseOnHover className="py-2">
+            {GROWTH.tools.map((tool, index) => {
+              const Icon = TOOL_ICONS[tool.name] ?? Globe
+              return (
                 <span
+                  key={tool.name}
                   title={tool.name}
                   aria-label={tool.name}
                   role="img"
-                  className="ring-ink/5 flex size-14 items-center justify-center rounded-2xl bg-white shadow-md ring-1"
+                  className="ring-ink/5 mx-6 flex size-14 shrink-0 items-center justify-center rounded-2xl bg-white shadow-md ring-1"
                 >
                   <Icon
                     size={22}
                     strokeWidth={1.7}
-                    className={index % 2 === 0 ? 'text-primary' : 'text-ink/70'}
+                    className={
+                      index % 2 === 0 ? 'text-primary' : 'text-ink/70'
+                    }
                   />
                 </span>
-              </li>
-            )
-          })}
-        </ul>
+              )
+            })}
+          </Marquee>
+        </div>
       </div>
     </div>
   )

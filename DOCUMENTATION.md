@@ -569,3 +569,23 @@ Tokens Tailwind v4 dans `index.css` (`@theme`) : `bg-page` cream #F0EFE9,
 `text-ink` / `bg-ink` navy #002329, `bg-ink-deep` #001519, `bg-primary`
 coral #FE5752, `text-muted`, `font-mono` (DM Mono pour les eyebrows),
 `max-w-container` (80rem), `-tracking-xl`. Police : Inter Tight.
+
+### Animations (2026-09-08, seconde passe)
+
+Les animations du template ont été extraites de son code compilé (variants
+framer-motion, durées, springs, marquees) et réimplémentées à l'identique :
+- Hero : cascade des couches de fond (grille, planète, étoiles, lueur),
+  cellules de grille aléatoires en dégradé coral, scintillement des étoiles.
+- Bento services : séquence d'entrée du mockup, donut + aiguille, pile de
+  notifications qui tourne toutes les 5 s, pins de la carte du monde
+  (springs + anneaux pulsés), requête Google tapée lettre par lettre puis
+  résultats en cascade, queues lumineuses sur les pistes du circuit.
+- Projets : overlay flouté au survol avec textes en cascade.
+- Carrousels : piste translatée (500 ms ease-out), un point par carte.
+- Bento croissance : compteur à chiffres roulants (`ui/RollingNumber.tsx`,
+  spring 280/18/0.3), carrés coral animés (`ui/GridPatternDepth.tsx`),
+  marquees à 50 px/s (`ui/Marquee.tsx`, prop `speed`).
+- Logos clients permutés toutes les 2 s, menu mobile en clip-path
+  circulaire, cartes outils qui se déplient au survol.
+Toutes respectent `prefers-reduced-motion` (états finaux affichés, pas de
+boucles infinies).
