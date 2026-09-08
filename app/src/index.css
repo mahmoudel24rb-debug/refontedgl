@@ -12,21 +12,54 @@
   --color-gray-light: #f6f6f6;
   --color-card-gray: #f2f2f0;
   --color-footer-green: #002329;
+
+  /* Refonte 2026 : tokens du site racine (template Productized Agency
+     adapte a la palette DGL). */
+  --color-page: #F0EFE9;
+  --color-ink: #002329;
+  --color-ink-deep: #001519;
+  --color-primary: #FE5752;
+  --color-primary-hover: #E54A45;
+  --color-muted: rgba(0, 35, 41, 0.6);
+
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --container-container: 80rem;
+
+  --tracking-xs: 0.01em;
+  --tracking-sm: 0.02em;
+  --tracking-xl: 0.04em;
 }
 
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background: #0a0a0a;
-  color: #ffffff;
-  font-family: "Inter Tight", sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: "Inter Tight", sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Le site racine (pages de src/site/) pose la classe `site-theme` sur
+     <body> : fond cream + encre navy. Les pages /composant gardent le
+     fond sombre historique. */
+  html:has(body.site-theme),
+  body.site-theme {
+    background: var(--color-page);
+    color: var(--color-ink);
+  }
+
+  body.site-theme #root {
+    background: transparent;
+    color: inherit;
+  }
 }
 
 * {
@@ -44,5 +77,57 @@ button {
   }
   to {
     transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Defilement horizontal infini (site racine) */
+@keyframes dgl-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes dgl-marquee-reverse {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Entree en fondu */
+@keyframes dgl-fade-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Scintillement des etoiles du hero */
+@keyframes dgl-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* Respiration tres lente de la lueur du hero */
+@keyframes dgl-glow-pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
   }
 }

@@ -18,6 +18,14 @@ export interface ComposantEntry {
 
 export const COMPOSANTS: ComposantEntry[] = [
   {
+    slug: 'site-v2',
+    name: 'Site v2 : racine du 2026-07-03 au 2026-09-08 (snapshot figé)',
+    status: 'validated',
+    Component: lazy(() => import('./site-v2/Demo')),
+    notes:
+      "Snapshot figé de la page d'accueil (hero glowy waves + composants modernisés) remplacée le 2026-09-08 par le template Productized Agency adapté à DGL.",
+  },
+  {
     slug: 'refonte-racine',
     name: 'Refonte racine — hero glowy waves + sections v2',
     status: 'ready',

@@ -3,7 +3,7 @@
 Documentation complète du chantier de refonte du site https://dgl-agency.fr.
 Cible : remplacer WordPress + Oxygen Builder 4.0 par une SPA React + Vite déployée sur Vercel.
 
-**Dernière mise à jour** : 2026-07-03 (site racine = composition d'origine avec composants modernisés ; snapshot pré-modernisation sur /composant/site-v1 ; refonte alternative sur /composant/refonte-racine)
+**Dernière mise à jour** : 2026-09-08 (site racine = template « Productized Agency » (Aceternity) reconstruit en React et adapté à DGL, 6 routes ; l'ancienne racine est figée sur /composant/site-v2 ; voir §14)
 
 ---
 
@@ -515,3 +515,57 @@ Toute la construction du projet a été faite en conversation avec Claude (Anthr
 - **shadcn/ui** (patterns Glowy Waves Hero)
 
 Le workflow est très itératif : Mahmoud dépose un prompt dans `composant/[nom]/`, Claude code le prototype, on teste sur `/composant/[nom]`, on itère jusqu'à validation, puis on promeut.
+
+---
+
+## 14. Site racine v3 (2026-09-08) : template « Productized Agency » adapté à DGL
+
+Le site racine est désormais la reconstruction React/Vite du template
+Next.js https://productized-agency-template-acetern.vercel.app/ (home,
+/work, /products, /pricing, /blog, /blog/[slug]) avec les contenus réels
+de dgl-agency.fr (tarifs 299/599/799 €, 4 cas clients chiffrés, équipe,
+FAQ, articles de blog). L'ancienne racine (hero glowy waves + composants
+modernisés) est figée sur `/composant/site-v2` ; `/composant` reste la
+page de test de tous les prototypes.
+
+### Routes (`app/src/App.tsx`)
+
+| Route | Page | Contenu |
+|---|---|---|
+| `/` | `site/pages/Home.tsx` | Hero, logos clients, bento services, réalisations, témoignages, bento croissance, comparatif, engagements, tarifs, fondateur, témoignages sombres, FAQ |
+| `/realisations` | `site/pages/Realisations.tsx` | filigrane + masonry 6 projets, bento services, témoignages, FAQ |
+| `/outils` | `site/pages/Outils.tsx` | hero Test de visibilité IA, 6 outils gratuits, FAQ |
+| `/tarifs` | `site/pages/Tarifs.tsx` | filigrane + 3 packs, logos, comparatif, engagements, témoignages, FAQ |
+| `/blog`, `/blog/:slug` | `site/pages/Blog.tsx`, `BlogPost.tsx` | snapshot des articles WordPress |
+
+Toutes les pages du site (sauf Home) sont en `React.lazy`. `ScrollToTop`
+remonte en haut à chaque changement de route.
+
+### Structure `app/src/site/`
+
+- `tokens.ts` : couleurs DGL, URLs (audit gratuit, contact, test IA), téléphone, email, avatar.
+- `content.ts` : TOUS les textes et données du site (nav, hero, projets, témoignages, tarifs, FAQ, footer, page outils, meta SEO). Modifier un texte = modifier ce fichier.
+- `ui/` : `DotButton` (CTA signature : matrice de points qui laisse place à l'avatar au hover), `SectionHeader`, `PageWatermark`, `Container`, `CarouselDots`, `Accordion`, `Marquee`, `Icons`.
+- `layout/` : `Navbar` (tone dark/light, panneau mobile), `Footer` (carte CTA + wordmark géant + colonnes), `PageLayout` (classe `site-theme` sur body, meta de page).
+- `sections/` : une section par fichier, chacune lit `content.ts`.
+- `blog/` : `posts.ts` (accès au JSON), `BlogCard`, `BlogCover` (couvertures typographiques : les articles n'ont pas d'image à la une), `BlogToc`, `BlogProse`.
+- `hooks/usePageMeta.ts` : title + meta description par route.
+
+### Données et scripts
+
+- `app/scripts/fetch-blog.mjs` : récupère les articles via l'API REST WordPress
+  (`/wp-json/wp/v2/posts`), nettoie le HTML (scripts, styles, blocs CTA,
+  attributs inline, encadrés convertis en `<aside>`), calcule temps de
+  lecture et sommaire, et écrit `app/src/data/blog.json` (budget 440 Ko,
+  soit 28 articles les plus récents ; monter `MAX_BYTES` pour en inclure
+  plus). À relancer pour mettre le blog à jour : `node scripts/fetch-blog.mjs`.
+- `app/scripts/fetch-assets.mjs` : télécharge les visuels des cas clients,
+  avatars et photos agence dans `public/assets/{projets,avatars,agence}/`
+  (déjà exécuté, fichiers commités).
+
+### Design system
+
+Tokens Tailwind v4 dans `index.css` (`@theme`) : `bg-page` cream #F0EFE9,
+`text-ink` / `bg-ink` navy #002329, `bg-ink-deep` #001519, `bg-primary`
+coral #FE5752, `text-muted`, `font-mono` (DM Mono pour les eyebrows),
+`max-w-container` (80rem), `-tracking-xl`. Police : Inter Tight.
