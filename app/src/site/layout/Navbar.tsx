@@ -75,7 +75,7 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
             </div>
 
             <div className="hidden md:block lg:min-w-45 lg:text-right">
-              <CtaButton label={CTA.label} href={CTA.href} />
+              <CtaButton label={CTA.label} href={CTA.href} size="sm" />
             </div>
 
             <div className="md:hidden">

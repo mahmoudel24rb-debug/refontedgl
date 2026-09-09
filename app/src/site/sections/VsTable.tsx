@@ -83,6 +83,7 @@ function Table() {
             <CtaButton
               label={VS.free.primary.label}
               href={VS.free.primary.href}
+              size="sm"
             />
           </div>
           <div className="border-ink/10 flex h-24 items-center border-t px-6">
@@ -90,6 +91,7 @@ function Table() {
               label={VS.free.secondary.label}
               href={VS.free.secondary.href}
               tone="light"
+              size="sm"
             />
           </div>
         </div>
@@ -135,11 +137,16 @@ function Panels() {
         <Accordion items={ITEMS} defaultOpenId={ITEMS[0]?.id ?? null} />
       </div>
       <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-        <CtaButton label={VS.free.primary.label} href={VS.free.primary.href} />
+        <CtaButton
+          label={VS.free.primary.label}
+          href={VS.free.primary.href}
+          size="sm"
+        />
         <CtaButton
           label={VS.free.secondary.label}
           href={VS.free.secondary.href}
           tone="light"
+          size="sm"
         />
       </div>
     </div>
@@ -160,6 +167,7 @@ export default function VsTable() {
             <CtaButton
               label={VS.free.primary.label}
               href={VS.free.primary.href}
+              size="sm"
             />
           }
         />

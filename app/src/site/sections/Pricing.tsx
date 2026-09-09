@@ -188,6 +188,7 @@ function PlanCard({ plan }: { plan: PricingPlan }) {
                   label={plan.cta.label}
                   href={plan.cta.href}
                   tone={plan.dark ? 'light' : 'dark'}
+                  size="sm"
                 />
               </div>
             </div>
@@ -229,6 +230,7 @@ function WidePlanCard({ plan }: { plan: PricingPlan }) {
                 label={plan.cta.label}
                 href={plan.cta.href}
                 tone={plan.dark ? 'light' : 'dark'}
+                size="sm"
               />
             </div>
           </div>
