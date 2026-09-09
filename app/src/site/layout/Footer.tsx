@@ -51,7 +51,7 @@ export default function Footer() {
                 alt="DGL Agency"
                 width={112}
                 height={28}
-                className="h-7 w-auto object-contain"
+                className="h-10 w-auto object-contain"
                 style={{ filter: LOGO_FILTER_WHITE }}
               />
             </Link>

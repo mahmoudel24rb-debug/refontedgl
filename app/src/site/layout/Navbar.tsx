@@ -51,9 +51,9 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
                 <img
                   src={LOGO_DGL}
                   alt="DGL Agency"
-                  width={112}
-                  height={28}
-                  className="h-7 w-auto object-contain"
+                  width={40}
+                  height={40}
+                  className="h-9 w-auto object-contain md:h-10"
                   style={{
                     filter:
                       tone === 'dark' ? LOGO_FILTER_WHITE : LOGO_FILTER_INK,
@@ -117,9 +117,9 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
                 <img
                   src={LOGO_DGL}
                   alt="DGL Agency"
-                  width={112}
-                  height={28}
-                  className="h-7 w-auto object-contain"
+                  width={40}
+                  height={40}
+                  className="h-9 w-auto object-contain md:h-10"
                   style={{ filter: LOGO_FILTER_WHITE }}
                 />
               </Link>
