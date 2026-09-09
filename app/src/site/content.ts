@@ -48,6 +48,20 @@ export interface TeamMember {
   linkedin: string
 }
 
+/**
+ * Repere de la carte de France de la carte « Google Ads et Meta Ads ».
+ * `city` doit exister dans `data/france-map.ts` (regenerer la carte avec
+ * `node scripts/gen-france-map.mjs` pour ajouter une ville).
+ */
+export interface AdsPin {
+  city: string
+  kind: 'client' | 'zone'
+  /** Nom du client (repere `client`), sert d'infobulle et de texte alternatif. */
+  label?: string
+  /** Logo du client, repasse en navy sur la pastille blanche. */
+  logo?: string
+}
+
 export interface ServicesBentoContent {
   heading: string
   main: { title: string; text: string; cta: { label: string; to: string } }
@@ -55,7 +69,7 @@ export interface ServicesBentoContent {
     title: string
     notifications: { label: string; text: string; avatar?: string }[]
   }
-  ads: { title: string; avatars: string[] }
+  ads: { title: string; pins: AdsPin[] }
   google: {
     title: string
     query: string
@@ -347,10 +361,47 @@ export const SERVICES_BENTO: ServicesBentoContent = {
   },
   ads: {
     title: 'Google Ads et Meta Ads, pilotés chaque semaine',
-    avatars: [
-      '/composant-hero/team/Image-Equipe-Kiara.webp',
-      '/composant-hero/team/Image-Equipe-Mahmoud.webp',
-      '/composant-hero/team/Image-Equipe-Victor.webp',
+    /* Repères de la carte de France : clients (pastille + logo) puis zones
+       où des campagnes tournent. Les villes viennent de data/france-map.ts. */
+    pins: [
+      {
+        city: 'Tours',
+        kind: 'client',
+        label: 'Epicure Social Club',
+        logo: '/assets/logos/epicure.webp',
+      },
+      {
+        city: 'Tours',
+        kind: 'client',
+        label: 'Parc de Beauregard',
+        logo: '/assets/logos/beauregard.webp',
+      },
+      {
+        city: 'Le Mans',
+        kind: 'client',
+        label: 'Les Océades',
+        logo: '/assets/logos/oceades.webp',
+      },
+      {
+        city: 'Strasbourg',
+        kind: 'client',
+        label: 'GYMFIT',
+        logo: '/assets/logos/gymfit.webp',
+      },
+      {
+        city: 'Paris',
+        kind: 'client',
+        label: 'GYMFIT La Garenne-Colombes',
+        logo: '/assets/logos/gymfit.webp',
+      },
+      { city: 'Orléans', kind: 'zone' },
+      { city: 'Bourges', kind: 'zone' },
+      { city: 'Chartres', kind: 'zone' },
+      { city: 'Châteauroux', kind: 'zone' },
+      { city: 'Angers', kind: 'zone' },
+      { city: 'Nantes', kind: 'zone' },
+      { city: 'Lyon', kind: 'zone' },
+      { city: 'Bordeaux', kind: 'zone' },
     ],
   },
   google: {

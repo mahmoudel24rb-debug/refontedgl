@@ -201,106 +201,168 @@ function Stars({ active }: { active: boolean }) {
   )
 }
 
-/** Demi-planete : seul l'arc superieur de l'ellipse depasse. */
+/* Arc superieur de la planete : geometrie du template (SVG 1951x1806,
+   ellipse cx 975.5 cy 956 rx 773.5 ry 701). Le trait n'est peint qu'au
+   sommet : les degrades sont verticaux (userSpaceOnUse) et s'eteignent
+   quelques dizaines de pixels sous l'apex, si bien que l'arc se dissout sur
+   les flancs au lieu de barrer la carte d'un trait continu. */
+
+/** Contour principal, trait 4 px. */
+const ARC = 'M975.5 255C1402.88 255 1749 569.029 1749 956C1749 1342.97 1402.88 1657 975.5 1657C548.119 1657 202 1342.97 202 956C202 569.029 548.119 255 975.5 255Z'
+/** Contour fin, 1 px, legerement plus large (copie a 40 %). */
+const ARC_THIN = 'M975.5 253.5C1403.57 253.5 1750.5 568.065 1750.5 956C1750.5 1343.93 1403.57 1658.5 975.5 1658.5C547.432 1658.5 200.5 1343.93 200.5 956C200.5 568.065 547.432 253.5 975.5 253.5Z'
+/** Contour des halos flous (trait 24 px). */
+const ARC_HALO = 'M975.5 255C1398.3 255 1739 565.452 1739 946C1739 1326.55 1398.3 1637 975.5 1637C552.695 1637 212 1326.55 212 946C212 565.452 552.695 255 975.5 255Z'
+/** Contour des deux halos les plus larges, remontes de 43 px. */
+const ARC_HALO_HIGH = 'M975.5 212C1398.3 212 1739 522.452 1739 903C1739 1283.55 1398.3 1594 975.5 1594C552.695 1594 212 1283.55 212 903C212 522.452 552.695 212 975.5 212Z'
+
+/** Les 6 halos flous du template, du plus net au plus diffus. */
+const HALOS: {
+  path: string
+  gradient: string
+  blur: number
+  width: number
+  opacity?: number
+}[] = [
+  { path: ARC, gradient: 'dgl-arc-2', blur: 12, width: 4 },
+  { path: ARC_HALO, gradient: 'dgl-arc-3', blur: 30, width: 24, opacity: 0.4 },
+  { path: ARC_HALO, gradient: 'dgl-arc-4', blur: 30, width: 24, opacity: 0.4 },
+  { path: ARC_HALO, gradient: 'dgl-arc-5', blur: 40, width: 24, opacity: 0.4 },
+  { path: ARC_HALO, gradient: 'dgl-arc-6', blur: 50, width: 24, opacity: 0.4 },
+  {
+    path: ARC_HALO_HIGH,
+    gradient: 'dgl-arc-7',
+    blur: 50,
+    width: 24,
+    opacity: 0.4,
+  },
+  {
+    path: ARC_HALO_HIGH,
+    gradient: 'dgl-arc-8',
+    blur: 100,
+    width: 24,
+    opacity: 0.4,
+  },
+]
+
+/** Degrades verticaux : coral vif, coral clair puis blanc, vers transparent. */
+const GRADIENTS: { id: string; y1: number; y2: number; color: string }[] = [
+  { id: 'dgl-arc-0', y1: 108.5, y2: 313.5, color: '#FE5752' },
+  { id: 'dgl-arc-1', y1: 108.5, y2: 582, color: '#FE5752' },
+  { id: 'dgl-arc-2', y1: 253, y2: 392, color: '#FE5752' },
+  { id: 'dgl-arc-3', y1: 243, y2: 468.5, color: '#FE5752' },
+  { id: 'dgl-arc-4', y1: 243, y2: 328.5, color: '#FE5752' },
+  { id: 'dgl-arc-5', y1: 243, y2: 334, color: '#FF9A94' },
+  { id: 'dgl-arc-6', y1: 243, y2: 361, color: '#FF9A94' },
+  { id: 'dgl-arc-7', y1: 200, y2: 336.5, color: '#FF9A94' },
+  { id: 'dgl-arc-8', y1: 200, y2: 780.5, color: '#ffffff' },
+]
+
+/**
+ * Le sommet de l'arc est cale sur `top` : le SVG remonte de 255 px, la
+ * hauteur de sa calotte. Sur mobile l'arc est reduit de 55 % ; a taille
+ * reelle, un rayon de 773 px sur 374 px de large donnerait un trait quasi
+ * rectiligne.
+ */
 function Planet({ active }: { active: boolean }) {
   return (
     <motion.div
       variants={FADE_IN}
-      className="pointer-events-none absolute top-[82%] left-1/2 w-[1950px] max-w-none -translate-x-1/2 md:top-[62%]"
+      className="pointer-events-none absolute top-[82%] left-1/2 w-[1951px] max-w-none origin-top -translate-x-1/2 scale-[0.45] md:top-[62%] md:scale-100"
     >
       <motion.svg
-        width="1950"
-        height="1200"
-        viewBox="0 0 1950 1200"
+        width="1951"
+        height="1806"
+        viewBox="0 0 1951 1806"
         fill="none"
+        overflow="visible"
         aria-hidden="true"
+        className="-mt-[255px] block"
         initial={{ opacity: active ? 0 : 1 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
         <defs>
-          <linearGradient id="dgl-hero-arc" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#FE5752" stopOpacity="0" />
-            <stop offset="20%" stopColor="#FE5752" stopOpacity="0.35" />
-            <stop offset="50%" stopColor="#FFD4D1" stopOpacity="1" />
-            <stop offset="80%" stopColor="#FE5752" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#FE5752" stopOpacity="0" />
-          </linearGradient>
-          <filter
-            id="dgl-hero-halo"
-            x="-10%"
-            y="-20%"
-            width="120%"
-            height="140%"
-          >
-            <feGaussianBlur stdDeviation="40" />
-          </filter>
-          <filter
-            id="dgl-hero-halo-tight"
-            x="-10%"
-            y="-20%"
-            width="120%"
-            height="140%"
-          >
-            <feGaussianBlur stdDeviation="14" />
-          </filter>
+          {GRADIENTS.map((gradient) => (
+            <linearGradient
+              key={gradient.id}
+              id={gradient.id}
+              x1="976"
+              y1={gradient.y1}
+              x2="976"
+              y2={gradient.y2}
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor={gradient.color} />
+              <stop offset="1" stopColor={gradient.color} stopOpacity="0" />
+            </linearGradient>
+          ))}
         </defs>
-        <ellipse cx="975" cy="580" rx="974" ry="578" fill="rgba(0,21,25,0.9)" />
-        <ellipse
-          cx="975"
-          cy="580"
-          rx="974"
-          ry="578"
-          fill="none"
-          stroke="url(#dgl-hero-arc)"
-          strokeWidth="16"
-          opacity="0.35"
-          filter="url(#dgl-hero-halo)"
-        />
-        <ellipse
-          cx="975"
-          cy="580"
-          rx="974"
-          ry="578"
-          fill="none"
-          stroke="url(#dgl-hero-arc)"
-          strokeWidth="8"
-          opacity="0.5"
-          filter="url(#dgl-hero-halo-tight)"
-        />
-        <ellipse
-          cx="975"
-          cy="580"
-          rx="974"
-          ry="578"
-          fill="none"
-          stroke="url(#dgl-hero-arc)"
-          strokeWidth="2"
-        />
+        <path d={ARC} stroke="url(#dgl-arc-0)" strokeWidth="4" />
+        <path d={ARC_THIN} stroke="url(#dgl-arc-1)" opacity="0.4" />
+        {HALOS.map((halo, index) => (
+          <g
+            key={index}
+            opacity={halo.opacity}
+            style={{
+              filter: `blur(${halo.blur}px)`,
+              mixBlendMode: 'plus-lighter',
+            }}
+          >
+            <path
+              d={halo.path}
+              stroke={`url(#${halo.gradient})`}
+              strokeWidth={halo.width}
+            />
+          </g>
+        ))}
       </motion.svg>
     </motion.div>
   )
 }
 
 /**
- * Lueur coral au centre bas. Elle est peinte AVANT la planete : la calotte
- * sombre masque la partie basse, il ne reste que le halo au-dessus de l'arc.
+ * Lueur coral au centre bas. Elle est peinte AVANT la planete. La planete
+ * n'ayant plus de calotte pleine, un masque vertical doux eteint la lueur
+ * avant qu'elle ne deborde sous l'arc (degrade progressif : aucun bord net).
  * Les taches sont peintes 2,5x plus fortes et montent chacune a 40 % (le
  * calque du template) : leur composition entre elles reste identique au rendu
  * statique precedent.
  */
 const PASS_THROUGH: Variants = { hidden: {}, show: {} }
 
+/* Le sommet de l'arc est a 82 % de la carte en mobile, 62 % en desktop : le
+   masque s'eteint juste avant, sur une plage large pour rester invisible. */
+const GLOW_MASK_MOBILE =
+  'linear-gradient(to bottom, black 0%, black 60%, transparent 88%)'
+const GLOW_MASK_DESKTOP =
+  'linear-gradient(to bottom, black 0%, black 38%, transparent 68%)'
+
 function Glow({ active }: { active: boolean }) {
   const pulse = active
     ? { animation: 'dgl-glow-pulse 8s ease-in-out infinite alternate' }
     : undefined
+  const [mask, setMask] = useState(GLOW_MASK_MOBILE)
+
+  useEffect(() => {
+    const query = window.matchMedia('(min-width: 768px)')
+    const apply = () =>
+      setMask(query.matches ? GLOW_MASK_DESKTOP : GLOW_MASK_MOBILE)
+    apply()
+    query.addEventListener('change', apply)
+    return () => query.removeEventListener('change', apply)
+  }, [])
+
   return (
     <motion.div
       variants={PASS_THROUGH}
       className="pointer-events-none absolute inset-0"
-      style={{ mixBlendMode: 'plus-lighter' }}
+      style={{
+        mixBlendMode: 'plus-lighter',
+        maskImage: mask,
+        WebkitMaskImage: mask,
+      }}
     >
       <motion.div
         variants={FADE_GLOW}

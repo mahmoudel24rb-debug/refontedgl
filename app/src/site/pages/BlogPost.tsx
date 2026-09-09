@@ -148,11 +148,7 @@ export default function BlogPost() {
                     ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
               >
-                <DotButton
-                  label="Commencer la lecture"
-                  href="#article"
-                  avatar={CTA.avatar}
-                />
+                <DotButton label="Commencer la lecture" href="#article" />
               </span>
             </div>
           </Container>
@@ -173,7 +169,6 @@ export default function BlogPost() {
                 <DotButton
                   label={CTA.label}
                   href={CTA.href}
-                  avatar={CTA.avatar}
                   className="mt-5"
                 />
               </div>

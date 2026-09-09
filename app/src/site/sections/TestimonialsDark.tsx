@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'framer-motion'
 import Container from '../ui/Container'
-import CarouselDots from '../ui/CarouselDots'
 import DotButton from '../ui/DotButton'
+import Marquee from '../ui/Marquee'
 import SectionHeader from '../ui/SectionHeader'
 import {
   CTA,
@@ -12,18 +11,21 @@ import {
 } from '../content'
 
 /**
- * Carrousel de temoignages sur cartes navy quadrillees : piste translatee de
- * `index * (largeur de la premiere carte + 24)` comme le module Feedbacks du
- * template, une pastille par avis, rotation automatique arretee des que le
- * visiteur intervient.
+ * Temoignages sur cartes navy quadrillees : meme defilement infini que les
+ * avis clairs, mais en sens inverse. En `prefers-reduced-motion`, les trois
+ * avis sont poses en grille statique.
  */
 
-const GAP = 24
-const ROTATION_MS = 7000
+const SPEED = 40
 
-function Card({ item }: { item: Testimonial }) {
+function Card({ item, spaced = true }: { item: Testimonial; spaced?: boolean }) {
+  const size = spaced
+    ? 'w-[85vw] shrink-0 mr-6 lg:w-[680px]'
+    : 'w-full min-w-0'
   return (
-    <figure className="bg-ink relative flex min-h-[360px] w-[85vw] shrink-0 flex-col justify-between overflow-hidden rounded-3xl p-8 text-white lg:w-[680px]">
+    <figure
+      className={`bg-ink relative flex min-h-[360px] flex-col justify-between overflow-hidden rounded-3xl p-8 text-white ${size}`}
+    >
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -59,70 +61,33 @@ function Card({ item }: { item: Testimonial }) {
 
 export default function TestimonialsDark() {
   const reduced = useReducedMotion()
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(0)
-  const [step, setStep] = useState(0)
-  const [locked, setLocked] = useState(false)
-
-  useLayoutEffect(() => {
-    const track = trackRef.current
-    const card = track?.firstElementChild
-    if (!card) return
-    const measure = () => setStep(card.getBoundingClientRect().width + GAP)
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(card)
-    window.addEventListener('resize', measure)
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('resize', measure)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (reduced || locked || TESTIMONIALS.length < 2) return
-    const id = window.setInterval(() => {
-      setActive((index) => (index + 1) % TESTIMONIALS.length)
-    }, ROTATION_MS)
-    return () => window.clearInterval(id)
-  }, [reduced, locked])
-
-  const select = useCallback((index: number) => {
-    setLocked(true)
-    setActive(index)
-  }, [])
 
   return (
-    <section className="w-full overflow-hidden py-16 md:py-24">
+    <section className="w-full overflow-x-hidden py-16 md:py-24">
       <Container>
         <SectionHeader
           title={TESTIMONIALS_DARK_HEADING}
           right={<DotButton label={CTA.label} href={CTA.href} />}
         />
+      </Container>
 
+      {reduced ? (
+        <Container>
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {TESTIMONIALS.map((item) => (
+              <Card key={item.name} item={item} spaced={false} />
+            ))}
+          </div>
+        </Container>
+      ) : (
         <div className="mt-12">
-          <div
-            ref={trackRef}
-            className="flex items-stretch gap-6 transition-transform duration-500 ease-out will-change-transform"
-            style={{ transform: `translate3d(${-active * step}px, 0, 0)` }}
-          >
+          <Marquee speed={SPEED} autoFill reverse pauseOnHover>
             {TESTIMONIALS.map((item) => (
               <Card key={item.name} item={item} />
             ))}
-          </div>
+          </Marquee>
         </div>
-
-        {TESTIMONIALS.length > 1 ? (
-          <div className="mt-10 flex justify-center">
-            <CarouselDots
-              count={TESTIMONIALS.length}
-              active={active}
-              label="Navigation des temoignages"
-              onSelect={select}
-            />
-          </div>
-        ) : null}
-      </Container>
+      )}
     </section>
   )
 }
