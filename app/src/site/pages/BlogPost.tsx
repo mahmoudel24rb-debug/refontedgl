@@ -9,7 +9,7 @@ import BlogProse from '../blog/BlogProse'
 import BlogToc from '../blog/BlogToc'
 import { getPost, getRelated } from '../blog/posts'
 import { CTA, FAQ_CTA } from '../content'
-import { LOGO_DGL, LOGO_FILTER_WHITE } from '../tokens'
+import { LOGO_DGL } from '../tokens'
 
 /**
  * La coquille de page (PageLayout) utilise `overflow-x: hidden`, ce qui cree
@@ -104,8 +104,7 @@ export default function BlogPost() {
                     src={LOGO_DGL}
                     alt=""
                     aria-hidden="true"
-                    className="size-4"
-                    style={{ filter: LOGO_FILTER_WHITE }}
+                    className="h-4 w-auto object-contain"
                   />
                 </span>
                 <span className="flex flex-col leading-tight">

@@ -3,7 +3,7 @@ import Container from '../ui/Container'
 import DotButton, { ArrowButton } from '../ui/DotButton'
 import { InstagramIcon, LinkedInIcon, XIcon } from '../ui/Icons'
 import { CTA, FOOTER } from '../content'
-import { LOGO_DGL, LOGO_FILTER_WHITE } from '../tokens'
+import { LOGO_DGL } from '../tokens'
 
 const SOCIAL_ICONS: Record<string, typeof LinkedInIcon> = {
   LinkedIn: LinkedInIcon,
@@ -49,10 +49,9 @@ export default function Footer() {
               <img
                 src={LOGO_DGL}
                 alt="DGL Agency"
-                width={112}
-                height={28}
-                className="h-10 w-auto object-contain"
-                style={{ filter: LOGO_FILTER_WHITE }}
+                width={380}
+                height={217}
+                className="h-16 w-auto object-contain"
               />
             </Link>
             <p className="max-w-xs text-sm text-white/60">{FOOTER.tagline}</p>

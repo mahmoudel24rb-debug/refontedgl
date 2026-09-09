@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react'
 import Container from '../ui/Container'
 import DotButton from '../ui/DotButton'
 import { CTA, NAV } from '../content'
-import { LOGO_DGL, LOGO_FILTER_INK, LOGO_FILTER_WHITE } from '../tokens'
+import { LOGO_DGL, LOGO_DGL_NAVY } from '../tokens'
 
 /** Ouverture du panneau mobile en cercle depuis le bouton hamburger. */
 const CLIP_CLOSED = 'circle(0% at calc(100% - 2.5rem) 2.5rem)'
@@ -49,15 +49,11 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
             <div className="flex shrink-0 items-center gap-2 lg:min-w-45">
               <Link to="/" aria-label="DGL Agency, accueil">
                 <img
-                  src={LOGO_DGL}
+                  src={tone === 'dark' ? LOGO_DGL : LOGO_DGL_NAVY}
                   alt="DGL Agency"
-                  width={40}
-                  height={40}
-                  className="h-9 w-auto object-contain md:h-10"
-                  style={{
-                    filter:
-                      tone === 'dark' ? LOGO_FILTER_WHITE : LOGO_FILTER_INK,
-                  }}
+                  width={380}
+                  height={217}
+                  className="h-12 w-auto object-contain md:h-14"
                 />
               </Link>
             </div>
@@ -117,10 +113,9 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
                 <img
                   src={LOGO_DGL}
                   alt="DGL Agency"
-                  width={40}
-                  height={40}
-                  className="h-9 w-auto object-contain md:h-10"
-                  style={{ filter: LOGO_FILTER_WHITE }}
+                  width={380}
+                  height={217}
+                  className="h-12 w-auto object-contain"
                 />
               </Link>
               <button

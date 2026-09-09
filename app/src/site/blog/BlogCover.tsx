@@ -1,4 +1,4 @@
-import { LOGO_DGL, LOGO_FILTER_WHITE } from '../tokens'
+import { LOGO_DGL } from '../tokens'
 
 /**
  * Couverture typographique d'un article : les articles WordPress DGL n'ont
@@ -88,8 +88,7 @@ export default function BlogCover({
             alt=""
             aria-hidden="true"
             loading="lazy"
-            className="h-4 w-auto shrink-0 opacity-80"
-            style={{ filter: LOGO_FILTER_WHITE }}
+            className="h-5 w-auto shrink-0"
           />
         </div>
       </div>

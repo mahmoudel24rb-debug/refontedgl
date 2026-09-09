@@ -5,7 +5,7 @@ import DotButton from '../ui/DotButton'
 import SectionHeader from '../ui/SectionHeader'
 import { CheckCircleIcon, VS_ICONS, WarningCircleIcon } from '../ui/Icons'
 import { VS } from '../content'
-import { LOGO_DGL, LOGO_FILTER_WHITE } from '../tokens'
+import { LOGO_DGL } from '../tokens'
 
 /**
  * Comparatif « DGL Agency vs agence classique » : tableau trois colonnes en
@@ -23,10 +23,9 @@ function BrandMark() {
         alt=""
         aria-hidden="true"
         loading="lazy"
-        width={20}
-        height={20}
-        className="size-3 object-contain"
-        style={{ filter: LOGO_FILTER_WHITE }}
+        width={380}
+        height={217}
+        className="h-2.5 w-auto object-contain"
       />
     </span>
   )
