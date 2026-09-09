@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 /**
  * En-tete de section du template : H2 aligne a gauche, slot optionnel a
- * droite (le plus souvent un DotButton).
+ * droite (le plus souvent un CtaButton).
  */
 export default function SectionHeader({
   title,

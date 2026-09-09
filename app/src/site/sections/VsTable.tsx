@@ -1,7 +1,7 @@
 import { Phone } from 'lucide-react'
 import Accordion, { type AccordionItem } from '../ui/Accordion'
 import Container from '../ui/Container'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import SectionHeader from '../ui/SectionHeader'
 import { CheckCircleIcon, VS_ICONS, WarningCircleIcon } from '../ui/Icons'
 import { VS } from '../content'
@@ -80,13 +80,13 @@ function Table() {
             <span className="text-ink text-base">{VS.free.label}</span>
           </div>
           <div className="border-ink/10 flex h-24 items-center border-t px-6">
-            <DotButton
+            <CtaButton
               label={VS.free.primary.label}
               href={VS.free.primary.href}
             />
           </div>
           <div className="border-ink/10 flex h-24 items-center border-t px-6">
-            <DotButton
+            <CtaButton
               label={VS.free.secondary.label}
               href={VS.free.secondary.href}
               tone="light"
@@ -135,8 +135,8 @@ function Panels() {
         <Accordion items={ITEMS} defaultOpenId={ITEMS[0]?.id ?? null} />
       </div>
       <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-        <DotButton label={VS.free.primary.label} href={VS.free.primary.href} />
-        <DotButton
+        <CtaButton label={VS.free.primary.label} href={VS.free.primary.href} />
+        <CtaButton
           label={VS.free.secondary.label}
           href={VS.free.secondary.href}
           tone="light"
@@ -157,7 +157,7 @@ export default function VsTable() {
         <SectionHeader
           title={VS.heading}
           right={
-            <DotButton
+            <CtaButton
               label={VS.free.primary.label}
               href={VS.free.primary.href}
             />

@@ -6,7 +6,7 @@ import {
   type Variants,
 } from 'framer-motion'
 import Container from '../ui/Container'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import { CTA, HERO } from '../content'
 
 /* -------------------------------------------------------------------------- */
@@ -437,7 +437,7 @@ export default function Hero() {
                     {HERO.subtitle}
                   </h2>
                   <div className="mt-6">
-                    <DotButton label={CTA.label} href={CTA.href} />
+                    <CtaButton label={CTA.label} href={CTA.href} />
                   </div>
                 </div>
               </div>
@@ -446,7 +446,7 @@ export default function Hero() {
             <div className="relative h-18 sm:h-48 md:h-72">
               <p
                 aria-hidden="true"
-                className="-tracking-xl absolute -top-10 left-1/2 -translate-x-1/2 bg-linear-to-r from-white/10 to-white/0 bg-clip-text text-[22vw] font-semibold whitespace-nowrap text-transparent select-none md:text-[17vw]"
+                className="-tracking-xl pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 bg-linear-to-r from-white/10 to-white/0 bg-clip-text text-[22vw] font-semibold whitespace-nowrap text-transparent select-none md:text-[17vw]"
               >
                 {HERO.wordmark}
               </p>

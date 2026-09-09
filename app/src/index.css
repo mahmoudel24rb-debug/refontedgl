@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
   --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
@@ -129,5 +130,11 @@ button {
   }
   to {
     transform: scale(1.06);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import Container from '../ui/Container'
 import Accordion from '../ui/Accordion'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import SectionHeader from '../ui/SectionHeader'
 import { CTA, FAQ, FAQ_CTA, FAQ_HEADING, type FaqItem } from '../content'
 import { EMAIL } from '../tokens'
@@ -61,7 +61,7 @@ export default function Faq({ items = FAQ }: { items?: FaqItem[] }) {
                 {FAQ_CTA.text}
               </p>
               <div className="mt-6">
-                <DotButton label={CTA.label} href={CTA.href} />
+                <CtaButton label={CTA.label} href={CTA.href} />
               </div>
             </div>
           </div>

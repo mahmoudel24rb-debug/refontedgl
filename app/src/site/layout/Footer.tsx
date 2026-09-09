@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import Container from '../ui/Container'
-import DotButton, { ArrowButton } from '../ui/DotButton'
+import CtaButton, { ArrowButton } from '../ui/CtaButton'
 import { InstagramIcon, LinkedInIcon, XIcon } from '../ui/Icons'
 import { CTA, FOOTER } from '../content'
 import { LOGO_DGL } from '../tokens'
@@ -55,7 +55,7 @@ export default function Footer() {
               />
             </Link>
             <p className="max-w-xs text-sm text-white/60">{FOOTER.tagline}</p>
-            <DotButton label={CTA.label} href={CTA.href} tone="dark" />
+            <CtaButton label={CTA.label} href={CTA.href} tone="dark" />
           </div>
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">

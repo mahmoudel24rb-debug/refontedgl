@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import Container from '../ui/Container'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import { CTA, NAV } from '../content'
 import { LOGO_DGL, LOGO_DGL_NAVY } from '../tokens'
 
@@ -75,7 +75,7 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
             </div>
 
             <div className="hidden md:block lg:min-w-45 lg:text-right">
-              <DotButton label={CTA.label} href={CTA.href} />
+              <CtaButton label={CTA.label} href={CTA.href} />
             </div>
 
             <div className="md:hidden">
@@ -140,7 +140,7 @@ export default function Navbar({ tone = 'light' }: { tone?: 'dark' | 'light' }) 
                 </Link>
               ))}
               <div className="pt-4">
-                <DotButton
+                <CtaButton
                   label={CTA.label}
                   href={CTA.href}
                   onClick={() => setOpen(false)}

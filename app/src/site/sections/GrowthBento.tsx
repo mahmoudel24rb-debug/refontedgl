@@ -10,7 +10,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import Container from '../ui/Container'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import GridPatternDepth from '../ui/GridPatternDepth'
 import Marquee from '../ui/Marquee'
 import RollingNumber from '../ui/RollingNumber'
@@ -96,7 +96,7 @@ function TeamCard() {
       <div className="mt-8">
         <p className="text-ink text-lg font-medium">{GROWTH.team.title}</p>
         <div className="mt-4">
-          <DotButton label={CTA.label} href={CTA.href} />
+          <CtaButton label={CTA.label} href={CTA.href} />
         </div>
       </div>
     </div>

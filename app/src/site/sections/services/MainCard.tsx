@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import DotButton from '../../ui/DotButton'
+import CtaButton from '../../ui/CtaButton'
 import { CAMPAIGN_DASHBOARD, SERVICES_BENTO } from '../../content'
 import { useEnter, VIEWPORT } from './shared'
 
@@ -197,7 +197,7 @@ export default function MainCard() {
           {SERVICES_BENTO.main.text}
         </p>
         <div className="mt-6">
-          <DotButton
+          <CtaButton
             label={SERVICES_BENTO.main.cta.label}
             href={SERVICES_BENTO.main.cta.to}
           />

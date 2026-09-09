@@ -2,7 +2,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import PageLayout from '../layout/PageLayout'
 import Container from '../ui/Container'
 import SectionHeader from '../ui/SectionHeader'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import BlogCard from '../blog/BlogCard'
 import BlogCover from '../blog/BlogCover'
 import BlogProse from '../blog/BlogProse'
@@ -147,7 +147,7 @@ export default function BlogPost() {
                     ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
               >
-                <DotButton label="Commencer la lecture" href="#article" />
+                <CtaButton label="Commencer la lecture" href="#article" />
               </span>
             </div>
           </Container>
@@ -165,7 +165,7 @@ export default function BlogPost() {
                   {FAQ_CTA.title}
                 </h2>
                 <p className="text-muted mt-3 text-sm">{FAQ_CTA.text}</p>
-                <DotButton
+                <CtaButton
                   label={CTA.label}
                   href={CTA.href}
                   className="mt-5"

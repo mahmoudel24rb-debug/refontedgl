@@ -1,5 +1,5 @@
 import Container from '../ui/Container'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import SectionHeader from '../ui/SectionHeader'
 import { GoogleGIcon } from '../ui/Icons'
 import { PRICING, type BadgeTone, type PricingPlan } from '../content'
@@ -184,7 +184,7 @@ function PlanCard({ plan }: { plan: PricingPlan }) {
             <div>
               <PlanPrice plan={plan} />
               <div className="mt-4">
-                <DotButton
+                <CtaButton
                   label={plan.cta.label}
                   href={plan.cta.href}
                   tone={plan.dark ? 'light' : 'dark'}
@@ -225,7 +225,7 @@ function WidePlanCard({ plan }: { plan: PricingPlan }) {
           <div className="mt-8 lg:mt-auto lg:pt-10">
             <PlanPrice plan={plan} />
             <div className="mt-4">
-              <DotButton
+              <CtaButton
                 label={plan.cta.label}
                 href={plan.cta.href}
                 tone={plan.dark ? 'light' : 'dark'}

@@ -1,6 +1,6 @@
 import { useReducedMotion } from 'framer-motion'
 import Container from '../ui/Container'
-import DotButton from '../ui/DotButton'
+import CtaButton from '../ui/CtaButton'
 import Marquee from '../ui/Marquee'
 import SectionHeader from '../ui/SectionHeader'
 import { QuoteIcon } from '../ui/Icons'
@@ -80,7 +80,7 @@ export default function TestimonialsLight() {
         <SectionHeader
           title={TESTIMONIALS_HEADING}
           align="center-mobile"
-          right={<DotButton label={CTA.label} href={CTA.href} />}
+          right={<CtaButton label={CTA.label} href={CTA.href} />}
         />
       </Container>
 
