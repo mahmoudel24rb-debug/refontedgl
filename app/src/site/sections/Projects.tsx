@@ -66,6 +66,11 @@ function Tile({ project }: { project: Project }) {
           alt={`${project.client}, ${project.title}`}
           loading="lazy"
           className="h-full w-full rounded-3xl object-cover object-center"
+          style={
+            project.imagePosition
+              ? { objectPosition: project.imagePosition }
+              : undefined
+          }
         />
         <motion.div
           variants={OVERLAY}

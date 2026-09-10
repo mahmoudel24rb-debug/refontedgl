@@ -89,6 +89,8 @@ export interface Project {
   image: string
   href: string
   span: ProjectSpan
+  /** Point de recadrage CSS (object-position) si le centre coupe un element cle. */
+  imagePosition?: string
 }
 
 export interface Testimonial {
@@ -430,7 +432,8 @@ export const PROJECTS: Project[] = [
     title: 'Refonte du site en 8 semaines',
     desc: 'Site premium, SEO local et machine à leads pour une chaîne de salles de sport de 3 000 membres.',
     tags: ['Création de site', 'SEO local', 'Meta Ads'],
-    image: '/assets/projets/gymfit-equipe.webp',
+    image: '/assets/projets/gymfit-site.webp',
+    imagePosition: 'center 15%',
     href: 'https://dgl-agency.fr/gymfit/',
     span: 'wide',
   },
@@ -440,7 +443,7 @@ export const PROJECTS: Project[] = [
     title: '4,2x de ROAS',
     desc: 'Campagnes Facebook et Instagram dans un rayon de 15 km, 0,78 € par prospect, +181 % de trafic organique en 3 mois.',
     tags: ['Meta Ads', 'Acquisition locale', 'Remarketing'],
-    image: '/assets/projets/gymfit-coach.webp',
+    image: '/assets/projets/gymfit-meta-ads.webp',
     href: 'https://dgl-agency.fr/gymfit/',
     span: 'narrow',
   },
@@ -450,7 +453,7 @@ export const PROJECTS: Project[] = [
     title: '+40 % de ventes e-commerce à Noël',
     desc: "Campagne Meta Ads de fin d'année : 58 prospects à 3,25 € et 173 prospects à 3,06 € sur les offres bilan peau et Pilates Reformer.",
     tags: ['Meta Ads', 'E-commerce', 'Offre saisonnière'],
-    image: '/assets/projets/oceades-equipe.webp',
+    image: '/assets/projets/oceades-noel.webp',
     href: 'https://dgl-agency.fr/les-oceades/',
     span: 'half',
   },
@@ -460,7 +463,7 @@ export const PROJECTS: Project[] = [
     title: '+182 % de trafic organique',
     desc: '352 mots-clés positionnés, 80 % en top 10, coût par formulaire divisé par 2,6 au Mans (25,34 € puis 9,70 €).',
     tags: ['SEO', 'Google Ads', 'Génération de leads'],
-    image: '/assets/projets/oceades-soin.webp',
+    image: '/assets/projets/oceades-seo.webp',
     href: 'https://dgl-agency.fr/les-oceades/',
     span: 'half',
   },
@@ -470,7 +473,7 @@ export const PROJECTS: Project[] = [
     title: '1,23 € par prospect',
     desc: '182 prospects à 4,13 € pour les stages de février, 46 prospects à 1,23 € pour la journée portes ouvertes, avec 20 € par jour.',
     tags: ['Meta Ads', 'Petit budget', 'Événementiel'],
-    image: '/assets/projets/beauregard-terrain.webp',
+    image: '/assets/projets/beauregard-kid-fitness.webp',
     href: 'https://dgl-agency.fr/parcbeauregard/',
     span: 'narrow',
   },
@@ -480,7 +483,7 @@ export const PROJECTS: Project[] = [
     title: '56 prospects à 4 € en 4 semaines',
     desc: "Lancement de l'offre Pilates Reformer : deux audiences testées, formulaire natif Facebook, ROAS x5,8, +60 % de leads.",
     tags: ['Meta Ads', 'Lancement offre', 'Formulaire natif'],
-    image: '/assets/projets/epicure-equipe.webp',
+    image: '/assets/projets/epicure-pilates.webp',
     href: 'https://dgl-agency.fr/epicure/',
     span: 'wide',
   },
