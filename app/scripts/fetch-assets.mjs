@@ -17,31 +17,6 @@ const UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
 
 const FILES = [
-  // Realisations
-  [
-    'projets/gymfit-site.webp',
-    'https://dgl-agency.fr/wp-content/uploads/2026/01/Image-salle-de-sport-Gymfit.webp',
-  ],
-  [
-    'projets/gymfit-meta-ads.webp',
-    'https://dgl-agency.fr/wp-content/uploads/2026/01/Image-Meta-ads-Gymfit-2.webp',
-  ],
-  [
-    'projets/oceades-noel.webp',
-    'https://dgl-agency.fr/wp-content/uploads/2026/02/Offre-de-noel-1.webp',
-  ],
-  [
-    'projets/oceades-seo.webp',
-    'https://dgl-agency.fr/wp-content/uploads/2026/03/Image-Les-Oceades-DGL.webp',
-  ],
-  [
-    'projets/beauregard-kid-fitness.webp',
-    'https://dgl-agency.fr/wp-content/uploads/2026/03/Image-Kid-Fitness-1.webp',
-  ],
-  [
-    'projets/epicure-pilates.webp',
-    'https://dgl-agency.fr/wp-content/uploads/2026/03/Visuel-Publicite-Epicure-1.webp',
-  ],
   // Avatars
   [
     'avatars/hakim.webp',

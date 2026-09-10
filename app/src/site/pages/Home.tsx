@@ -2,7 +2,7 @@ import PageLayout from '../layout/PageLayout'
 import Hero from '../sections/Hero'
 import LogoCloud from '../sections/LogoCloud'
 import ServicesBento from '../sections/ServicesBento'
-import Projects from '../sections/Projects'
+import ProjectsBento from '../sections/ProjectsBento'
 import TestimonialsLight from '../sections/TestimonialsLight'
 import GrowthBento from '../sections/GrowthBento'
 import VsTable from '../sections/VsTable'
@@ -26,7 +26,7 @@ export default function Home() {
       <Hero />
       <LogoCloud />
       <ServicesBento />
-      <Projects variant="home" />
+      <ProjectsBento />
       <TestimonialsLight />
       <GrowthBento />
       <VsTable />

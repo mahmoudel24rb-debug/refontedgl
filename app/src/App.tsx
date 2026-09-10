@@ -9,6 +9,7 @@ import ComposantView from '@/pages/ComposantView'
 import Home from '@/site/pages/Home'
 
 const Realisations = lazy(() => import('@/site/pages/Realisations'))
+const CaseStudy = lazy(() => import('@/site/pages/CaseStudy'))
 const Outils = lazy(() => import('@/site/pages/Outils'))
 const Tarifs = lazy(() => import('@/site/pages/Tarifs'))
 const Blog = lazy(() => import('@/site/pages/Blog'))
@@ -39,6 +40,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/realisations" element={<Realisations />} />
+              <Route path="/realisations/:slug" element={<CaseStudy />} />
               <Route path="/outils" element={<Outils />} />
               <Route path="/tarifs" element={<Tarifs />} />
               <Route path="/blog" element={<Blog />} />

@@ -1,4 +1,5 @@
 import { motion, type Variants } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import Container from '../ui/Container'
 import PageWatermark from '../ui/PageWatermark'
 import { ArrowRightIcon } from '../ui/Icons'
@@ -14,7 +15,11 @@ import {
  * filigrane geant et overlay au survol, comme le template.
  * `variant` : `home` (filigrane au-dessus de la grille, section espacee) ou
  * `page` (filigrane cale sous la navbar de la page realisations).
+ * Une tuile pointe soit vers une fiche cas client interne (Link react-router),
+ * soit vers une URL externe qui s'ouvre dans un nouvel onglet.
  */
+
+const MotionLink = motion.create(Link)
 
 const SPANS: Record<ProjectSpan, string> = {
   wide: 'col-span-14 md:col-span-7 lg:col-span-9',
@@ -49,18 +54,20 @@ const BOTTOM_BLOCK: Variants = {
   },
 }
 
+const TILE_CLASS =
+  'group relative block h-[280px] overflow-hidden rounded-3xl text-left sm:h-[340px] lg:h-[460px]'
+
+const TILE_MOTION = {
+  initial: 'rest',
+  animate: 'rest',
+  whileHover: 'hover',
+  className: TILE_CLASS,
+} as const
+
 function Tile({ project }: { project: Project }) {
-  return (
-    <div className={SPANS[project.span]}>
-      <motion.a
-        href={project.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        initial="rest"
-        animate="rest"
-        whileHover="hover"
-        className="group relative block h-[280px] overflow-hidden rounded-3xl text-left sm:h-[340px] lg:h-[460px]"
-      >
+  const internal = project.href.startsWith('/')
+  const content = (
+    <>
         <img
           src={project.image}
           alt={`${project.client}, ${project.title}`}
@@ -101,7 +108,25 @@ function Tile({ project }: { project: Project }) {
             </span>
           </motion.div>
         </motion.div>
-      </motion.a>
+    </>
+  )
+
+  return (
+    <div className={SPANS[project.span]}>
+      {internal ? (
+        <MotionLink to={project.href} {...TILE_MOTION}>
+          {content}
+        </MotionLink>
+      ) : (
+        <motion.a
+          href={project.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          {...TILE_MOTION}
+        >
+          {content}
+        </motion.a>
+      )}
 
       <div className="mt-4 md:hidden" aria-hidden="true">
         <p className="-tracking-xs text-muted font-mono text-xs uppercase">
