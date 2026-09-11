@@ -1,0 +1,383 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-sequel: "Sequel Sans", var(--font-inter-tight), sans-serif;
+
+  --color-bg-black: #0a0a0a;
+  --color-brand-deep: #002329;
+  --color-brand-bright: #fe5752;
+  --color-brand-hover: #e54a45;
+  --color-cream: #f0efe9;
+  --color-gray-light: #f6f6f6;
+  --color-card-gray: #f2f2f0;
+  --color-footer-green: #002329;
+
+  /* Refonte 2026 : tokens du site racine (template Productized Agency
+     adapte a la palette DGL). */
+  --color-page: #F0EFE9;
+  --color-ink: #002329;
+  --color-ink-deep: #001519;
+  --color-primary: #FE5752;
+  --color-primary-hover: #E54A45;
+  --color-muted: rgba(0, 35, 41, 0.6);
+
+  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --container-container: 80rem;
+
+  --tracking-xs: 0.01em;
+  --tracking-sm: 0.02em;
+  --tracking-xl: 0.04em;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: var(--font-sans), sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Le groupe de routes (site) pose la classe `site-theme` sur <body> :
+     fond cream + encre navy. Le groupe (composant) garde le fond sombre
+     historique. */
+  html:has(body.site-theme),
+  body.site-theme {
+    background: var(--color-page);
+    color: var(--color-ink);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Marquee testimonials */
+@keyframes ts-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Defilement horizontal infini (site racine) */
+@keyframes dgl-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes dgl-marquee-reverse {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Entree en fondu */
+@keyframes dgl-fade-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Scintillement des etoiles du hero */
+@keyframes dgl-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* Respiration tres lente de la lueur du hero */
+@keyframes dgl-glow-pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Shiny CTA : bordure conique animee, points et shimmer (voir                */
+/* src/components/ui/shiny-button.tsx et src/site/ui/CtaButton.tsx)           */
+/* -------------------------------------------------------------------------- */
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --gradient-percent {
+  syntax: "<percentage>";
+  initial-value: 5%;
+  inherits: false;
+}
+
+@property --gradient-shine {
+  syntax: "<color>";
+  initial-value: white;
+  inherits: false;
+}
+
+.shiny-cta {
+  --shiny-cta-bg: #002329;
+  --shiny-cta-bg-subtle: #0d3a41;
+  --shiny-cta-fg: #ffffff;
+  --shiny-cta-highlight: #FE5752;
+  --shiny-cta-highlight-subtle: #FF9A94;
+  --animation: gradient-angle linear infinite;
+  --duration: 3s;
+  --shadow-size: 2px;
+  --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 4px;
+  padding: 1.25rem 2.5rem;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 360px;
+  color: var(--shiny-cta-fg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  text-decoration: none;
+  background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+    conic-gradient(
+      from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+      transparent,
+      var(--shiny-cta-highlight) var(--gradient-percent),
+      var(--gradient-shine) calc(var(--gradient-percent) * 2),
+      var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+      transparent calc(var(--gradient-percent) * 4)
+    ) border-box;
+  box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+  transition: var(--transition);
+  transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+}
+
+/* Variante claire : bouton secondaire sur cartes sombres ou blanches */
+.shiny-cta--light {
+  --shiny-cta-bg: #ffffff;
+  --shiny-cta-bg-subtle: #e6e5df;
+  --shiny-cta-fg: #002329;
+  --shiny-cta-highlight: #FE5752;
+  --shiny-cta-highlight-subtle: #FF9A94;
+}
+
+/* Taille compacte : navbar 64 px, comparatif et tarifs */
+.shiny-cta--sm {
+  padding: 0.8rem 1.6rem;
+  font-size: 0.9375rem;
+}
+
+.shiny-cta::before,
+.shiny-cta::after,
+.shiny-cta span::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  translate: -50% -50%;
+  z-index: -1;
+}
+
+.shiny-cta:active {
+  translate: 0 1px;
+}
+
+/* Dots pattern */
+.shiny-cta::before {
+  --size: calc(100% - var(--shadow-size) * 3);
+  --position: 2px;
+  --space: calc(var(--position) * 2);
+  width: var(--size);
+  height: var(--size);
+  background: radial-gradient(
+    circle at var(--position) var(--position),
+    white calc(var(--position) / 4),
+    transparent 0
+  ) padding-box;
+  background-size: var(--space) var(--space);
+  background-repeat: space;
+  mask-image: conic-gradient(
+    from calc(var(--gradient-angle) + 45deg),
+    black,
+    transparent 10% 90%,
+    black
+  );
+  border-radius: inherit;
+  opacity: 0.4;
+  z-index: -1;
+}
+
+/* Points navy sur la variante claire */
+.shiny-cta--light::before {
+  background-image: radial-gradient(
+    circle at var(--position) var(--position),
+    #002329 calc(var(--position) / 4),
+    transparent 0
+  );
+}
+
+/* Inner shimmer */
+.shiny-cta::after {
+  --animation: shimmer linear infinite;
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(
+    -50deg,
+    transparent,
+    var(--shiny-cta-highlight),
+    transparent
+  );
+  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  opacity: 0.6;
+}
+
+.shiny-cta span {
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shiny-cta span::before {
+  --size: calc(100% + 1rem);
+  width: var(--size);
+  height: var(--size);
+  box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+  opacity: 0;
+  transition: opacity var(--transition);
+  animation: calc(var(--duration) * 1.5) breathe linear infinite;
+}
+
+/* Animate */
+.shiny-cta,
+.shiny-cta::before,
+.shiny-cta::after {
+  animation: var(--animation) var(--duration),
+    var(--animation) calc(var(--duration) / 0.4) reverse paused;
+  animation-composition: add;
+}
+
+.shiny-cta:is(:hover, :focus-visible) {
+  --gradient-percent: 20%;
+  --gradient-angle-offset: 95deg;
+  --gradient-shine: var(--shiny-cta-highlight-subtle);
+}
+
+.shiny-cta:is(:hover, :focus-visible),
+.shiny-cta:is(:hover, :focus-visible)::before,
+.shiny-cta:is(:hover, :focus-visible)::after {
+  animation-play-state: running;
+}
+
+.shiny-cta:is(:hover, :focus-visible) span::before {
+  opacity: 1;
+}
+
+@keyframes gradient-angle {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes breathe {
+  from, to {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny-cta,
+  .shiny-cta::before,
+  .shiny-cta::after,
+  .shiny-cta span::before {
+    animation: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Utilitaires du site                                                        */
+/* -------------------------------------------------------------------------- */
+
+/* overflow-x: clip evite le conteneur de defilement cree par hidden, qui
+   cassait le position: sticky du sommaire des articles. */
+.site-theme .overflow-x-hidden {
+  overflow-x: clip;
+}
+
+/* Contenu verrouille des outils : floute et inerte tant que le visiteur
+   n'a pas laisse ses coordonnees. */
+.dgl-gate {
+  filter: blur(8px);
+  user-select: none;
+  pointer-events: none;
+  transition: filter 0.5s ease;
+}
+
+.dgl-gate--open {
+  filter: none;
+  user-select: auto;
+  pointer-events: auto;
+}

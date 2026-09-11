@@ -589,3 +589,13 @@ framer-motion, durées, springs, marquees) et réimplémentées à l'identique :
   circulaire, cartes outils qui se déplient au survol.
 Toutes respectent `prefers-reduced-motion` (états finaux affichés, pas de
 boucles infinies).
+
+## 15. Migration Next.js + Payload (dossier `web/`, septembre 2026)
+
+Le site migre de Vite (`app/`) vers **Next.js App Router + Payload CMS 3** dans `web/` (un seul projet Vercel : site SSR, admin `/admin`, API). Décisions : base Neon Postgres, médias sur Vercel Blob, emails via Resend, articles et leads gérés dans Payload (CRM interne, tags repris de Jetpack CRM).
+
+- Code du site copié de `app/src/site` vers `web/src/site` (react-router remplacé par next/link, `PageLayout` serveur, metadata par route, `'use client'` sur les sections animées). Prototypes conservés sur `/composant` (hors index).
+- Collections : users, media, categories, articles (28 articles importés en mode `legacy`, script `pnpm import:articles`), leads, scans (GEO scan), tool-runs, rate-limits.
+- Outils portés : `/outils/test-pagespeed`, `/outils/simulateur-roi`, `/outils/test-visibilite-ia` (API sous `src/app/api/tools/*`, kit partagé `src/site/tools/shared`). Les autres lead magnets WordPress restent à porter (voir plan du 11 septembre 2026).
+- SEO : `sitemap.ts`, `robots.ts`, `/opengraph-image`, JSON-LD, redirections 308 des anciennes URL WordPress dans `next.config.ts`, `NEXT_PUBLIC_NOINDEX=1` tant que le domaine n'est pas basculé.
+- Déploiement : branche `next-payload` en Preview d'abord, puis Root Directory Vercel `web`, build `pnpm ci`. Détails et commandes dans `web/README.md`, variables dans `web/.env.example`. `app/` reste déployé jusqu'à la bascule, puis sera supprimé.
