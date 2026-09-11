@@ -10,7 +10,7 @@ la meme base Postgres, deployes ensemble sur Vercel.
 | `pnpm dev:db` | Demarre un Postgres embarque dans `.pg/` (port 5433, base `dgl`). A lancer avant `pnpm dev` en local. |
 | `pnpm dev` | Serveur de developpement Next (http://localhost:3000, admin sur `/admin`). |
 | `pnpm build` | Build de production (`next build`). |
-| `pnpm ci` | Build de deploiement : `payload migrate` puis `next build`. Commande de build Vercel. |
+| `pnpm run build:vercel` | Build de deploiement : `payload migrate` puis `next build`. Commande de build Vercel. |
 | `pnpm start` | Sert le build de production. |
 | `pnpm lint` | ESLint (config `next/core-web-vitals`). |
 | `pnpm generate:types` | Regenere `src/payload-types.ts`. A relancer apres toute modification de collection. |
@@ -44,7 +44,7 @@ Comportements conditionnels :
   l'iteration.
 - **Avant un merge** : `pnpm migrate:create <nom>` contre une base propre,
   puis versionner les fichiers produits dans `src/migrations/`.
-- **En production** : la commande de build `pnpm ci` execute
+- **En production** : la commande de build `pnpm run build:vercel` execute
   `payload migrate` avant `next build`. Aucun `push` n'est actif.
 
 ## Structure

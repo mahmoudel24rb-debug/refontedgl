@@ -37,3 +37,8 @@ yarn-error.log*
 .vercel
 /.idea/*
 !/.idea/runConfigurations
+
+# Fichiers locaux generes par la CLI Vercel (skills des integrations)
+.agents
+.claude
+skills-lock.json

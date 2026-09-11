@@ -1,0 +1,9 @@
+.pg
+.next*
+node_modules
+.env
+.env.local
+.agents
+.claude
+skills-lock.json
+tsconfig.tsbuildinfo
